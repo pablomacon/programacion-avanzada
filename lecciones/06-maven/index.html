@@ -434,8 +434,31 @@
         }
       }
     </style>
-  </head>
+    <link rel="stylesheet" href="../../assets/fonts.css">
+  <link rel="stylesheet" href="../../assets/pm-common.css">
+</head>
   <body>
+  <!-- Encabezado Institucional Unificado -->
+  <header class="pm-site-header" id="pmSiteHeader">
+    <div class="pm-header-bar">
+      <a href="../../index.html" class="pm-brand" aria-label="Programación Avanzada 2026 - Inicio">
+        <img src="../../assets/logo-profe-macon.png" alt="Profe Macón" class="pm-logo">
+        <div class="pm-brand-text">
+          <span class="pm-course-name">Programación Avanzada</span>
+          <span class="pm-course-sub">2.º BT TI · DGETP / UTU</span>
+        </div>
+      </a>
+      <nav class="pm-site-nav" aria-label="Navegación del curso">
+        <a href="../../index.html" class="pm-nav-link">Inicio</a>
+        <a href="../../index.html#unidad-01" class="pm-nav-link is-active">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02" class="pm-nav-link">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03" class="pm-nav-link">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04" class="pm-nav-link">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html" class="pm-nav-link pm-nav-project">Tienda de Cómics</a>
+      </nav>
+    </div>
+  </header>
+
     <header>
       <div class="topbar">
         <div class="logo-wrap">
@@ -487,7 +510,7 @@
       <a href="#estructura">Estructura</a>
       <a href="#capas">Capas</a>
       <a href="#codigo">Del diagrama al código</a>
-      <a href="#ticket">Ticket</a>
+      <a href="#cierre">Cierre</a>
     </nav>
 
     <main>
@@ -857,7 +880,8 @@ public class Main {
         </p>
       </section>
 
-      <section class="section-card">
+      <section id="cierre" class="section-card">
+        <span id="ticket" style="display:block;scroll-margin-top:70px;"></span>
         <h2>8. Cierre: ¿por qué hacemos todo esto?</h2>
         <p>
           Organizar un proyecto no es un detalle decorativo. Es parte de
@@ -886,5 +910,58 @@ public class Main {
       <img class="footer-logo" src="logo_PM.png" alt="Logo PM" />
       Programación Avanzada – Maven y paquetes – Prof. Pablo Macón – 2026
     </footer>
-  </body>
+  <!-- Navegación entre Lecciones -->
+  <nav class="pm-lesson-nav" aria-label="Navegación entre lecciones">
+    <div class="pm-lesson-nav-inner">
+      <div class="pm-lesson-nav-prev">
+        <a href="../05-abstractas-polimorfismo/index.html" class="pm-nav-btn pm-prev">
+          <span class="pm-nav-arrow" aria-hidden="true">←</span>
+          <span class="pm-nav-meta">
+            <small>Anterior · Unidad 01</small>
+            <b>Clases abstractas, sobrescritura y polimorfismo</b>
+          </span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-center">
+        <a href="../../index.html#unidad-01" class="pm-nav-unit-pill">
+          <span class="pm-unit-badge">UNIDAD 01</span>
+          <span class="pm-unit-name">Lección 06 de 6</span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-next">
+        <a href="../01-producto-vista/index.html" class="pm-nav-btn pm-next">
+          <span class="pm-nav-meta">
+            <small>Siguiente · Unidad 02</small>
+            <b>ProductoVista: construimos la interfaz</b>
+          </span>
+          <span class="pm-nav-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Pie de Página Institucional -->
+  <footer class="pm-course-footer">
+    <div class="pm-footer-inner">
+      <div class="pm-footer-brand">
+        <strong>Profe Macón</strong> · Programación Avanzada 2026
+      </div>
+      <div class="pm-footer-meta">
+        2.º Bachillerato Tecnológico en Tecnologías de la Información · DGETP / UTU · Uruguay<br>
+        Material didáctico para la tienda de cómics «La Viñeta».
+      </div>
+      <div class="pm-footer-links">
+        <a href="../../index.html">Inicio</a>
+        <a href="../../index.html#unidad-01">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html">Tienda de Cómics</a>
+        <a href="#top" class="pm-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Volver arriba</a>
+      </div>
+    </div>
+  </footer>
+
+    <script src="../../assets/pm-common.js"></script>
+</body>
 </html>

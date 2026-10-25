@@ -38,12 +38,147 @@
     .mini-flow strong{display:block;color:#171419;margin-bottom:4px}
     @media(max-width:860px){.proj-hero{grid-template-columns:1fr}}
   </style>
+  <link rel="stylesheet" href="../../assets/fonts.css">
+  <link rel="stylesheet" href="../../assets/pm-common.css">
+  <style>
+    /* Correcciones locales: la versión rediseñada no definía .article ni .panel. */
+    .article {
+      width: min(100% - 40px, 1240px);
+      margin: 0 auto;
+      padding: 40px 0 72px;
+    }
+
+    .article > *,
+    .panel,
+    .proj-hero > *,
+    .codebox {
+      min-width: 0;
+    }
+
+    .article h1 {
+      max-width: 960px;
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 4.5vw, 3.45rem);
+      line-height: 1.08;
+      overflow-wrap: break-word;
+    }
+
+    .article .lead {
+      max-width: 920px;
+      margin: 0 0 28px;
+      font-size: 1.08rem;
+      line-height: 1.7;
+      color: #403b49;
+    }
+
+    .article .eyebrow {
+      display: inline-block;
+      margin-bottom: 8px;
+      font-family: var(--pm-font-title);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      color: var(--pm-teal);
+    }
+
+    .article .panel {
+      margin: 18px 0;
+      padding: 26px;
+      overflow: visible;
+      background: var(--pm-card-bg);
+      border: 1px solid var(--pm-line);
+      border-radius: 18px;
+      box-shadow: 0 4px 16px rgba(23, 20, 25, .04);
+    }
+
+    .article .panel h2 { margin-top: 0; }
+    .article .panel p,
+    .article .panel li {
+      line-height: 1.65;
+      overflow-wrap: break-word;
+    }
+
+    .article .codebox {
+      position: relative;
+      max-width: 100%;
+      margin: 16px 0 12px;
+    }
+
+    .article .codebox .code-label {
+      padding: 9px 14px;
+      border: 1px solid #342e37;
+      border-bottom: 0;
+      border-radius: 12px 12px 0 0;
+      background: #272128;
+      color: #cfc6d4;
+      font-family: var(--pm-font-code);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+    }
+
+    .article .codebox pre {
+      box-sizing: border-box;
+      max-width: 100%;
+      margin: 0;
+      padding: 20px 22px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      border: 1px solid #342e37;
+      border-radius: 0 0 12px 12px;
+      background: #171419;
+      color: #f4f1f5;
+      font-family: var(--pm-font-code);
+      font-size: 15.5px;
+      font-weight: 450;
+      font-variant-ligatures: none;
+      line-height: 1.55;
+      tab-size: 4;
+      white-space: pre;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article .codebox .c { color: #8bd69a; }
+    .article .codebox .kw { color: #d9a6ff; }
+    .article .codebox .ty { color: #83d5ff; }
+    .article .codebox .st { color: #f6cf78; }
+    .article .codebox .an { color: #ffb0a7; }
+    .article .codebox .pm-copy-btn {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      border-color: rgba(255, 255, 255, .38);
+    }
+
+    @media (max-width: 600px) {
+      .article { width: min(100% - 24px, 1240px); padding: 24px 0 48px; }
+      .article .panel { padding: 18px; border-radius: 14px; }
+      .article .codebox pre { padding: 18px 16px; font-size: 15px; }
+    }
+  </style>
 </head>
 <body>
-  <header class="lesson-head">
-    <a href="../../index.html#proyecto"><img src="../../assets/logo-profe-macon.png" alt="Profe Macón"></a>
-    <a class="back" href="../../index.html#proyecto">← Índice del curso</a>
+  <!-- Encabezado Institucional Unificado -->
+  <header class="pm-site-header" id="pmSiteHeader">
+    <div class="pm-header-bar">
+      <a href="../../index.html" class="pm-brand" aria-label="Programación Avanzada 2026 - Inicio">
+        <img src="../../assets/logo-profe-macon.png" alt="Profe Macón" class="pm-logo">
+        <div class="pm-brand-text">
+          <span class="pm-course-name">Programación Avanzada</span>
+          <span class="pm-course-sub">2.º BT TI · DGETP / UTU</span>
+        </div>
+      </a>
+      <nav class="pm-site-nav" aria-label="Navegación del curso">
+        <a href="../../index.html" class="pm-nav-link">Inicio</a>
+        <a href="../../index.html#unidad-01" class="pm-nav-link">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02" class="pm-nav-link">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03" class="pm-nav-link">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04" class="pm-nav-link">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html" class="pm-nav-link pm-nav-project is-active">Tienda de Cómics</a>
+      </nav>
+    </div>
   </header>
+
+  
   <main class="article">
     <span class="eyebrow">REFERENCIA INTEGRADA · JAVA / JDBC / SWING / MAVEN</span>
     <h1>Tienda de Cómics: proyecto completo y comentado</h1>
@@ -570,5 +705,58 @@
     <div class="footnav"><a href="../../index.html#proyecto">← Índice del curso</a></div>
   </main>
   <footer>PROFE MACÓN · Programación Avanzada 2026</footer>
+  <!-- Navegación entre Lecciones -->
+  <nav class="pm-lesson-nav" aria-label="Navegación entre lecciones">
+    <div class="pm-lesson-nav-inner">
+      <div class="pm-lesson-nav-prev">
+        <a href="../06-polimorfismo/index.html" class="pm-nav-btn pm-prev">
+          <span class="pm-nav-arrow" aria-hidden="true">←</span>
+          <span class="pm-nav-meta">
+            <small>Anterior · Unidad 04</small>
+            <b>Polimorfismo y bajo acoplamiento</b>
+          </span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-center">
+        <a href="../../index.html#proyecto" class="pm-nav-unit-pill">
+          <span class="pm-unit-badge">PROYECTO</span>
+          <span class="pm-unit-name">Referencia del Proyecto</span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-next">
+        <a href="../../index.html" class="pm-nav-btn pm-next">
+          <span class="pm-nav-meta">
+            <small>Fin del curso</small>
+            <b>Volver a Portada</b>
+          </span>
+          <span class="pm-nav-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Pie de Página Institucional -->
+  <footer class="pm-course-footer">
+    <div class="pm-footer-inner">
+      <div class="pm-footer-brand">
+        <strong>Profe Macón</strong> · Programación Avanzada 2026
+      </div>
+      <div class="pm-footer-meta">
+        2.º Bachillerato Tecnológico en Tecnologías de la Información · DGETP / UTU · Uruguay<br>
+        Material didáctico para la tienda de cómics «La Viñeta».
+      </div>
+      <div class="pm-footer-links">
+        <a href="../../index.html">Inicio</a>
+        <a href="../../index.html#unidad-01">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html">Tienda de Cómics</a>
+        <a href="#top" class="pm-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Volver arriba</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/pm-common.js"></script>
 </body>
 </html>

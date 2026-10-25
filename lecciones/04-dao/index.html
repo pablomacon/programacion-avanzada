@@ -36,7 +36,30 @@ details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;backgr
 .quiz{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:#fcfbfd}.quiz p{margin-top:0;font-weight:700}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #cfc7d3;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.choice:hover{background:#f5f1f8}.choice.correct{border-color:var(--teal);background:var(--soft-teal)}.choice.wrong{border-color:#b56d6d;background:#fbefef}.feedback{margin:10px 0 0;min-height:1.4em;color:#4d4753}
 .footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
 hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
-</style></head><body>
+</style>  <link rel="stylesheet" href="../../assets/fonts.css">
+  <link rel="stylesheet" href="../../assets/pm-common.css">
+</head><body>
+  <!-- Encabezado Institucional Unificado -->
+  <header class="pm-site-header" id="pmSiteHeader">
+    <div class="pm-header-bar">
+      <a href="../../index.html" class="pm-brand" aria-label="Programación Avanzada 2026 - Inicio">
+        <img src="../../assets/logo-profe-macon.png" alt="Profe Macón" class="pm-logo">
+        <div class="pm-brand-text">
+          <span class="pm-course-name">Programación Avanzada</span>
+          <span class="pm-course-sub">2.º BT TI · DGETP / UTU</span>
+        </div>
+      </a>
+      <nav class="pm-site-nav" aria-label="Navegación del curso">
+        <a href="../../index.html" class="pm-nav-link">Inicio</a>
+        <a href="../../index.html#unidad-01" class="pm-nav-link">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02" class="pm-nav-link">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03" class="pm-nav-link">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04" class="pm-nav-link is-active">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html" class="pm-nav-link pm-nav-project">Tienda de Cómics</a>
+      </nav>
+    </div>
+  </header>
+
 <header class="hero"><div class="wrap"><div class="brand"><img class="full" src="assets/logo-profemacon.png" alt="Profe Macón"><div style="display:flex;align-items:center;gap:14px"><small>Programación Avanzada<br>2.º BT · Tecnologías de la Información</small><img class="iso" src="assets/logo-pm.png" alt="PM"></div></div><div class="eyebrow">Tienda de Cómics · Unidad de persistencia · Material 04</div><h1>Una responsabilidad nueva:<br><em>ProductoDAO y operaciones CRUD</em></h1><p>Ya sabemos conectarnos a MySQL, insertar y consultar registros. Ahora vamos a decidir dónde debe vivir ese código y cómo incorporarlo a nuestra arquitectura sin mezclar las responsabilidades de Vista, Controller y Service.</p><div class="tags"><span class="tag">CET1 · Modularidad</span><span class="tag">CET3 · Persistencia JDBC</span><span class="tag">Java 17 + MySQL</span><span class="tag">DAO</span><span class="tag">CRUD</span></div></div></header>
 <nav><div class="wrap"><a href="#problema">1 · Problema</a><a href="#repaso">2 · Capas</a><a href="#dao">3 · DAO</a><a href="#conexion">4 · Repetición</a><a href="#conexionbd">5 · ConexionBD</a><a href="#primerdao">6 · Guardar</a><a href="#listar">7 · Listar</a><a href="#crud">8 · CRUD</a><a href="#integracion">9 · Service</a><a href="#errores">10 · Errores</a><a href="#flujo">11 · Flujo</a><a href="#preguntas">12 · Preguntas</a><a href="#cierre">13 · Cierre</a></div></nav>
 <main><section id="problema"><div class="step">1 · Tienda de Cómics</div><h2>¿Dónde colocamos todo el código de JDBC?</h2><p class="lead">En el material anterior aprendimos a preparar un <code class="inline">INSERT</code>, consultar productos con <code class="inline">SELECT</code> y convertir las filas de un <code class="inline">ResultSet</code> en objetos Java. Pero todavía tenemos una decisión pendiente: <b>¿qué clase se hará cargo de esas operaciones?</b></p><p>Imagina que copiamos las conexiones, las sentencias SQL y sus excepciones dentro de <code class="inline">ProductoController</code>. Nuestro controlador tendría que escuchar los botones, leer los campos, gestionar la tabla, crear productos, abrir conexiones y ejecutar SQL.</p><p>¿Recuerdas por qué quitamos responsabilidades de <code class="inline">Main</code>? Estamos por repetir el mismo problema.</p><div class="callout warn"><b>Pregunta inicial:</b> ¿alcanza con que el programa funcione, o también importa que cada clase tenga una responsabilidad clara?</div></section><section id="repaso"><div class="step">2 · Tienda de Cómics</div><h2>¿Qué responsabilidad tenía cada componente?</h2><p>Antes de añadir una clase, recuperemos nuestra organización actual:</p><div class="arch"><div class="layer">Producto_Vista<br><small>Campos, botones y JTable</small></div><div class="down">↓</div><div class="layer">ProductoController<br><small>Escucha eventos y coordina la interacción</small></div><div class="down">↓</div><div class="layer">ProductoService<br><small>Aplica las reglas del negocio</small></div></div><p>Una regla del negocio puede ser que el precio no sea negativo o que el nombre del producto no esté vacío. Estas reglas siguen siendo necesarias aunque dejemos de usar MySQL y guardemos los datos de otra manera.</p><p>Por eso <code class="inline">ProductoService</code> no debería convertirse en una colección de instrucciones JDBC. Necesitamos separar <b>la decisión de si un producto es válido</b> de <b>la operación técnica de guardarlo</b>.</p></section><section id="dao"><div class="step">3 · Tienda de Cómics</div><h2>Un nuevo componente: ProductoDAO</h2><p>La solución que utilizaremos es el patrón <b>DAO</b>, sigla de <em>Data Access Object</em> (objeto de acceso a datos).</p><p>Crearemos una clase llamada <code class="inline">ProductoDAO</code>. Su función será acceder a los datos persistentes de los productos. Allí estarán las instrucciones SQL y el código JDBC necesario para ejecutarlas.</p><div class="arch"><div class="layer">Producto_Vista<br><small>Muestra y recoge datos</small></div><div class="down">↓</div><div class="layer">ProductoController<br><small>Coordina eventos</small></div><div class="down">↓</div><div class="layer">ProductoService<br><small>Comprueba reglas del negocio</small></div><div class="down">↓</div><div class="layer main">ProductoDAO<br><small>Accede a los datos: JDBC y SQL</small></div><div class="down">↓</div><div class="layer">MySQL<br><small>Almacena registros</small></div></div><div class="callout teal"><b>No confundas las tareas:</b> <code class="inline">ProductoDAO</code> no dibuja botones, no muestra <code class="inline">JOptionPane</code> y no decide si un precio cumple las reglas del comercio.</div></section><section id="conexion"><div class="step">4 · Tienda de Cómics</div><h2>Hay otro código que no queremos repetir</h2><p>Supongamos que ya tenemos un método para insertar productos y otro para listarlos. Ambos necesitan la misma información: dirección del servidor, base de datos, usuario y contraseña.</p><pre>String url = &quot;jdbc:mysql://localhost:3306/tiendacomics&quot;;
@@ -106,4 +129,57 @@ public ProductoService(ProductoDAO productoDAO) {
 <div class="quiz" data-answer="a" data-explain="El DAO puede propagar SQLException para que otra capa decida cómo informar el fallo."><p>5. Si la conexión con MySQL falla, ¿qué debería evitar el DAO?</p><div class="choices"><button class="choice" data-value="a">Mostrar directamente un JOptionPane.</button><button class="choice" data-value="b">Comunicar el problema mediante una excepción.</button><button class="choice" data-value="c">Liberar los recursos utilizados.</button></div><div class="feedback" aria-live="polite"></div></div></section><section id="cierre"><div class="step">13 · Tienda de Cómics</div><h2>Microentrega y lo que viene</h2><h3>Documentamos nuestras decisiones</h3><ol><li>Explica por qué <code class="inline">ProductoController</code> no debería contener instrucciones <code class="inline">INSERT</code> y <code class="inline">SELECT</code>.</li><li>Completa el recorrido <b>Vista → Controller → Service → DAO → MySQL</b> con una responsabilidad de cada componente.</li><li>Señala dónde debe comprobarse un precio negativo y dónde debe ejecutarse la consulta SQL.</li><li>Explica qué ventaja obtenemos al utilizar una clase común <code class="inline">ConexionBD</code>.</li><li>Dibuja un esquema que muestre el trayecto de <b>un producto</b> desde su creación hasta su almacenamiento.</li></ol><div class="callout teal"><b>Tres niveles:</b> <b>mínimo viable:</b> identificar responsabilidades; <b>estándar:</b> explicar y leer <code class="inline">guardar()</code> y <code class="inline">listar()</code>; <b>desafío:</b> proponer la sentencia <code class="inline">DELETE</code> con <code class="inline">WHERE codigo = ?</code> y justificar el parámetro.</div><p class="lead"><b>Próximo y último material de la secuencia:</b> veremos que distintos DAO necesitan operaciones semejantes. ¿Cómo establecer un contrato común sin duplicar las implementaciones? La respuesta nos llevará a <b>interfaces, polimorfismo y bajo acoplamiento</b>.</p></section><div class="footer"><div style="display:flex;align-items:center;gap:12px"><img src="assets/logo-pm.png" alt="PM"><div><b>PROFE MACÓN</b><br><span class="muted">Explora, aprende, crea.</span></div></div><div class="site">profemacon.net</div></div></main>
 <div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.18)"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div>
 <script>document.querySelectorAll('.quiz').forEach(function(q){q.querySelectorAll('.choice').forEach(function(btn){btn.addEventListener('click',function(){q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong');});var ok=btn.dataset.value===q.dataset.answer;btn.classList.add(ok?'correct':'wrong');var f=q.querySelector('.feedback');f.textContent=(ok?'Correcto. ':'Revisa la respuesta y la explicación. ')+q.dataset.explain;if(!ok){var c=q.querySelector('.choice[data-value="'+q.dataset.answer+'"]');if(c)c.classList.add('correct');}});});});</script>
-<script src="scorm.js"></script><style id="site-navigation">#site-back{position:fixed;right:18px;bottom:18px;z-index:99999;display:block;padding:11px 16px;background:#171419;color:#fff!important;font:700 13px Arial,sans-serif;border-radius:999px;text-decoration:none;box-shadow:0 8px 25px #17141940;border:1px solid #988db3}#site-back:hover{background:#756a96}@media print{#site-back{display:none}}</style><a id="site-back" href="../../index.html#unidad-04">← Índice del curso</a></body></html>
+<script src="scorm.js"></script>  <!-- Navegación entre Lecciones -->
+  <nav class="pm-lesson-nav" aria-label="Navegación entre lecciones">
+    <div class="pm-lesson-nav-inner">
+      <div class="pm-lesson-nav-prev">
+        <a href="../03-sql/index.html" class="pm-nav-btn pm-prev">
+          <span class="pm-nav-arrow" aria-hidden="true">←</span>
+          <span class="pm-nav-meta">
+            <small>Anterior · Unidad 04</small>
+            <b>PreparedStatement y ResultSet</b>
+          </span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-center">
+        <a href="../../index.html#unidad-04" class="pm-nav-unit-pill">
+          <span class="pm-unit-badge">UNIDAD 04</span>
+          <span class="pm-unit-name">Lección 04 de 6</span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-next">
+        <a href="../05-interfaces/index.html" class="pm-nav-btn pm-next">
+          <span class="pm-nav-meta">
+            <small>Siguiente lección</small>
+            <b>Interfaz CrudDAO</b>
+          </span>
+          <span class="pm-nav-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Pie de Página Institucional -->
+  <footer class="pm-course-footer">
+    <div class="pm-footer-inner">
+      <div class="pm-footer-brand">
+        <strong>Profe Macón</strong> · Programación Avanzada 2026
+      </div>
+      <div class="pm-footer-meta">
+        2.º Bachillerato Tecnológico en Tecnologías de la Información · DGETP / UTU · Uruguay<br>
+        Material didáctico para la tienda de cómics «La Viñeta».
+      </div>
+      <div class="pm-footer-links">
+        <a href="../../index.html">Inicio</a>
+        <a href="../../index.html#unidad-01">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html">Tienda de Cómics</a>
+        <a href="#top" class="pm-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Volver arriba</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/pm-common.js"></script>
+</body></html>

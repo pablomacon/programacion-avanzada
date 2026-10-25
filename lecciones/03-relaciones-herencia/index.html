@@ -77,7 +77,30 @@ figure.uml figcaption{margin:12px 6px 0;color:#5c5562;font-size:.93rem;line-heig
 @media(max-width:750px){.compare-relations{grid-template-columns:1fr}.relationship{grid-template-columns:1fr}.relationship .relation{padding:4px}}
 
 .uml-stage{margin:22px 0 30px;border:1px solid var(--line);border-radius:15px;background:#fff;overflow:hidden;box-shadow:0 8px 24px rgba(23,20,25,.06)}.uml-stage img{display:block;width:100%;height:auto;object-fit:contain;background:white;padding:16px;box-sizing:border-box}.uml-stage figcaption{padding:12px 18px;background:#f3eff6;color:#39323d;font-size:.93rem;line-height:1.55;border-top:1px solid var(--line)}.uml-stage figcaption code{font-size:.92em}@media(max-width:650px){.uml-stage img{padding:6px}.uml-stage figcaption{padding:10px 12px}}
-</style></head><body><a class="curso-regreso" href="../../index.html#unidad-01" aria-label="Volver al índice de la Unidad 1">← Volver a Unidad 1</a>
+</style>  <link rel="stylesheet" href="../../assets/fonts.css">
+  <link rel="stylesheet" href="../../assets/pm-common.css">
+</head><body>
+  <!-- Encabezado Institucional Unificado -->
+  <header class="pm-site-header" id="pmSiteHeader">
+    <div class="pm-header-bar">
+      <a href="../../index.html" class="pm-brand" aria-label="Programación Avanzada 2026 - Inicio">
+        <img src="../../assets/logo-profe-macon.png" alt="Profe Macón" class="pm-logo">
+        <div class="pm-brand-text">
+          <span class="pm-course-name">Programación Avanzada</span>
+          <span class="pm-course-sub">2.º BT TI · DGETP / UTU</span>
+        </div>
+      </a>
+      <nav class="pm-site-nav" aria-label="Navegación del curso">
+        <a href="../../index.html" class="pm-nav-link">Inicio</a>
+        <a href="../../index.html#unidad-01" class="pm-nav-link is-active">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02" class="pm-nav-link">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03" class="pm-nav-link">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04" class="pm-nav-link">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html" class="pm-nav-link pm-nav-project">Tienda de Cómics</a>
+      </nav>
+    </div>
+  </header>
+
 <style>.curso-regreso{position:fixed;bottom:20px;right:20px;z-index:9999;display:block;background:#171419;color:#fff!important;font:700 14px/1.35 Arial,Helvetica,sans-serif;text-decoration:none;padding:12px 16px;border-radius:30px;box-shadow:0 8px 25px #17141945;border:2px solid #00a99d}.curso-regreso:hover,.curso-regreso:focus-visible{background:#756a96;color:#fff!important;outline:2px solid #fff}@media print{.curso-regreso{display:none}}</style><header class="hero"><div class="wrap"><div class="brand"><img alt="Profe Macón" class="full" src="assets/logo-profemacon.png"/><small><b>PROGRAMACIÓN AVANZADA</b><br/>2.º BT TI · DGETP/UTU · 2026<br/>CET1 · POO en Java</small></div><div class="eyebrow">UNIDAD 01 · INTRODUCCIÓN A LA POO · LECCIÓN 03</div><h1>Relaciones entre objetos <em>y herencia</em></h1><p>En «La Viñeta», comprender cómo colaboran Cliente, Venta, Producto y DetalleVenta nos permite diseñar relaciones correctas. Luego veremos qué cambia cuando una clase es una especialización de otra.</p><div class="tags"><span class="tag">Asociaciones</span><span class="tag">Agregación</span><span class="tag">Composición</span><span class="tag">Herencia</span><span class="tag">CET1</span></div></div></header><nav aria-label="Apartados de la lección"><div class="wrap"><a href="#partida">Nuestros UML</a><a href="#asociacion">Asociación</a><a href="#agregacion">Agregación</a><a href="#composicion">Composición</a><a href="#distinguir">Comparación</a><a href="#herencia">Herencia</a><a href="#modelo">Decisiones</a><a href="#cierre">Comprobación</a></div></nav><main><section id="partida"><div class="step">01 · El punto de partida</div><h2>Volvemos al modelo de la tienda</h2><p class="lead">En los dos SCORM anteriores aprendimos a identificar entidades, definir atributos y distribuir responsabilidades. Ahora necesitamos precisar <b>qué significa cada línea que une nuestras clases</b>.</p><div class="grid2"><figure class="uml"><img alt="UML conceptual de Cliente, Venta, Producto y clase de asociación DetalleVenta" src="assets/uml-conceptual.png"/><figcaption>Diagrama conceptual aportado: representa la venta y su detalle como clase de asociación.</figcaption></figure><figure class="uml"><img alt="UML de diseño con Cliente, Venta, Producto, DetalleVenta y atributos" src="assets/uml-diseno.png"/><figcaption>Diagrama de diseño aportado: muestra atributos y relaciones cercanas a la implementación.</figcaption></figure></div><div class="callout teal"><b>Observación importante:</b> en nuestros dibujos aparecen rombos y una clase de asociación. <b>No debemos interpretar automáticamente un rombo como prueba de que existe composición</b>. La semántica de agregación o composición se justifica con reglas de pertenencia y ciclo de vida; el material original se conserva sin alterar.</div><p>La pregunta que orienta esta lección es: <b>¿un objeto simplemente conoce a otro, lo agrupa o es responsable de su existencia?</b></p></section>
 <section id="asociacion"><div class="step">02 · Relación general</div><h2>Asociación: un objeto conoce a otro</h2><p>Una <b>asociación</b> representa un vínculo entre objetos. No afirma necesariamente quién los crea, quién es su propietario o cuánto tiempo viven.</p><div class="relationship"><div class="entity">Cliente</div><div class="relation">realiza →<br/>asociación</div><div class="entity">Venta</div></div><p>En la tienda una venta corresponde a un cliente. En una implementación Java podemos representarlo con un atributo que guarde una referencia a un objeto de la clase <code class="inline">Cliente</code>.</p><div class="code-label">Venta.java — referencia a otra clase</div><pre><code>public class Venta {
     private int numero;
@@ -170,4 +193,57 @@ public class Vendedor extends Persona {
 <p><b>Decisión abierta:</b> si más adelante los clientes necesitan reglas o comportamientos específicos, podremos revisar la conveniencia de recuperar <code class="inline">Cliente</code> como clase especializada. El diseño responde a los requerimientos presentes, no a todas las posibilidades futuras.</p>
 </section>
 <section id="modelo"><div class="step">07 · Decidir antes de programar</div><h2>El UML nos obliga a justificar nuestras elecciones</h2><div class="grid2"><div class="card"><h3>En nuestros UML de partida</h3><p>Se representan Cliente, Venta, Producto y DetalleVenta. La asociación entre Venta y Producto lleva información propia en DetalleVenta.</p><p>Conservamos las imágenes sin modificar símbolos ni inventar multiplicidades dibujadas.</p></div><div class="card"><h3>En una versión posterior del diseño</h3><p>Podemos establecer una composición Venta–DetalleVenta, una asociación DetalleVenta–Producto y, si el dominio lo necesita, introducir tipos generales y especializados mediante herencia.</p><p>Estas son <b>decisiones justificadas</b>, no correcciones silenciosas de los diagramas originales.</p></div></div><div class="callout teal"><b>Regla útil:</b> antes de elegir una flecha UML, explica la relación en una oración del negocio. Si no puedes explicar la relación, todavía falta análisis.</div><h3>Progresión del curso</h3><p>Hoy estudiaremos <b>la semántica de las relaciones y la herencia</b>. En el siguiente SCORM aprenderemos a representar asociaciones múltiples mediante <code class="inline">List</code> y a elegir entre <code class="inline">ArrayList</code> y <code class="inline">LinkedList</code>. Allí introduciremos también el polimorfismo de colecciones y una primera mirada a <code class="inline">Set</code>, <code class="inline">Map</code>, estructuras ordenadas y métodos de ordenación.</p></section>
-<section id="cierre"><div class="step">08 · Cierre y verificación</div><h2>Comprueba si distingues las relaciones</h2><div class="quiz" data-answer="b"><p><b>Situación 1:</b> Una venta utiliza un cliente que permanece en el sistema cuando se elimina esa venta. ¿Qué relación describe mejor este vínculo?</p><div class="choices"><button class="choice" data-value="a" type="button">Composición</button><button class="choice" data-value="b" type="button">Asociación</button><button class="choice" data-value="c" type="button">Herencia</button></div><div aria-live="polite" class="feedback"></div></div><div class="quiz" data-answer="c"><p><b>Situación 2:</b> Un detalle no tiene sentido sin la venta a la que pertenece y la aplicación decide que una venta controla la vida de sus detalles. ¿Qué relación estamos modelando?</p><div class="choices"><button class="choice" data-value="a" type="button">Herencia</button><button class="choice" data-value="b" type="button">Asociación sin pertenencia</button><button class="choice" data-value="c" type="button">Composición</button></div><div aria-live="polite" class="feedback"></div></div><div class="quiz" data-answer="a"><p><b>Situación 3:</b> En una ampliación justificada del sistema, Cliente especializa Persona. ¿Qué palabra Java expresa esa relación?</p><div class="choices"><button class="choice" data-value="a" type="button">extends</button><button class="choice" data-value="b" type="button">new</button><button class="choice" data-value="c" type="button">import</button></div><div aria-live="polite" class="feedback"></div></div><div class="callout"><b>Microentrega de documentación:</b> redacta tres reglas de negocio que justifiquen las relaciones Venta–Cliente, Venta–DetalleVenta y DetalleVenta–Producto. Luego escribe una oración para explicar por qué Venta no debe heredar de Cliente.</div><p><b>Siguiente:</b> SCORM 04 — Colecciones Java, interfaz <code class="inline">List</code>, implementaciones, otras colecciones y polimorfismo.</p></section><div class="footer"><div style="display:flex;align-items:center;gap:12px"><img alt="PM" src="assets/logo-pm.png"/><div><b>PROFE MACÓN</b><br/><span class="muted">Explora, aprende, crea.</span></div></div><div class="site">profemacon.net</div></div></main><div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div><script>document.querySelectorAll('.quiz').forEach(function(q){q.querySelectorAll('.choice').forEach(function(btn){btn.addEventListener('click',function(){q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong')});var ok=btn.dataset.value===q.dataset.answer;btn.classList.add(ok?'correct':'wrong');q.querySelector('.feedback').textContent=ok?'Correcto. Has identificado la relación por su significado en el modelo.':'Revisa qué ocurre con la independencia de los objetos y sus ciclos de vida.'})})});</script><script src="scorm.js"></script></body></html>
+<section id="cierre"><div class="step">08 · Cierre y verificación</div><h2>Comprueba si distingues las relaciones</h2><div class="quiz" data-answer="b"><p><b>Situación 1:</b> Una venta utiliza un cliente que permanece en el sistema cuando se elimina esa venta. ¿Qué relación describe mejor este vínculo?</p><div class="choices"><button class="choice" data-value="a" type="button">Composición</button><button class="choice" data-value="b" type="button">Asociación</button><button class="choice" data-value="c" type="button">Herencia</button></div><div aria-live="polite" class="feedback"></div></div><div class="quiz" data-answer="c"><p><b>Situación 2:</b> Un detalle no tiene sentido sin la venta a la que pertenece y la aplicación decide que una venta controla la vida de sus detalles. ¿Qué relación estamos modelando?</p><div class="choices"><button class="choice" data-value="a" type="button">Herencia</button><button class="choice" data-value="b" type="button">Asociación sin pertenencia</button><button class="choice" data-value="c" type="button">Composición</button></div><div aria-live="polite" class="feedback"></div></div><div class="quiz" data-answer="a"><p><b>Situación 3:</b> En una ampliación justificada del sistema, Cliente especializa Persona. ¿Qué palabra Java expresa esa relación?</p><div class="choices"><button class="choice" data-value="a" type="button">extends</button><button class="choice" data-value="b" type="button">new</button><button class="choice" data-value="c" type="button">import</button></div><div aria-live="polite" class="feedback"></div></div><div class="callout"><b>Microentrega de documentación:</b> redacta tres reglas de negocio que justifiquen las relaciones Venta–Cliente, Venta–DetalleVenta y DetalleVenta–Producto. Luego escribe una oración para explicar por qué Venta no debe heredar de Cliente.</div><p><b>Siguiente:</b> SCORM 04 — Colecciones Java, interfaz <code class="inline">List</code>, implementaciones, otras colecciones y polimorfismo.</p></section><div class="footer"><div style="display:flex;align-items:center;gap:12px"><img alt="PM" src="assets/logo-pm.png"/><div><b>PROFE MACÓN</b><br/><span class="muted">Explora, aprende, crea.</span></div></div><div class="site">profemacon.net</div></div></main><div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div><script>document.querySelectorAll('.quiz').forEach(function(q){q.querySelectorAll('.choice').forEach(function(btn){btn.addEventListener('click',function(){q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong')});var ok=btn.dataset.value===q.dataset.answer;btn.classList.add(ok?'correct':'wrong');q.querySelector('.feedback').textContent=ok?'Correcto. Has identificado la relación por su significado en el modelo.':'Revisa qué ocurre con la independencia de los objetos y sus ciclos de vida.'})})});</script><script src="scorm.js"></script>  <!-- Navegación entre Lecciones -->
+  <nav class="pm-lesson-nav" aria-label="Navegación entre lecciones">
+    <div class="pm-lesson-nav-inner">
+      <div class="pm-lesson-nav-prev">
+        <a href="../02-clases-objetos/index.html" class="pm-nav-btn pm-prev">
+          <span class="pm-nav-arrow" aria-hidden="true">←</span>
+          <span class="pm-nav-meta">
+            <small>Anterior · Unidad 01</small>
+            <b>Clases, objetos y responsabilidades</b>
+          </span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-center">
+        <a href="../../index.html#unidad-01" class="pm-nav-unit-pill">
+          <span class="pm-unit-badge">UNIDAD 01</span>
+          <span class="pm-unit-name">Lección 03 de 6</span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-next">
+        <a href="../04-colecciones/index.html" class="pm-nav-btn pm-next">
+          <span class="pm-nav-meta">
+            <small>Siguiente lección</small>
+            <b>Colecciones: List, ArrayList, LinkedList y polimorfismo</b>
+          </span>
+          <span class="pm-nav-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Pie de Página Institucional -->
+  <footer class="pm-course-footer">
+    <div class="pm-footer-inner">
+      <div class="pm-footer-brand">
+        <strong>Profe Macón</strong> · Programación Avanzada 2026
+      </div>
+      <div class="pm-footer-meta">
+        2.º Bachillerato Tecnológico en Tecnologías de la Información · DGETP / UTU · Uruguay<br>
+        Material didáctico para la tienda de cómics «La Viñeta».
+      </div>
+      <div class="pm-footer-links">
+        <a href="../../index.html">Inicio</a>
+        <a href="../../index.html#unidad-01">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html">Tienda de Cómics</a>
+        <a href="#top" class="pm-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Volver arriba</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/pm-common.js"></script>
+</body></html>

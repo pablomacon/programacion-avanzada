@@ -1,0 +1,30 @@
+/* ==========================================================================
+   Programación Avanzada 2026 — Tipografía Oficial Local (Fuentes Variables WOFF2)
+   ========================================================================== */
+
+/* Montserrat: 600–700 para títulos, subtítulos y tarjetas */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url('fonts/montserrat-variable.woff2') format('woff2');
+}
+
+/* Inter: 400–600 para textos, menús, botones, tablas y notas */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('fonts/inter-variable.woff2') format('woff2');
+}
+
+/* Fira Code: 400–500 para código Java, SQL, XML */
+@font-face {
+  font-family: 'Fira Code';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('fonts/fira-code-variable.woff2') format('woff2');
+}

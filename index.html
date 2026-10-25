@@ -1,1 +1,844 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Programación Avanzada 2026 · Profe Macón</title><link rel="stylesheet" href="assets/style.css"><link rel="icon" href="assets/logo-pm.png"></head><body><header class="site-header" id="head"><div class="bar"><a href="index.html"><img src="assets/logo-profe-macon.png" alt="Profe Macón"></a><nav class="nav"><a href="#unidad-01">POO</a><a href="#unidad-02">Vista</a><a href="#unidad-03">Control / Servicio</a><a href="#unidad-04">Persistencia</a></nav></div></header><section class="hero"><div><span class="eyebrow">2.º BT TI · DGETP/UTU · 2026</span><h1>Programación Avanzada</h1><p class="lead">Material de Programación Avanzada para 2.º BT TI. La Unidad 1 reúne seis lecciones; las cinco primeras conservan el diseño original de sus paquetes SCORM.</p></div></section><main class="container"><section class="unit" id="unidad-01"><div class="unit-title"><small>UNIDAD 01 · CET1 / CET2</small><h2>Introducción a la programación orientada a objetos</h2><p>De analizar «La Viñeta» a construir modelos, relaciones, jerarquías y colecciones Java.</p></div><div class="cards"><a class="card" href="lecciones/01-analisis-diseno-oo/index.html" aria-label="Lección 1: Análisis y diseño orientado a objetos"><span class="num">01</span><b>Análisis y diseño orientado a objetos</b><i aria-hidden="true">↗</i></a><a class="card" href="lecciones/02-clases-objetos/index.html" aria-label="Lección 2: Clases, objetos y responsabilidades"><span class="num">02</span><b>Clases, objetos y responsabilidades</b><i aria-hidden="true">↗</i></a><a class="card" href="lecciones/03-relaciones-herencia/index.html" aria-label="Lección 3: Asociaciones, agregación, composición y herencia"><span class="num">03</span><b>Asociaciones, agregación, composición y herencia</b><i aria-hidden="true">↗</i></a><a class="card" href="lecciones/04-colecciones/index.html" aria-label="Lección 4: Colecciones: List, ArrayList, LinkedList y polimorfismo"><span class="num">04</span><b>Colecciones: List, ArrayList, LinkedList y polimorfismo</b><i aria-hidden="true">↗</i></a><a class="card" href="lecciones/05-abstractas-polimorfismo/index.html" aria-label="Lección 5: Clases abstractas, sobrescritura y polimorfismo"><span class="num">05</span><b>Clases abstractas, sobrescritura y polimorfismo</b><i aria-hidden="true">↗</i></a><a class="card" href="lecciones/06-maven/index.html" aria-label="Lección 6: Maven y organización de proyectos"><span class="num">06</span><b>Maven y organización de proyectos</b><i aria-hidden="true">↗</i></a></div></section><section class="unit" id="unidad-02"><div class="unit-title"><small>UNIDAD 02</small><h2>Vista</h2><p>Swing y construcción de interfaces.</p></div><div class="cards"><a class="card" href="lecciones/01-producto-vista/index.html"><span class="num">01</span><b>ProductoVista: construimos la interfaz</b><i>↗</i></a><a class="card" href="lecciones/02-eventos-tabla/index.html"><span class="num">02</span><b>ProductoVista: eventos y JTable</b><i>↗</i></a></div></section><section class="unit" id="unidad-03"><div class="unit-title"><small>UNIDAD 03</small><h2>Control y Servicio</h2><p>Organización de responsabilidades.</p></div><div class="cards"><a class="card" href="lecciones/01-main-arquitectura/index.html"><span class="num">01</span><b>Cuando Main hace demasiado</b><i>↗</i></a><a class="card" href="lecciones/02-producto-controller/index.html"><span class="num">02</span><b>ProductoController</b><i>↗</i></a><a class="card" href="lecciones/03-producto-service/index.html"><span class="num">03</span><b>ProductoService</b><i>↗</i></a><a class="card" href="lecciones/04-excepciones/index.html"><span class="num">04</span><b>Excepciones y errores</b><i>↗</i></a></div></section><section class="unit" id="unidad-04"><div class="unit-title"><small>UNIDAD 04</small><h2>Persistencia</h2><p>JDBC, DAO, interfaces y bajo acoplamiento.</p></div><div class="cards"><a class="card" href="lecciones/01-introduccion-jdbc/index.html"><span class="num">01</span><b>¿Dónde quedaron nuestros productos?</b><i>↗</i></a><a class="card" href="lecciones/02-connection/index.html"><span class="num">02</span><b>DriverManager y Connection</b><i>↗</i></a><a class="card" href="lecciones/03-sql/index.html"><span class="num">03</span><b>PreparedStatement y ResultSet</b><i>↗</i></a><a class="card" href="lecciones/04-dao/index.html"><span class="num">04</span><b>ProductoDAO y CRUD</b><i>↗</i></a><a class="card" href="lecciones/05-interfaces/index.html"><span class="num">05</span><b>Interfaz CrudDAO</b><i>↗</i></a><a class="card" href="lecciones/06-polimorfismo/index.html"><span class="num">06</span><b>Polimorfismo y bajo acoplamiento</b><i>↗</i></a></div></section><section class="unit" id="proyecto"><div class="unit-title"><small>REFERENCIA INTEGRADA</small><h2>Tienda de Cómics</h2><p>Versión integrada de Producto, con las clases completas y explicación de su arquitectura.</p></div><div class="cards"><a class="card" href="lecciones/proyecto-tienda-comics/index.html"><span class="num">PM</span><b>Ver proyecto completo: código y explicación</b><i>↗</i></a></div></section></main><footer>PROFE MACÓN · Programación Avanzada 2026</footer><script>const h=document.getElementById('head');function compact(){h.classList.toggle('compact',scrollY>80)}addEventListener('scroll',compact,{passive:true});compact();</script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Programación Avanzada 2026 · Profe Macón · 2.º BT TI</title>
+  <link rel="icon" href="assets/logo-pm.png">
+  <link rel="stylesheet" href="assets/fonts.css">
+  <link rel="stylesheet" href="assets/pm-common.css">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <!-- Encabezado Institucional Unificado -->
+  <header class="pm-site-header" id="pmSiteHeader">
+    <div class="pm-header-bar">
+      <a href="index.html" class="pm-brand" aria-label="Programación Avanzada 2026 - Inicio">
+        <img src="assets/logo-profe-macon.png" alt="Profe Macón" class="pm-logo">
+        <div class="pm-brand-text">
+          <span class="pm-course-name">Programación Avanzada</span>
+          <span class="pm-course-sub">2.º BT TI · DGETP / UTU</span>
+        </div>
+      </a>
+      <nav class="pm-site-nav" aria-label="Navegación del curso">
+        <a href="#inicio" class="pm-nav-link is-active">Inicio</a>
+        <a href="#unidad-01" class="pm-nav-link">Unidad 1 · POO</a>
+        <a href="#unidad-02" class="pm-nav-link">Unidad 2 · Vista</a>
+        <a href="#unidad-03" class="pm-nav-link">Unidad 3 · Control y Servicio</a>
+        <a href="#unidad-04" class="pm-nav-link">Unidad 4 · Persistencia</a>
+        <a href="#proyecto" class="pm-nav-link pm-nav-project">Tienda de Cómics</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Principal -->
+  <section class="pm-hero" id="inicio">
+    <div class="pm-hero-inner">
+      <div class="pm-hero-content">
+        <span class="pm-eyebrow">2.º Bachillerato Tecnológico en Tecnologías de la Información · 2026</span>
+        <h1 class="pm-hero-title">Programación Avanzada</h1>
+        <p class="pm-hero-lead">
+          Del análisis y diseño orientado a objetos a la construcción de aplicaciones Java con interfaz gráfica, arquitectura modular y persistencia de datos.
+        </p>
+        
+        <!-- Píldoras de Tecnologías -->
+        <div class="pm-tech-stack" aria-label="Pila tecnológica del curso">
+          <span class="pm-tech-badge"><span class="pm-dot"></span> Java 17</span>
+          <span class="pm-tech-badge"><span class="pm-dot"></span> Maven</span>
+          <span class="pm-tech-badge"><span class="pm-dot"></span> Swing</span>
+          <span class="pm-tech-badge"><span class="pm-dot"></span> FlatLaf</span>
+          <span class="pm-tech-badge"><span class="pm-dot"></span> JDBC</span>
+          <span class="pm-tech-badge"><span class="pm-dot"></span> MySQL</span>
+        </div>
+
+        <!-- Tarjeta del Caso Integrador -->
+        <div class="pm-case-card">
+          <div class="pm-case-icon">💡</div>
+          <div class="pm-case-info">
+            <span class="pm-case-badge">Caso Integrador del Curso</span>
+            <h3 class="pm-case-title">La Viñeta — Tienda de Cómics</h3>
+            <p class="pm-case-desc">
+              A lo largo del curso construimos una aplicación de escritorio completa. Comenzamos modelando el dominio de cómics, diseñamos su ventana con Swing, organizamos el flujo con controladores y servicios, y persistimos el inventario con JDBC y el patrón DAO.
+            </p>
+          </div>
+          <a href="lecciones/proyecto-tienda-comics/index.html" class="pm-case-btn">
+            Explorar Proyecto Completo <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mapa de Ruta / Arquitectura en Capas -->
+  <section class="pm-roadmap-section">
+    <div class="pm-container">
+      <div class="pm-section-head">
+        <span class="pm-subhead">Recorrido Pedagógico</span>
+        <h2>Arquitectura de la Aplicación en 4 Etapas</h2>
+      </div>
+      <div class="pm-roadmap-grid">
+        <a href="#unidad-01" class="pm-roadmap-step">
+          <span class="pm-step-num">01</span>
+          <h4>Modelo y POO</h4>
+          <p>Clases, objetos, herencia, colecciones y Maven.</p>
+          <span class="pm-step-tag">Dominio Java</span>
+        </a>
+        <a href="#unidad-02" class="pm-roadmap-step">
+          <span class="pm-step-num">02</span>
+          <h4>Vista Gráfica</h4>
+          <p>Swing, layouts, eventos y visualización con JTable.</p>
+          <span class="pm-step-tag">Interfaz UI</span>
+        </a>
+        <a href="#unidad-03" class="pm-roadmap-step">
+          <span class="pm-step-num">03</span>
+          <h4>Control y Servicio</h4>
+          <p>Reglas de negocio, validaciones y manejo de excepciones.</p>
+          <span class="pm-step-tag">Lógica Modular</span>
+        </a>
+        <a href="#unidad-04" class="pm-roadmap-step">
+          <span class="pm-step-num">04</span>
+          <h4>Persistencia</h4>
+          <p>Conexión MySQL, SQL seguro, patrón DAO y polimorfismo.</p>
+          <span class="pm-step-tag">Base de Datos</span>
+        </a>
+        <a href="#proyecto" class="pm-roadmap-step pm-step-final">
+          <span class="pm-step-num">★</span>
+          <h4>Tienda de Cómics</h4>
+          <p>Integración total en capas listas para producción.</p>
+          <span class="pm-step-tag pm-tag-highlight">Caso Completo</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Buscador en Tiempo Real -->
+  <section class="pm-search-section">
+    <div class="pm-container">
+      <div class="pm-search-card">
+        <div class="pm-search-bar">
+          <span class="pm-search-icon" aria-hidden="true">🔍</span>
+          <input type="search" id="pmSearchInput" class="pm-search-input"
+                 placeholder="Buscar lección por tema, tecnología (JDBC, Swing, DAO...), título o competencia..."
+                 aria-label="Buscar lecciones">
+          <button type="button" id="pmSearchClear" class="pm-search-clear" aria-label="Limpiar búsqueda" style="display:none;">✕</button>
+        </div>
+        
+        <div class="pm-search-filters" role="group" aria-label="Filtros rápidos">
+          <span class="pm-filter-label">Filtros rápidos:</span>
+          <button type="button" class="pm-filter-chip is-active" data-filter="all">Todas las lecciones</button>
+          <button type="button" class="pm-filter-chip" data-filter="unidad-01">Unidad 1 · POO</button>
+          <button type="button" class="pm-filter-chip" data-filter="unidad-02">Unidad 2 · Vista</button>
+          <button type="button" class="pm-filter-chip" data-filter="unidad-03">Unidad 3 · Control/Servicio</button>
+          <button type="button" class="pm-filter-chip" data-filter="unidad-04">Unidad 4 · Persistencia</button>
+          <button type="button" class="pm-filter-chip" data-filter="CET1">CET1</button>
+          <button type="button" class="pm-filter-chip" data-filter="CET2">CET2</button>
+          <button type="button" class="pm-filter-chip" data-filter="CET3">CET3</button>
+        </div>
+
+        <div class="pm-search-meta">
+          <span id="pmSearchCount" class="pm-search-count">Mostrando 19 lecciones</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mensaje de Búsqueda Vacía -->
+  <div id="pmSearchEmpty" class="pm-search-empty" style="display: none;">
+    <div class="pm-empty-box">
+      <span class="pm-empty-icon">🔎</span>
+      <h3>No se encontraron lecciones</h3>
+      <p>No hay contenidos que coincidan con tu término de búsqueda. Intenta con otra palabra clave como <em>Swing, DAO, MySQL, Clases</em> o limpia el filtro.</p>
+      <button type="button" class="pm-btn-reset-search" id="pmResetSearchBtn">Restablecer búsqueda</button>
+    </div>
+  </div>
+
+  <!-- Contenido de las Unidades -->
+  <main class="pm-container pm-lessons-container" id="contenido">
+
+    <!-- UNIDAD 01 -->
+    <section class="pm-unit" id="unidad-01" data-unit="unidad-01">
+      <div class="pm-unit-header">
+        <div class="pm-unit-badge-block">
+          <span class="pm-unit-pill">UNIDAD 01</span>
+          <span class="pm-unit-competence">CET1 · CET2</span>
+        </div>
+        <h2 class="pm-unit-title">Introducción a la programación orientada a objetos</h2>
+        <p class="pm-unit-lead">
+          De analizar «La Viñeta» a construir modelos, relaciones, jerarquías, colecciones Java y proyectos con Maven.
+        </p>
+      </div>
+
+      <div class="pm-cards-grid">
+        <!-- Lección 1.1 -->
+        <a class="pm-card" href="lecciones/01-analisis-diseno-oo/index.html"
+           data-unit="unidad-01"
+           data-title="Análisis y diseño orientado a objetos"
+           data-tags="UML Modelo Conceptual Diseño OO Requisitos"
+           data-competence="CET1 CET2"
+           data-desc="Del problema real al modelo de clases y diseño conceptual para la tienda de cómics La Viñeta.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">01</span>
+            <span class="pm-badge-cet">CET1 · CET2</span>
+          </div>
+          <h3 class="pm-card-title">Análisis y diseño orientado a objetos</h3>
+          <p class="pm-card-desc">Del problema real al modelo de clases y diseño conceptual para la tienda de cómics «La Viñeta».</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">UML</span>
+            <span class="pm-tag">Modelo Conceptual</span>
+            <span class="pm-tag">Diseño OO</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 1.2 -->
+        <a class="pm-card" href="lecciones/02-clases-objetos/index.html"
+           data-unit="unidad-01"
+           data-title="Clases, objetos y responsabilidades"
+           data-tags="Clases Objetos Encapsulamiento Métodos Constructores"
+           data-competence="CET1"
+           data-desc="Definición de atributos, métodos, encapsulamiento, constructores y responsabilidades de cada clase Java.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">02</span>
+            <span class="pm-badge-cet">CET1</span>
+          </div>
+          <h3 class="pm-card-title">Clases, objetos y responsabilidades</h3>
+          <p class="pm-card-desc">Definición de atributos, métodos, encapsulamiento, constructores y responsabilidades en Java.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Clases</span>
+            <span class="pm-tag">Encapsulamiento</span>
+            <span class="pm-tag">Objetos</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 1.3 -->
+        <a class="pm-card" href="lecciones/03-relaciones-herencia/index.html"
+           data-unit="unidad-01"
+           data-title="Asociaciones, agregación, composición y herencia"
+           data-tags="Herencia Composición Asociaciones Agregación Reutilización"
+           data-competence="CET1"
+           data-desc="Modelado e implementación de relaciones entre objetos, jerarquías de herencia y reutilización de código.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">03</span>
+            <span class="pm-badge-cet">CET1</span>
+          </div>
+          <h3 class="pm-card-title">Asociaciones, agregación, composición y herencia</h3>
+          <p class="pm-card-desc">Modelado e implementación de relaciones entre objetos, jerarquías de herencia y reutilización.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Herencia</span>
+            <span class="pm-tag">Composición</span>
+            <span class="pm-tag">Asociaciones</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 1.4 -->
+        <a class="pm-card" href="lecciones/04-colecciones/index.html"
+           data-unit="unidad-01"
+           data-title="Colecciones: List, ArrayList, LinkedList y polimorfismo"
+           data-tags="List ArrayList LinkedList Colecciones Polimorfismo Iteración"
+           data-competence="CET1 CET2"
+           data-desc="Manejo de estructuras de datos dinámicas en memoria, interfaces de colecciones e iteración eficiente.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">04</span>
+            <span class="pm-badge-cet">CET1 · CET2</span>
+          </div>
+          <h3 class="pm-card-title">Colecciones: List, ArrayList, LinkedList y polimorfismo</h3>
+          <p class="pm-card-desc">Manejo de estructuras de datos dinámicas en memoria, interfaces de colecciones e iteración.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">List</span>
+            <span class="pm-tag">ArrayList</span>
+            <span class="pm-tag">Polimorfismo</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 1.5 -->
+        <a class="pm-card" href="lecciones/05-abstractas-polimorfismo/index.html"
+           data-unit="unidad-01"
+           data-title="Clases abstractas, sobrescritura y polimorfismo"
+           data-tags="Clases Abstractas Override Polimorfismo Enlace Dinámico"
+           data-competence="CET1 CET2"
+           data-desc="Contratos base mediante clases abstractas, métodos sobrescritos (@Override) y enlace dinámico.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">05</span>
+            <span class="pm-badge-cet">CET1 · CET2</span>
+          </div>
+          <h3 class="pm-card-title">Clases abstractas, sobrescritura y polimorfismo</h3>
+          <p class="pm-card-desc">Contratos base con clases abstractas, métodos sobrescritos (@Override) y enlace dinámico.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Clases Abstractas</span>
+            <span class="pm-tag">@Override</span>
+            <span class="pm-tag">Polimorfismo</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 1.6 -->
+        <a class="pm-card" href="lecciones/06-maven/index.html"
+           data-unit="unidad-01"
+           data-title="Maven y organización de proyectos"
+           data-tags="Maven pom.xml Paquetes Estructura Dependencias"
+           data-competence="CET1"
+           data-desc="Transformación de diagramas a un proyecto Java real estructurado con Maven, paquetes y ciclo de vida.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">06</span>
+            <span class="pm-badge-cet">CET1</span>
+          </div>
+          <h3 class="pm-card-title">Maven y organización de proyectos</h3>
+          <p class="pm-card-desc">Transformación de diagramas a un proyecto Java real estructurado con Maven y paquetes.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Maven</span>
+            <span class="pm-tag">pom.xml</span>
+            <span class="pm-tag">Paquetes</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- UNIDAD 02 -->
+    <section class="pm-unit" id="unidad-02" data-unit="unidad-02">
+      <div class="pm-unit-header">
+        <div class="pm-unit-badge-block">
+          <span class="pm-unit-pill">UNIDAD 02</span>
+          <span class="pm-unit-competence">CET1</span>
+        </div>
+        <h2 class="pm-unit-title">Vista</h2>
+        <p class="pm-unit-lead">
+          Java Swing, FlatLaf, layouts, eventos y construcción de interfaces de usuario para escritorio.
+        </p>
+      </div>
+
+      <div class="pm-cards-grid">
+        <!-- Lección 2.1 -->
+        <a class="pm-card" href="lecciones/01-producto-vista/index.html"
+           data-unit="unidad-02"
+           data-title="ProductoVista: construimos la interfaz"
+           data-tags="Swing JFrame JPanel Layouts BorderLayout GridLayout"
+           data-competence="CET1"
+           data-desc="Creación paso a paso de la ventana gráfica en Java Swing con JFrame, JPanel y gestores de layout.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">01</span>
+            <span class="pm-badge-cet">CET1</span>
+          </div>
+          <h3 class="pm-card-title">ProductoVista: construimos la interfaz</h3>
+          <p class="pm-card-desc">Construcción paso a paso de la ventana de productos en Java Swing con JFrame, JPanel y layouts.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Swing</span>
+            <span class="pm-tag">JFrame</span>
+            <span class="pm-tag">Layouts</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 2.2 -->
+        <a class="pm-card" href="lecciones/02-eventos-tabla/index.html"
+           data-unit="unidad-02"
+           data-title="ProductoVista: eventos y JTable"
+           data-tags="Eventos ActionListener JTable TableModel Botones"
+           data-competence="CET1"
+           data-desc="Gestión de eventos de usuario, botones de acción y visualización de listados dinámicos con JTable.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">02</span>
+            <span class="pm-badge-cet">CET1</span>
+          </div>
+          <h3 class="pm-card-title">ProductoVista: eventos y JTable</h3>
+          <p class="pm-card-desc">Conexión de botones, gestión de eventos con listeners y actualización de tablas JTable.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Eventos</span>
+            <span class="pm-tag">JTable</span>
+            <span class="pm-tag">Listeners</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- UNIDAD 03 -->
+    <section class="pm-unit" id="unidad-03" data-unit="unidad-03">
+      <div class="pm-unit-header">
+        <div class="pm-unit-badge-block">
+          <span class="pm-unit-pill">UNIDAD 03</span>
+          <span class="pm-unit-competence">CET1 · CET2</span>
+        </div>
+        <h2 class="pm-unit-title">Control y Servicio</h2>
+        <p class="pm-unit-lead">
+          Modularidad, separación de responsabilidades, capas de negocio y manejo profesional de excepciones.
+        </p>
+      </div>
+
+      <div class="pm-cards-grid">
+        <!-- Lección 3.1 -->
+        <a class="pm-card" href="lecciones/01-main-arquitectura/index.html"
+           data-unit="unidad-03"
+           data-title="Cuando Main hace demasiado"
+           data-tags="Arquitectura Modularidad Main Responsabilidades MVC"
+           data-competence="CET1 CET2"
+           data-desc="Identificación del problema de sobrecarga en Main y fundamentos para separar vista, lógica y datos.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">01</span>
+            <span class="pm-badge-cet">CET1 · CET2</span>
+          </div>
+          <h3 class="pm-card-title">Cuando Main hace demasiado</h3>
+          <p class="pm-card-desc">Por qué conviene separar responsabilidades antes de que la aplicación crezca sin control.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Arquitectura</span>
+            <span class="pm-tag">Modularidad</span>
+            <span class="pm-tag">Mantenibilidad</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 3.2 -->
+        <a class="pm-card" href="lecciones/02-producto-controller/index.html"
+           data-unit="unidad-03"
+           data-title="ProductoController"
+           data-tags="Controller MVC Coordinación Eventos Desacoplamiento"
+           data-competence="CET1 CET2"
+           data-desc="Intermediación entre la interfaz de usuario y las reglas del negocio sin mezclar responsabilidades.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">02</span>
+            <span class="pm-badge-cet">CET1 · CET2</span>
+          </div>
+          <h3 class="pm-card-title">ProductoController</h3>
+          <p class="pm-card-desc">El intermediario entre la vista y el servicio: coordinar acciones de usuario sin acoplar capas.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Controller</span>
+            <span class="pm-tag">Coordinación</span>
+            <span class="pm-tag">Desacoplamiento</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 3.3 -->
+        <a class="pm-card" href="lecciones/03-producto-service/index.html"
+           data-unit="unidad-03"
+           data-title="ProductoService"
+           data-tags="Service Reglas de Negocio Validación Lógica"
+           data-competence="CET1 CET2"
+           data-desc="Implementación de la capa de servicio para validaciones, reglas de negocio y consistencia de datos.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">03</span>
+            <span class="pm-badge-cet">CET1 · CET2</span>
+          </div>
+          <h3 class="pm-card-title">ProductoService</h3>
+          <p class="pm-card-desc">Reglas de negocio, validaciones y lógica de dominio aisladas de la interfaz gráfica.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Service</span>
+            <span class="pm-tag">Reglas de Negocio</span>
+            <span class="pm-tag">Validación</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 3.4 -->
+        <a class="pm-card" href="lecciones/04-excepciones/index.html"
+           data-unit="unidad-03"
+           data-title="Excepciones y errores"
+           data-tags="Excepciones Try-Catch Error Handling Robustez"
+           data-competence="CET1 CET2"
+           data-desc="Manejo robusto de errores con try-catch, creación de excepciones personalizadas y feedback al usuario.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">04</span>
+            <span class="pm-badge-cet">CET1 · CET2</span>
+          </div>
+          <h3 class="pm-card-title">Excepciones y errores</h3>
+          <p class="pm-card-desc">Anticipar fallos, capturar excepciones y presentar mensajes claros y amigables al usuario.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Excepciones</span>
+            <span class="pm-tag">Try-Catch</span>
+            <span class="pm-tag">Robustez</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- UNIDAD 04 -->
+    <section class="pm-unit" id="unidad-04" data-unit="unidad-04">
+      <div class="pm-unit-header">
+        <div class="pm-unit-badge-block">
+          <span class="pm-unit-pill">UNIDAD 04</span>
+          <span class="pm-unit-competence">CET2 · CET3</span>
+        </div>
+        <h2 class="pm-unit-title">Persistencia</h2>
+        <p class="pm-unit-lead">
+          JDBC directo, DriverManager, consultas SQL seguras, patrón DAO, interfaces y bajo acoplamiento.
+        </p>
+      </div>
+
+      <div class="pm-cards-grid">
+        <!-- Lección 4.1 -->
+        <a class="pm-card" href="lecciones/01-introduccion-jdbc/index.html"
+           data-unit="unidad-04"
+           data-title="¿Dónde quedaron nuestros productos?"
+           data-tags="Persistencia Bases de Datos JDBC MySQL Ciclo de Vida"
+           data-competence="CET2 CET3"
+           data-desc="La necesidad de persistencia permanente más allá del ciclo de vida en memoria de la aplicación.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">01</span>
+            <span class="pm-badge-cet">CET2 · CET3</span>
+          </div>
+          <h3 class="pm-card-title">¿Dónde quedaron nuestros productos?</h3>
+          <p class="pm-card-desc">Por qué los datos en memoria desaparecen al cerrar el programa y cómo conectarse a bases de datos.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Persistencia</span>
+            <span class="pm-tag">JDBC</span>
+            <span class="pm-tag">MySQL</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 4.2 -->
+        <a class="pm-card" href="lecciones/02-connection/index.html"
+           data-unit="unidad-04"
+           data-title="DriverManager y Connection"
+           data-tags="Connection DriverManager Conexión URL JDBC Credenciales"
+           data-competence="CET3"
+           data-desc="Configuración del driver JDBC de MySQL, parámetros de conexión y gestión segura de sesiones de BD.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">02</span>
+            <span class="pm-badge-cet">CET3</span>
+          </div>
+          <h3 class="pm-card-title">DriverManager y Connection</h3>
+          <p class="pm-card-desc">Primera conexión a MySQL: cargar drivers, configurar URL JDBC y gestionar la conexión.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">DriverManager</span>
+            <span class="pm-tag">Connection</span>
+            <span class="pm-tag">MySQL</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 4.3 -->
+        <a class="pm-card" href="lecciones/03-sql/index.html"
+           data-unit="unidad-04"
+           data-title="PreparedStatement y ResultSet"
+           data-tags="PreparedStatement ResultSet SQL Inyección SQL Mapeo"
+           data-competence="CET3"
+           data-desc="Ejecución de consultas parametrizadas contra inyección SQL y mapeo de filas ResultSet a objetos Java.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">03</span>
+            <span class="pm-badge-cet">CET3</span>
+          </div>
+          <h3 class="pm-card-title">PreparedStatement y ResultSet</h3>
+          <p class="pm-card-desc">Consultas parametrizadas seguras, prevención de inyección SQL y transformación de tablas a objetos.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">PreparedStatement</span>
+            <span class="pm-tag">ResultSet</span>
+            <span class="pm-tag">SQL Seguro</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 4.4 -->
+        <a class="pm-card" href="lecciones/04-dao/index.html"
+           data-unit="unidad-04"
+           data-title="ProductoDAO y CRUD"
+           data-tags="DAO Patrón DAO CRUD Insert Select Update Delete"
+           data-competence="CET3"
+           data-desc="Aplicación del patrón Data Access Object para encapsular operaciones Crear, Leer, Actualizar y Borrar.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">04</span>
+            <span class="pm-badge-cet">CET3</span>
+          </div>
+          <h3 class="pm-card-title">ProductoDAO y CRUD</h3>
+          <p class="pm-card-desc">Encapsulación de consultas SQL en una clase especializada mediante el patrón Data Access Object.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Patrón DAO</span>
+            <span class="pm-tag">CRUD</span>
+            <span class="pm-tag">Encapsulamiento</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 4.5 -->
+        <a class="pm-card" href="lecciones/05-interfaces/index.html"
+           data-unit="unidad-04"
+           data-title="Interfaz CrudDAO"
+           data-tags="Interfaces CrudDAO Contratos Desacoplamiento Genéricos"
+           data-competence="CET2 CET3"
+           data-desc="Definición de contratos genéricos mediante interfaces para desacoplar el acceso a datos del resto del sistema.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">05</span>
+            <span class="pm-badge-cet">CET2 · CET3</span>
+          </div>
+          <h3 class="pm-card-title">Interfaz CrudDAO</h3>
+          <p class="pm-card-desc">Definir un contrato común para que el resto del sistema no dependa de cómo se guardan los datos.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Interfaces</span>
+            <span class="pm-tag">CrudDAO</span>
+            <span class="pm-tag">Contratos</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+
+        <!-- Lección 4.6 -->
+        <a class="pm-card" href="lecciones/06-polimorfismo/index.html"
+           data-unit="unidad-04"
+           data-title="Polimorfismo y bajo acoplamiento"
+           data-tags="Polimorfismo Bajo Acoplamiento DAO Inversión Dependencias"
+           data-competence="CET2 CET3"
+           data-desc="Flexibilidad para alternar entre diferentes implementaciones DAO (memoria vs base de datos) sin tocar la lógica.">
+          <div class="pm-card-top">
+            <span class="pm-card-num">06</span>
+            <span class="pm-badge-cet">CET2 · CET3</span>
+          </div>
+          <h3 class="pm-card-title">Polimorfismo y bajo acoplamiento</h3>
+          <p class="pm-card-desc">Una misma interfaz y múltiples implementaciones de almacenamiento: memoria vs MySQL sin modificar código.</p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Bajo Acoplamiento</span>
+            <span class="pm-tag">Polimorfismo</span>
+            <span class="pm-tag">Flexibilidad</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Ver lección</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- PROYECTO INTEGRADO -->
+    <section class="pm-unit pm-unit-project" id="proyecto" data-unit="proyecto">
+      <div class="pm-unit-header">
+        <div class="pm-unit-badge-block">
+          <span class="pm-unit-pill pm-pill-highlight">REFERENCIA INTEGRADA</span>
+          <span class="pm-unit-competence">CET1 · CET2 · CET3</span>
+        </div>
+        <h2 class="pm-unit-title">Tienda de Cómics — «La Viñeta»</h2>
+        <p class="pm-unit-lead">
+          La síntesis completa de todo el año: paquetes model, view, controller, service, dao, config y exceptions con código Java comentado paso a paso.
+        </p>
+      </div>
+
+      <div class="pm-cards-grid">
+        <a class="pm-card pm-card-featured" href="lecciones/proyecto-tienda-comics/index.html"
+           data-unit="proyecto"
+           data-title="Tienda de Cómics: Proyecto Completo y Código Fuente"
+           data-tags="Proyecto Completo Java Swing FlatLaf JDBC MySQL Arquitectura"
+           data-competence="CET1 CET2 CET3"
+           data-desc="Versión integrada de Producto, con las clases completas comentadas y la explicación detallada de su arquitectura en capas.">
+          <div class="pm-card-top">
+            <span class="pm-card-num pm-num-gold">PM</span>
+            <span class="pm-badge-cet">CET1 · CET2 · CET3</span>
+          </div>
+          <h3 class="pm-card-title">Ver proyecto completo: código, paquetes y arquitectura</h3>
+          <p class="pm-card-desc">
+            Código fuente completo de las 7 capas de la aplicación: Producto, ProductoVista, ProductoController, ProductoService, ProductoDAO, DatabaseConnection y excepciones de negocio.
+          </p>
+          <div class="pm-card-tags">
+            <span class="pm-tag">Java 17</span>
+            <span class="pm-tag">FlatLaf UI</span>
+            <span class="pm-tag">JDBC Directo</span>
+            <span class="pm-tag">Patrón DAO</span>
+            <span class="pm-tag">MySQL</span>
+          </div>
+          <div class="pm-card-footer">
+            <span class="pm-card-link-text">Abrir referencia del proyecto</span>
+            <span class="pm-card-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Pie de Página Institucional -->
+  <footer class="pm-course-footer">
+    <div class="pm-footer-inner">
+      <div class="pm-footer-brand">
+        <strong>Profe Macón</strong> · Programación Avanzada 2026
+      </div>
+      <div class="pm-footer-meta">
+        2.º Bachillerato Tecnológico en Tecnologías de la Información · DGETP / UTU · Uruguay<br>
+        Materiales de estudio elaborados para la construcción del proyecto «La Viñeta — Tienda de Cómics».
+      </div>
+      <div class="pm-footer-links">
+        <a href="#inicio">Inicio</a>
+        <a href="#unidad-01">Unidad 1 · POO</a>
+        <a href="#unidad-02">Unidad 2 · Vista</a>
+        <a href="#unidad-03">Unidad 3 · Control y Servicio</a>
+        <a href="#unidad-04">Unidad 4 · Persistencia</a>
+        <a href="lecciones/proyecto-tienda-comics/index.html">Tienda de Cómics</a>
+        <a href="#inicio" class="pm-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Volver arriba</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/pm-common.js"></script>
+  <script>
+    // Buscador interactivo en tiempo real para la portada
+    (function() {
+      'use strict';
+      var searchInput = document.getElementById('pmSearchInput');
+      var clearBtn = document.getElementById('pmSearchClear');
+      var countEl = document.getElementById('pmSearchCount');
+      var emptyEl = document.getElementById('pmSearchEmpty');
+      var resetBtn = document.getElementById('pmResetSearchBtn');
+      var filterChips = document.querySelectorAll('.pm-filter-chip');
+      var cards = document.querySelectorAll('.pm-card');
+      var units = document.querySelectorAll('.pm-unit');
+
+      var currentFilter = 'all';
+      var currentQuery = '';
+
+      function normalize(str) {
+        return (str || '').toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '');
+      }
+
+      function filterLessons() {
+        var q = normalize(currentQuery.trim());
+        var visibleCount = 0;
+
+        cards.forEach(function(card) {
+          var unit = card.getAttribute('data-unit') || '';
+          var title = normalize(card.getAttribute('data-title'));
+          var tags = normalize(card.getAttribute('data-tags'));
+          var comp = normalize(card.getAttribute('data-competence'));
+          var desc = normalize(card.getAttribute('data-desc'));
+          var fullText = title + ' ' + tags + ' ' + comp + ' ' + desc + ' ' + unit;
+
+          var matchesChip = false;
+          if (currentFilter === 'all') {
+            matchesChip = true;
+          } else if (currentFilter.startsWith('unidad-') || currentFilter === 'proyecto') {
+            matchesChip = (unit === currentFilter);
+          } else if (currentFilter.startsWith('CET')) {
+            matchesChip = comp.toUpperCase().indexOf(currentFilter) !== -1;
+          }
+
+          var matchesText = (q === '') || (fullText.indexOf(q) !== -1);
+
+          if (matchesChip && matchesText) {
+            card.style.display = '';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        // Ocultar o mostrar encabezados de unidad vacías
+        units.forEach(function(unitSec) {
+          var visibleCardsInUnit = unitSec.querySelectorAll('.pm-card:not([style*="display: none"])');
+          if (visibleCardsInUnit.length === 0) {
+            unitSec.style.display = 'none';
+          } else {
+            unitSec.style.display = '';
+          }
+        });
+
+        // Actualizar contador y mensaje vacío
+        if (countEl) {
+          if (visibleCount === 1) {
+            countEl.textContent = 'Mostrando 1 lección';
+          } else {
+            countEl.textContent = 'Mostrando ' + visibleCount + ' lecciones';
+          }
+        }
+
+        if (emptyEl) {
+          emptyEl.style.display = (visibleCount === 0) ? 'block' : 'none';
+        }
+
+        if (clearBtn) {
+          clearBtn.style.display = (currentQuery.length > 0) ? 'inline-block' : 'none';
+        }
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          currentQuery = searchInput.value;
+          filterLessons();
+        });
+      }
+
+      if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+          searchInput.value = '';
+          currentQuery = '';
+          searchInput.focus();
+          filterLessons();
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+          searchInput.value = '';
+          currentQuery = '';
+          currentFilter = 'all';
+          filterChips.forEach(function(c) {
+            c.classList.toggle('is-active', c.getAttribute('data-filter') === 'all');
+          });
+          filterLessons();
+        });
+      }
+
+      filterChips.forEach(function(chip) {
+        chip.addEventListener('click', function() {
+          filterChips.forEach(function(c) { c.classList.remove('is-active'); });
+          chip.classList.add('is-active');
+          currentFilter = chip.getAttribute('data-filter') || 'all';
+          filterLessons();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

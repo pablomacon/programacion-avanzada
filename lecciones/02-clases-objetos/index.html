@@ -62,8 +62,31 @@ figure.uml figcaption{margin:12px 6px 0;color:#5c5562;font-size:.93rem;line-heig
 .photo-note{margin:14px 0;border-radius:12px;background:#f0faf8;padding:14px 17px;border-left:4px solid var(--teal)}
 @media(max-width:680px){.object-window,.important-row{grid-template-columns:1fr}}
 @media print{.object-window,.flow,.card{break-inside:avoid}}
-</style></head>
-<body><a class="curso-regreso" href="../../index.html#unidad-01" aria-label="Volver al índice de la Unidad 1">← Volver a Unidad 1</a>
+</style>  <link rel="stylesheet" href="../../assets/fonts.css">
+  <link rel="stylesheet" href="../../assets/pm-common.css">
+</head>
+<body>
+  <!-- Encabezado Institucional Unificado -->
+  <header class="pm-site-header" id="pmSiteHeader">
+    <div class="pm-header-bar">
+      <a href="../../index.html" class="pm-brand" aria-label="Programación Avanzada 2026 - Inicio">
+        <img src="../../assets/logo-profe-macon.png" alt="Profe Macón" class="pm-logo">
+        <div class="pm-brand-text">
+          <span class="pm-course-name">Programación Avanzada</span>
+          <span class="pm-course-sub">2.º BT TI · DGETP / UTU</span>
+        </div>
+      </a>
+      <nav class="pm-site-nav" aria-label="Navegación del curso">
+        <a href="../../index.html" class="pm-nav-link">Inicio</a>
+        <a href="../../index.html#unidad-01" class="pm-nav-link is-active">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02" class="pm-nav-link">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03" class="pm-nav-link">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04" class="pm-nav-link">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html" class="pm-nav-link pm-nav-project">Tienda de Cómics</a>
+      </nav>
+    </div>
+  </header>
+
 <style>.curso-regreso{position:fixed;bottom:20px;right:20px;z-index:9999;display:block;background:#171419;color:#fff!important;font:700 14px/1.35 Arial,Helvetica,sans-serif;text-decoration:none;padding:12px 16px;border-radius:30px;box-shadow:0 8px 25px #17141945;border:2px solid #00a99d}.curso-regreso:hover,.curso-regreso:focus-visible{background:#756a96;color:#fff!important;outline:2px solid #fff}@media print{.curso-regreso{display:none}}</style><header class="hero"><div class="wrap"><div class="brand"><img class="full" src="assets/logo-profemacon.png" alt="Profe Macón"><small><b>PROGRAMACIÓN AVANZADA</b><br>2.º BT TI · DGETP/UTU · 2026<br>CET1 · POO en Java</small></div><div class="eyebrow">UNIDAD 01 · INTRODUCCIÓN A LA POO · LECCIÓN 02</div><h1>De las clases a <em>los objetos</em></h1><p>En la tienda de cómics «La Viñeta» ya identificamos entidades y asociaciones. Ahora vamos a convertir ese análisis en clases Java, repartir responsabilidades y crear objetos que colaboran.</p><div class="tags"><span class="tag">Clases y objetos</span><span class="tag">Estado y comportamiento</span><span class="tag">Encapsulamiento</span><span class="tag">Relaciones</span><span class="tag">CET1</span></div></div></header>
 <nav aria-label="Apartados de la lección"><div class="wrap"><a href="#retomar">Recordamos UML</a><a href="#clases">Clases y objetos</a><a href="#atributos">Atributos</a><a href="#responsabilidades">Responsabilidades</a><a href="#encapsular">Encapsulamiento</a><a href="#colaboracion">Colaboración</a><a href="#ensamble">Código integrado</a><a href="#cierre">Síntesis</a></div></nav><main><section id="retomar"><div class="step">01 · Punto de partida</div><h2>El diagrama no es todavía el programa</h2><p class="lead">El SCORM anterior nos dejó dos miradas sobre el mismo problema: un <b>modelo conceptual</b> para comprender el negocio y un <b>modelo de diseño</b> para acercarnos a Java.</p>
 <div class="grid2"><figure class="uml"><img src="assets/uml-conceptual.png" alt="Diagrama conceptual de Cliente, Venta, Producto y DetalleVenta como clase de asociación"/><figcaption><b>Modelo conceptual.</b> Expresa quién participa en la venta y por qué es necesario guardar datos sobre cada producto vendido.</figcaption></figure><figure class="uml"><img src="assets/uml-diseno.png" alt="Diagrama de diseño de Cliente, Venta, Producto y DetalleVenta con atributos y tipos"/><figcaption><b>Modelo de diseño.</b> Agrega atributos y tipos; representa referencias y una colección de detalles para programar.</figcaption></figure></div>
@@ -194,4 +217,57 @@ public class Main {
 <h3>Comprobación rápida</h3><div class="quiz" data-answer="c"><p>Si una venta contiene tres productos diferentes, ¿qué objeto debería calcular el importe de cada renglón?</p><div class="choices"><button class="choice" data-value="a">Cliente, porque participa en la compra</button><button class="choice" data-value="b">Producto, porque es un artículo del catálogo</button><button class="choice" data-value="c">DetalleVenta, porque conoce cantidad y precio de ese renglón</button></div><p class="feedback" aria-live="polite"></p></div>
 <div class="callout teal"><b>Microentrega de documentación:</b> elabora una ficha CRC de <code class="inline">Venta</code> y <code class="inline">DetalleVenta</code>: nombre de clase, dos responsabilidades y sus colaboradores. Acompáñala con un ejemplo de objeto concreto de cada una.</div>
 <p><b>Lo siguiente:</b> profundizaremos en encapsulamiento, relaciones y colecciones, y veremos cómo las decisiones OO nos permiten construir programas más fáciles de ampliar.</p></section><div class="footer"><div style="display:flex;align-items:center;gap:12px"><img src="assets/logo-pm.png" alt="PM"><div><b>PROFE MACÓN</b><br><span class="muted">Explora, aprende, crea.</span></div></div><div class="site">profemacon.net</div></div></main><div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div>
-<script>document.querySelectorAll('.quiz').forEach(function(q){q.querySelectorAll('.choice').forEach(function(btn){btn.addEventListener('click',function(){q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong')});var ok=btn.dataset.value===q.dataset.answer;btn.classList.add(ok?'correct':'wrong');q.querySelector('.feedback').textContent=ok?'Correcto: DetalleVenta puede calcular el subtotal con su cantidad y precio unitario.':'Revisa qué objeto conoce los dos valores necesarios para calcular cada subtotal.'})})});</script><script src="scorm.js"></script></body></html>
+<script>document.querySelectorAll('.quiz').forEach(function(q){q.querySelectorAll('.choice').forEach(function(btn){btn.addEventListener('click',function(){q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong')});var ok=btn.dataset.value===q.dataset.answer;btn.classList.add(ok?'correct':'wrong');q.querySelector('.feedback').textContent=ok?'Correcto: DetalleVenta puede calcular el subtotal con su cantidad y precio unitario.':'Revisa qué objeto conoce los dos valores necesarios para calcular cada subtotal.'})})});</script><script src="scorm.js"></script>  <!-- Navegación entre Lecciones -->
+  <nav class="pm-lesson-nav" aria-label="Navegación entre lecciones">
+    <div class="pm-lesson-nav-inner">
+      <div class="pm-lesson-nav-prev">
+        <a href="../01-analisis-diseno-oo/index.html" class="pm-nav-btn pm-prev">
+          <span class="pm-nav-arrow" aria-hidden="true">←</span>
+          <span class="pm-nav-meta">
+            <small>Anterior · Unidad 01</small>
+            <b>Análisis y diseño orientado a objetos</b>
+          </span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-center">
+        <a href="../../index.html#unidad-01" class="pm-nav-unit-pill">
+          <span class="pm-unit-badge">UNIDAD 01</span>
+          <span class="pm-unit-name">Lección 02 de 6</span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-next">
+        <a href="../03-relaciones-herencia/index.html" class="pm-nav-btn pm-next">
+          <span class="pm-nav-meta">
+            <small>Siguiente lección</small>
+            <b>Asociaciones, agregación, composición y herencia</b>
+          </span>
+          <span class="pm-nav-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Pie de Página Institucional -->
+  <footer class="pm-course-footer">
+    <div class="pm-footer-inner">
+      <div class="pm-footer-brand">
+        <strong>Profe Macón</strong> · Programación Avanzada 2026
+      </div>
+      <div class="pm-footer-meta">
+        2.º Bachillerato Tecnológico en Tecnologías de la Información · DGETP / UTU · Uruguay<br>
+        Material didáctico para la tienda de cómics «La Viñeta».
+      </div>
+      <div class="pm-footer-links">
+        <a href="../../index.html">Inicio</a>
+        <a href="../../index.html#unidad-01">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html">Tienda de Cómics</a>
+        <a href="#top" class="pm-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Volver arriba</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/pm-common.js"></script>
+</body></html>

@@ -36,7 +36,30 @@ details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;backgr
 .quiz{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:#fcfbfd}.quiz p{margin-top:0;font-weight:700}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #cfc7d3;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.choice:hover{background:#f5f1f8}.choice.correct{border-color:var(--teal);background:var(--soft-teal)}.choice.wrong{border-color:#b56d6d;background:#fbefef}.feedback{margin:10px 0 0;min-height:1.4em;color:#4d4753}
 .footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
 hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
-</style></head><body>
+</style>  <link rel="stylesheet" href="../../assets/fonts.css">
+  <link rel="stylesheet" href="../../assets/pm-common.css">
+</head><body>
+  <!-- Encabezado Institucional Unificado -->
+  <header class="pm-site-header" id="pmSiteHeader">
+    <div class="pm-header-bar">
+      <a href="../../index.html" class="pm-brand" aria-label="Programación Avanzada 2026 - Inicio">
+        <img src="../../assets/logo-profe-macon.png" alt="Profe Macón" class="pm-logo">
+        <div class="pm-brand-text">
+          <span class="pm-course-name">Programación Avanzada</span>
+          <span class="pm-course-sub">2.º BT TI · DGETP / UTU</span>
+        </div>
+      </a>
+      <nav class="pm-site-nav" aria-label="Navegación del curso">
+        <a href="../../index.html" class="pm-nav-link">Inicio</a>
+        <a href="../../index.html#unidad-01" class="pm-nav-link">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02" class="pm-nav-link">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03" class="pm-nav-link">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04" class="pm-nav-link is-active">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html" class="pm-nav-link pm-nav-project">Tienda de Cómics</a>
+      </nav>
+    </div>
+  </header>
+
 <header class="hero"><div class="wrap"><div class="brand"><img class="full" src="assets/logo-profemacon.png" alt="Profe Macón"><div style="display:flex;align-items:center;gap:14px"><small>Programación Avanzada<br>2.º BT · Tecnologías de la Información</small><img class="iso" src="assets/logo-pm.png" alt="PM"></div></div><div class="eyebrow">Tienda de Cómics · Unidad de persistencia · Material 03</div><h1>De objetos a registros:<br><em>PreparedStatement y ResultSet</em></h1><p>Ya sabemos conectarnos a MySQL. Ahora aprenderemos a insertar un Producto, consultar las filas almacenadas y construir nuevos objetos Java con sus datos, sin perder de vista las responsabilidades de Controller y Service.</p><div class="tags"><span class="tag">CET3 · JDBC y SQL</span><span class="tag">CET1 · Objetos Producto</span><span class="tag">Java 17 + MySQL</span><span class="tag">PreparedStatement</span><span class="tag">ResultSet</span></div></div></header>
 <nav><div class="wrap"><a href="#problema">1 · Problema</a><a href="#tabla">2 · Tabla</a><a href="#sentencia">3 · INSERT</a><a href="#parametros">4 · PreparedStatement</a><a href="#asignar">5 · Parámetros</a><a href="#executeupdate">6 · Ejecutar</a><a href="#insertar">7 · Insertar</a><a href="#select">8 · SELECT</a><a href="#resultset">9 · ResultSet</a><a href="#objetos">10 · Objetos</a><a href="#listar">11 · Listar</a><a href="#organizacion">12 · Organización</a><a href="#comprobamos">13 · Preguntas</a><a href="#cierre">14 · Cierre</a></div></nav>
 <main><section id="problema"><div class="step">1 · Tienda de Cómics</div><h2>Nos conectamos… ¿y ahora cómo guardamos los productos?</h2><p class="lead">En el material 02 aprendimos a solicitar una conexión a MySQL mediante <code class="inline">DriverManager.getConnection()</code>. Conseguimos comunicarnos con la base de datos, pero todavía no hemos guardado ningún producto.</p>
@@ -124,4 +147,57 @@ while (resultado.next()) {
 </section><section id="cierre"><div class="step">14 · Tienda de Cómics</div><h2>Documentamos y dejamos preparada la siguiente clase</h2><h3>Microentrega de documentación</h3><ol><li>Explica la diferencia entre <code class="inline">prepareStatement()</code>, <code class="inline">executeUpdate()</code> y <code class="inline">executeQuery()</code>.</li><li>Indica a qué atributo de <code class="inline">Producto</code> corresponde cada signo <code class="inline">?</code> de nuestro <code class="inline">INSERT</code>.</li><li>Describe qué sucede durante una iteración de <code class="inline">while(resultado.next())</code>.</li><li>Realiza un pequeño diagrama: <b>Producto → INSERT → tabla → SELECT → nuevo Producto</b>.</li><li>Justifica por qué el Controller no debería contener todo este código JDBC.</li></ol><div class="callout teal"><b>Tres niveles de trabajo:</b> <b>mínimo:</b> reconocer SQL y métodos JDBC; <b>estándar:</b> explicar insertar y listar productos; <b>desafío:</b> modificar la consulta para ordenar por precio e investigar qué cambiaría si el nombre del producto contuviera un apóstrofo.</div><p class="lead"><b>Próximo material:</b> construiremos <code class="inline">ProductoDAO</code> y una clase de conexión reutilizable, integrando el acceso a datos con <code class="inline">ProductoService</code> sin mezclar las responsabilidades.</p></section><div class="footer"><div style="display:flex;align-items:center;gap:12px"><img src="assets/logo-pm.png" alt="PM"><div><b>PROFE MACÓN</b><br><span class="muted">Explora, aprende, crea.</span></div></div><div class="site">profemacon.net</div></div></main>
 <div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.18)"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div>
 <script>document.querySelectorAll('.quiz').forEach(function(q){q.querySelectorAll('.choice').forEach(function(btn){btn.addEventListener('click',function(){q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong');});var ok=btn.dataset.value===q.dataset.answer;btn.classList.add(ok?'correct':'wrong');var f=q.querySelector('.feedback');f.textContent=(ok?'Correcto. ':'Revisa la respuesta y la explicación. ')+q.dataset.explain;if(!ok){var c=q.querySelector('.choice[data-value="'+q.dataset.answer+'"]');if(c)c.classList.add('correct');}});});});</script>
-<script src="scorm.js"></script><style id="site-navigation">#site-back{position:fixed;right:18px;bottom:18px;z-index:99999;display:block;padding:11px 16px;background:#171419;color:#fff!important;font:700 13px Arial,sans-serif;border-radius:999px;text-decoration:none;box-shadow:0 8px 25px #17141940;border:1px solid #988db3}#site-back:hover{background:#756a96}@media print{#site-back{display:none}}</style><a id="site-back" href="../../index.html#unidad-04">← Índice del curso</a></body></html>
+<script src="scorm.js"></script>  <!-- Navegación entre Lecciones -->
+  <nav class="pm-lesson-nav" aria-label="Navegación entre lecciones">
+    <div class="pm-lesson-nav-inner">
+      <div class="pm-lesson-nav-prev">
+        <a href="../02-connection/index.html" class="pm-nav-btn pm-prev">
+          <span class="pm-nav-arrow" aria-hidden="true">←</span>
+          <span class="pm-nav-meta">
+            <small>Anterior · Unidad 04</small>
+            <b>DriverManager y Connection</b>
+          </span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-center">
+        <a href="../../index.html#unidad-04" class="pm-nav-unit-pill">
+          <span class="pm-unit-badge">UNIDAD 04</span>
+          <span class="pm-unit-name">Lección 03 de 6</span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-next">
+        <a href="../04-dao/index.html" class="pm-nav-btn pm-next">
+          <span class="pm-nav-meta">
+            <small>Siguiente lección</small>
+            <b>ProductoDAO y CRUD</b>
+          </span>
+          <span class="pm-nav-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Pie de Página Institucional -->
+  <footer class="pm-course-footer">
+    <div class="pm-footer-inner">
+      <div class="pm-footer-brand">
+        <strong>Profe Macón</strong> · Programación Avanzada 2026
+      </div>
+      <div class="pm-footer-meta">
+        2.º Bachillerato Tecnológico en Tecnologías de la Información · DGETP / UTU · Uruguay<br>
+        Material didáctico para la tienda de cómics «La Viñeta».
+      </div>
+      <div class="pm-footer-links">
+        <a href="../../index.html">Inicio</a>
+        <a href="../../index.html#unidad-01">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html">Tienda de Cómics</a>
+        <a href="#top" class="pm-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Volver arriba</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/pm-common.js"></script>
+</body></html>

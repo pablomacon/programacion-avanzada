@@ -36,7 +36,30 @@ details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;backgr
 .quiz{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:#fcfbfd}.quiz p{margin-top:0;font-weight:700}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #cfc7d3;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.choice:hover{background:#f5f1f8}.choice.correct{border-color:var(--teal);background:var(--soft-teal)}.choice.wrong{border-color:#b56d6d;background:#fbefef}.feedback{margin:10px 0 0;min-height:1.4em;color:#4d4753}
 .footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
 hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
-</style></head><body>
+</style>  <link rel="stylesheet" href="../../assets/fonts.css">
+  <link rel="stylesheet" href="../../assets/pm-common.css">
+</head><body>
+  <!-- Encabezado Institucional Unificado -->
+  <header class="pm-site-header" id="pmSiteHeader">
+    <div class="pm-header-bar">
+      <a href="../../index.html" class="pm-brand" aria-label="Programación Avanzada 2026 - Inicio">
+        <img src="../../assets/logo-profe-macon.png" alt="Profe Macón" class="pm-logo">
+        <div class="pm-brand-text">
+          <span class="pm-course-name">Programación Avanzada</span>
+          <span class="pm-course-sub">2.º BT TI · DGETP / UTU</span>
+        </div>
+      </a>
+      <nav class="pm-site-nav" aria-label="Navegación del curso">
+        <a href="../../index.html" class="pm-nav-link">Inicio</a>
+        <a href="../../index.html#unidad-01" class="pm-nav-link">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02" class="pm-nav-link">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03" class="pm-nav-link">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04" class="pm-nav-link is-active">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html" class="pm-nav-link pm-nav-project">Tienda de Cómics</a>
+      </nav>
+    </div>
+  </header>
+
 <header class="hero"><div class="wrap"><div class="brand"><img class="full" src="assets/logo-profemacon.png" alt="Profe Macón"><div style="display:flex;align-items:center;gap:14px"><small>Programación Avanzada<br>2.º BT · Tecnologías de la Información</small><img class="iso" src="assets/logo-pm.png" alt="PM"></div></div><div class="eyebrow">Tienda de Cómics · Unidad de persistencia · Material 06</div><h1>Una misma interfaz,<br><em>dos formas de guardar</em></h1><p>Vamos a comprobar para qué sirven las interfaces: dos DAO diferentes, un mismo servicio y una decisión que queda en Main.</p><div class="tags"><span class="tag">CET1 · POO</span><span class="tag">CET2 · Polimorfismo y bajo acoplamiento</span><span class="tag">CET3 · Persistencia</span><span class="tag">Java 17</span></div></div></header>
 <nav><div class="wrap"><a href="#situacion">1 · Problema</a><a href="#recordar">2 · Contrato</a><a href="#dos">3 · Dos DAO</a><a href="#memoria">4 · En memoria</a><a href="#completar">5 · CRUD</a><a href="#acoplado">6 · Acoplamiento</a><a href="#inyectar">7 · Constructor</a><a href="#main">8 · Main</a><a href="#polimorfismo">9 · Polimorfismo</a><a href="#limites">10 · Reglas</a><a href="#actividad">11 · Comprueba</a><a href="#cierre">12 · Cierre</a></div></nav>
 <main><section id="situacion"><div class="step">1 · Tienda de Cómics</div><h2>Una pregunta para poner a prueba las interfaces</h2><p class="lead">Ya logramos separar las responsabilidades: <code class="inline">ProductoController</code> coordina la vista, <code class="inline">ProductoService</code> comprueba las reglas de negocio y <code class="inline">ProductoDAO</code> guarda los productos en MySQL.</p><p>En el SCORM 05 definimos un contrato <code class="inline">CrudDAO&lt;Producto&gt;</code>. Pero podríamos preguntarnos: <b>¿para qué nos sirve en la práctica?</b></p><div class="callout warn"><b>Desafío:</b> un día MySQL no está disponible en el laboratorio. Queremos probar las reglas del servicio con una lista en memoria. ¿Podemos cambiar la forma de almacenar productos sin volver a escribir el servicio?</div><p>Para comprender la respuesta construiremos una segunda implementación del mismo contrato y observaremos cómo Java decide qué métodos ejecutar.</p></section><section id="recordar"><div class="step">2 · Tienda de Cómics</div><h2>Lo que la interfaz promete y lo que no promete</h2><p>Recordemos el contrato del material anterior. En este ejemplo conservamos las cuatro operaciones y el identificador <code class="inline">long</code> de nuestros productos:</p><pre>import java.sql.SQLException;
@@ -121,4 +144,57 @@ ProductoService servicio = new ProductoService(dao);</pre><p>Compara los fragmen
 <div class="quiz" data-answer="a" data-explain="Las mismas firmas no garantizan por sí solas reglas iguales sobre duplicados, errores o registros inexistentes."><p>5. ¿Una interfaz garantiza que dos implementaciones reaccionen igual ante códigos duplicados?</p><div class="choices"><button class="choice" data-value="a">No; además debemos acordar y comprobar su comportamiento.</button><button class="choice" data-value="b">Sí; Java compara automáticamente sus algoritmos.</button><button class="choice" data-value="c">Sí; todas las interfaces almacenan claves primarias.</button></div><div class="feedback" aria-live="polite"></div></div></section><section id="cierre"><div class="step">12 · Tienda de Cómics</div><h2>Documentamos lo aprendido y cerramos la unidad</h2><h3>Microentrega de documentación</h3><ol><li>Dibuja un esquema que incluya <code class="inline">Main</code>, <code class="inline">ProductoService</code>, <code class="inline">CrudDAO&lt;Producto&gt;</code>, <code class="inline">ProductoDAO</code> y <code class="inline">ProductoDAOEnMemoria</code>. Señala quién construye a quién.</li><li>Explica qué cambia y qué permanece igual cuando sustituimos el DAO JDBC por el DAO en memoria.</li><li>Indica qué implementación conserva los productos después de cerrar el programa y por qué.</li><li>Describe una diferencia de comportamiento que deberíamos corregir para que ambas implementaciones sean realmente sustituibles.</li></ol><div class="callout teal"><b>Tres niveles:</b> <b>mínimo viable:</b> reconocer interfaz, implementación y elección en Main; <b>estándar:</b> justificar la inyección por constructor y el polimorfismo; <b>desafío:</b> diseñar cómo ambas implementaciones informarían de manera consistente un código duplicado.</div><p class="lead">Ya podemos leer nuestra arquitectura de otra manera: <b>una interfaz indica qué necesitamos; una implementación decide cómo hacerlo; y Main conecta los componentes que trabajarán juntos.</b></p><p>Próximo paso: una práctica integradora en la que comprobaremos que el sistema funciona con MySQL y que nuestras responsabilidades permanecen separadas.</p></section><div class="footer"><div style="display:flex;align-items:center;gap:12px"><img src="assets/logo-pm.png" alt="PM"><div><b>PROFE MACÓN</b><br><span class="muted">Explora, aprende, crea.</span></div></div><div class="site">profemacon.net</div></div></main>
 <div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.18)"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div>
 <script>document.querySelectorAll('.quiz').forEach(function(q){q.querySelectorAll('.choice').forEach(function(btn){btn.addEventListener('click',function(){q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong');});var ok=btn.dataset.value===q.dataset.answer;btn.classList.add(ok?'correct':'wrong');var f=q.querySelector('.feedback');f.textContent=(ok?'Correcto. ':'Revisa la respuesta y la explicación. ')+q.dataset.explain;if(!ok){var cb=q.querySelector('.choice[data-value="'+q.dataset.answer+'"]');if(cb)cb.classList.add('correct');}});});});</script>
-<script src="scorm.js"></script><style id="site-navigation">#site-back{position:fixed;right:18px;bottom:18px;z-index:99999;display:block;padding:11px 16px;background:#171419;color:#fff!important;font:700 13px Arial,sans-serif;border-radius:999px;text-decoration:none;box-shadow:0 8px 25px #17141940;border:1px solid #988db3}#site-back:hover{background:#756a96}@media print{#site-back{display:none}}</style><a id="site-back" href="../../index.html#unidad-04">← Índice del curso</a></body></html>
+<script src="scorm.js"></script>  <!-- Navegación entre Lecciones -->
+  <nav class="pm-lesson-nav" aria-label="Navegación entre lecciones">
+    <div class="pm-lesson-nav-inner">
+      <div class="pm-lesson-nav-prev">
+        <a href="../05-interfaces/index.html" class="pm-nav-btn pm-prev">
+          <span class="pm-nav-arrow" aria-hidden="true">←</span>
+          <span class="pm-nav-meta">
+            <small>Anterior · Unidad 04</small>
+            <b>Interfaz CrudDAO</b>
+          </span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-center">
+        <a href="../../index.html#unidad-04" class="pm-nav-unit-pill">
+          <span class="pm-unit-badge">UNIDAD 04</span>
+          <span class="pm-unit-name">Lección 06 de 6</span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-next">
+        <a href="../proyecto-tienda-comics/index.html" class="pm-nav-btn pm-next">
+          <span class="pm-nav-meta">
+            <small>Siguiente · Proyecto</small>
+            <b>Tienda de Cómics: Proyecto Completo</b>
+          </span>
+          <span class="pm-nav-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Pie de Página Institucional -->
+  <footer class="pm-course-footer">
+    <div class="pm-footer-inner">
+      <div class="pm-footer-brand">
+        <strong>Profe Macón</strong> · Programación Avanzada 2026
+      </div>
+      <div class="pm-footer-meta">
+        2.º Bachillerato Tecnológico en Tecnologías de la Información · DGETP / UTU · Uruguay<br>
+        Material didáctico para la tienda de cómics «La Viñeta».
+      </div>
+      <div class="pm-footer-links">
+        <a href="../../index.html">Inicio</a>
+        <a href="../../index.html#unidad-01">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html">Tienda de Cómics</a>
+        <a href="#top" class="pm-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Volver arriba</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/pm-common.js"></script>
+</body></html>

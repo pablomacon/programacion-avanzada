@@ -57,8 +57,31 @@ figure.uml figcaption{margin:12px 6px 0;color:#5c5562;font-size:.93rem;line-heig
 @media(max-width:760px){.model-steps{grid-template-columns:1fr}section{padding:20px 16px}.brand .full{max-width:70vw}}
 @media print{nav,.quiz,#scormProgress{display:none!important}body{background:white}section{box-shadow:none;break-inside:avoid}.hero{padding-bottom:12px}figure.uml img{max-height:430px}}
 </style>
+  <link rel="stylesheet" href="../../assets/fonts.css">
+  <link rel="stylesheet" href="../../assets/pm-common.css">
 </head>
-<body><a class="curso-regreso" href="../../index.html#unidad-01" aria-label="Volver al índice de la Unidad 1">← Volver a Unidad 1</a>
+<body>
+  <!-- Encabezado Institucional Unificado -->
+  <header class="pm-site-header" id="pmSiteHeader">
+    <div class="pm-header-bar">
+      <a href="../../index.html" class="pm-brand" aria-label="Programación Avanzada 2026 - Inicio">
+        <img src="../../assets/logo-profe-macon.png" alt="Profe Macón" class="pm-logo">
+        <div class="pm-brand-text">
+          <span class="pm-course-name">Programación Avanzada</span>
+          <span class="pm-course-sub">2.º BT TI · DGETP / UTU</span>
+        </div>
+      </a>
+      <nav class="pm-site-nav" aria-label="Navegación del curso">
+        <a href="../../index.html" class="pm-nav-link">Inicio</a>
+        <a href="../../index.html#unidad-01" class="pm-nav-link is-active">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02" class="pm-nav-link">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03" class="pm-nav-link">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04" class="pm-nav-link">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html" class="pm-nav-link pm-nav-project">Tienda de Cómics</a>
+      </nav>
+    </div>
+  </header>
+
 <style>.curso-regreso{position:fixed;bottom:20px;right:20px;z-index:9999;display:block;background:#171419;color:#fff!important;font:700 14px/1.35 Arial,Helvetica,sans-serif;text-decoration:none;padding:12px 16px;border-radius:30px;box-shadow:0 8px 25px #17141945;border:2px solid #00a99d}.curso-regreso:hover,.curso-regreso:focus-visible{background:#756a96;color:#fff!important;outline:2px solid #fff}@media print{.curso-regreso{display:none}}</style>
 
 <header class="hero"><div class="wrap">
@@ -145,4 +168,57 @@ public class Venta {
 <div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div>
 <script>document.querySelectorAll('.quiz').forEach(function(q){q.querySelectorAll('.choice').forEach(function(btn){btn.addEventListener('click',function(){q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong')});var ok=btn.dataset.value===q.dataset.answer;btn.classList.add(ok?'correct':'wrong');q.querySelector('.feedback').textContent=ok?'Correcto: la cantidad corresponde a un renglón de una venta concreta.':'Revisa qué entidad representa una compra de un producto en una venta particular.'})})});</script>
 <script src="scorm.js"></script>
+  <!-- Navegación entre Lecciones -->
+  <nav class="pm-lesson-nav" aria-label="Navegación entre lecciones">
+    <div class="pm-lesson-nav-inner">
+      <div class="pm-lesson-nav-prev">
+        <a href="../../index.html#unidad-01" class="pm-nav-btn pm-prev">
+          <span class="pm-nav-arrow" aria-hidden="true">←</span>
+          <span class="pm-nav-meta">
+            <small>Inicio de Unidad</small>
+            <b>Índice Unidad 01</b>
+          </span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-center">
+        <a href="../../index.html#unidad-01" class="pm-nav-unit-pill">
+          <span class="pm-unit-badge">UNIDAD 01</span>
+          <span class="pm-unit-name">Lección 01 de 6</span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-next">
+        <a href="../02-clases-objetos/index.html" class="pm-nav-btn pm-next">
+          <span class="pm-nav-meta">
+            <small>Siguiente lección</small>
+            <b>Clases, objetos y responsabilidades</b>
+          </span>
+          <span class="pm-nav-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Pie de Página Institucional -->
+  <footer class="pm-course-footer">
+    <div class="pm-footer-inner">
+      <div class="pm-footer-brand">
+        <strong>Profe Macón</strong> · Programación Avanzada 2026
+      </div>
+      <div class="pm-footer-meta">
+        2.º Bachillerato Tecnológico en Tecnologías de la Información · DGETP / UTU · Uruguay<br>
+        Material didáctico para la tienda de cómics «La Viñeta».
+      </div>
+      <div class="pm-footer-links">
+        <a href="../../index.html">Inicio</a>
+        <a href="../../index.html#unidad-01">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html">Tienda de Cómics</a>
+        <a href="#top" class="pm-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Volver arriba</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/pm-common.js"></script>
 </body></html>

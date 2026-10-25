@@ -1,0 +1,520 @@
+/* ==========================================================================
+   Programación Avanzada 2026 — Profe Macón
+   Sistema de Componentes Comunes y Tipografía Oficial
+   ========================================================================== */
+
+@import url('fonts.css');
+
+:root {
+  /* Paleta Profe Macón */
+  --pm-violet: #988db3;
+  --pm-violet-deep: #756a96;
+  --pm-teal: #00a99d;
+  --pm-teal-hover: #008f85;
+  --pm-ink: #171419;
+  --pm-bg: #f4f2f5;
+  --pm-white: #ffffff;
+  --pm-line: #ddd7df;
+  --pm-line-light: #ece8ef;
+  --pm-card-bg: #ffffff;
+  --pm-text-muted: #5e5762;
+  --pm-text-light: #827b86;
+  --pm-code-bg: #171419;
+  --pm-code-fg: #f8f7fa;
+
+  /* Sistema tipográfico oficial */
+  --pm-font-title: 'Montserrat', Arial, sans-serif;
+  --pm-font-body: 'Inter', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --pm-font-code: 'Fira Code', Consolas, 'Courier New', monospace;
+
+  --pm-header-height-expanded: 76px;
+  --pm-header-height-compact: 56px;
+}
+
+/* --------------------------------------------------------------------------
+   1. Tipografía Oficial (Reglas base no invasivas)
+   -------------------------------------------------------------------------- */
+body {
+  font-family: var(--pm-font-body);
+}
+
+h1, h2, h3,
+.pm-title-font {
+  font-family: var(--pm-font-title);
+  letter-spacing: -0.02em;
+}
+
+/* Fira Code para bloques y elementos de código, con ligaduras desactivadas */
+pre, code, kbd, samp {
+  font-family: var(--pm-font-code);
+  font-variant-ligatures: none;
+}
+
+/* --------------------------------------------------------------------------
+   2. Encabezado Institucional Unificado (.pm-site-header)
+   -------------------------------------------------------------------------- */
+.pm-site-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  background-color: #ffffff;
+  border-bottom: 3px solid var(--pm-teal);
+  box-shadow: 0 4px 18px rgba(23, 20, 25, 0.08);
+  transition: padding 0.25s ease, box-shadow 0.25s ease;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.pm-site-header * {
+  box-sizing: border-box;
+}
+
+.pm-site-header .pm-header-bar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: padding 0.25s ease;
+}
+
+.pm-site-header.is-compact .pm-header-bar {
+  padding: 8px 20px;
+}
+
+.pm-site-header .pm-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.pm-site-header .pm-logo {
+  height: 48px;
+  max-height: 48px;
+  width: auto;
+  object-fit: contain;
+  transition: height 0.25s ease;
+  display: block;
+}
+
+.pm-site-header.is-compact .pm-logo {
+  height: 36px;
+  max-height: 36px;
+}
+
+.pm-site-header .pm-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.pm-site-header .pm-course-name {
+  font-family: var(--pm-font-title);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--pm-ink);
+  line-height: 1.15;
+}
+
+.pm-site-header .pm-course-sub {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pm-violet-deep);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pm-site-header.is-compact .pm-course-sub {
+  display: none;
+}
+
+/* Navegación institucional */
+.pm-site-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  position: static;
+  top: auto;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.pm-site-nav .pm-nav-link {
+  font-family: var(--pm-font-body);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--pm-ink);
+  text-decoration: none;
+  padding: 7px 12px;
+  border-radius: 8px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+}
+
+.pm-site-nav .pm-nav-link:hover {
+  background-color: var(--pm-bg);
+  color: var(--pm-violet-deep);
+}
+
+.pm-site-nav .pm-nav-link.is-active {
+  background-color: #f1edf7;
+  color: var(--pm-violet-deep);
+}
+
+.pm-site-nav .pm-nav-project {
+  background: linear-gradient(135deg, rgba(0, 169, 157, 0.12), rgba(152, 141, 179, 0.18));
+  color: #0b6861;
+  border: 1px solid rgba(0, 169, 157, 0.35);
+  font-weight: 700;
+}
+
+.pm-site-nav .pm-nav-project:hover {
+  background: var(--pm-teal);
+  color: #ffffff;
+  border-color: var(--pm-teal);
+}
+
+/* --------------------------------------------------------------------------
+   3. Navegación entre Lecciones (.pm-lesson-nav)
+   -------------------------------------------------------------------------- */
+.pm-lesson-nav {
+  margin: 48px auto 24px;
+  max-width: 1100px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  position: static;
+  top: auto;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.pm-lesson-nav-inner {
+  background: #ffffff;
+  border: 1px solid var(--pm-line);
+  border-radius: 18px;
+  padding: 16px 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.pm-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--pm-ink);
+  background-color: #f8f6fa;
+  border: 1px solid var(--pm-line);
+  transition: all 0.15s ease;
+  max-width: 320px;
+}
+
+.pm-nav-btn:hover {
+  background-color: #f1edf7;
+  border-color: var(--pm-violet);
+  transform: translateY(-1px);
+}
+
+.pm-nav-arrow {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--pm-teal);
+  line-height: 1;
+}
+
+.pm-nav-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.pm-nav-meta small {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--pm-violet-deep);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pm-nav-meta b {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pm-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+}
+
+.pm-lesson-nav-center {
+  display: flex;
+  align-items: center;
+}
+
+.pm-nav-unit-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background-color: #f1edf7;
+  border: 1px solid var(--pm-violet);
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--pm-ink);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.pm-nav-unit-pill:hover {
+  background-color: #e6dfef;
+  transform: translateY(-1px);
+}
+
+.pm-unit-badge {
+  font-family: var(--pm-font-title);
+  font-size: 12px;
+  font-weight: 700;
+  background-color: var(--pm-violet-deep);
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.pm-unit-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--pm-ink);
+}
+
+/* --------------------------------------------------------------------------
+   4. Botón Copiar en Bloques de Código Reconocidos (.pm-copy-btn)
+   -------------------------------------------------------------------------- */
+.pm-has-copy-btn {
+  position: relative !important;
+}
+
+.pm-copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.14);
+  color: #f8f7fa;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 7px;
+  padding: 5px 11px;
+  font-family: var(--pm-font-body);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  line-height: 1.3;
+}
+
+.pm-copy-btn:hover {
+  background: var(--pm-teal);
+  color: #ffffff;
+  border-color: var(--pm-teal);
+}
+
+.pm-copy-btn.is-copied {
+  background: #28a745;
+  border-color: #28a745;
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   5. Pie de Página Institucional (.pm-course-footer)
+   -------------------------------------------------------------------------- */
+.pm-course-footer {
+  background-color: #ffffff;
+  border-top: 1px solid var(--pm-line);
+  margin-top: 60px;
+  padding: 36px 20px 48px;
+  color: var(--pm-text-muted);
+  font-size: 14.5px;
+}
+
+.pm-footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+
+.pm-footer-brand strong {
+  font-family: var(--pm-font-title);
+  color: var(--pm-ink);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.pm-footer-meta {
+  color: var(--pm-text-light);
+  font-size: 13.5px;
+  max-width: 700px;
+}
+
+.pm-footer-links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.pm-footer-links a {
+  color: var(--pm-violet-deep);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.pm-footer-links a:hover {
+  color: var(--pm-teal);
+  text-decoration: underline;
+}
+
+.pm-footer-links .pm-back-top {
+  color: var(--pm-teal);
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   6. Aislamiento y Armonía Didáctica (Sin interferir con SCORM)
+   -------------------------------------------------------------------------- */
+
+/* Evitar que las barras de navegación internas de las lecciones se solapen bajo la cabecera fija */
+.hero + nav,
+header:not(.pm-site-header) + nav {
+  top: 56px;
+  z-index: 900;
+}
+
+/* Equilibrar el logotipo didáctico secundario sin eliminar contenidos */
+.hero .brand .full,
+.hero .brand-logo-full,
+.topbar .logo-box img {
+  max-height: 48px;
+  max-width: 240px;
+  width: auto;
+  object-fit: contain;
+}
+
+.hero .brand {
+  padding: 10px 18px;
+  margin-bottom: 20px;
+}
+
+/* Contraste en portada oscura de ProductoVista */
+.hero-inner h1,
+.hero-inner h1 em {
+  color: #ffffff;
+}
+.hero-inner h1 em {
+  color: #c7bce0;
+}
+.hero-inner p {
+  color: #e6ebff;
+}
+
+/* Ocultar elementos heredados obsoletos de navegación flotante */
+#site-back,
+.curso-regreso,
+.lesson-head {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. Adaptabilidad Móvil (.pm-site-header)
+   -------------------------------------------------------------------------- */
+@media (max-width: 860px) {
+  .pm-site-header .pm-header-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px 14px;
+  }
+  
+  .pm-site-header.is-compact .pm-header-bar {
+    padding: 6px 14px;
+  }
+
+  .pm-site-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px;
+    padding: 2px 2px 6px;
+    scrollbar-width: none;
+  }
+
+  .pm-site-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pm-site-nav .pm-nav-link {
+    flex-shrink: 0;
+    font-size: 13px;
+    padding: 6px 12px;
+    background: #f4f2f5;
+    border: 1px solid var(--pm-line-light);
+  }
+
+  .pm-site-nav .pm-nav-link.is-active {
+    background: var(--pm-violet-deep);
+    color: #ffffff;
+    border-color: var(--pm-violet-deep);
+  }
+
+  .pm-site-nav .pm-nav-project {
+    background: #e6f6f4;
+    color: var(--pm-teal);
+    border-color: var(--pm-teal);
+  }
+
+  .pm-lesson-nav-inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pm-nav-btn {
+    max-width: 100%;
+    justify-content: space-between;
+  }
+
+  .pm-lesson-nav-center {
+    justify-content: center;
+  }
+}
+
+@media print {
+  .pm-site-header,
+  .pm-lesson-nav,
+  .pm-course-footer,
+  .pm-copy-btn {
+    display: none !important;
+  }
+}

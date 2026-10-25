@@ -43,8 +43,31 @@ details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;backgr
 .footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
 hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
 </style>
+  <link rel="stylesheet" href="../../assets/fonts.css">
+  <link rel="stylesheet" href="../../assets/pm-common.css">
 </head>
 <body>
+  <!-- Encabezado Institucional Unificado -->
+  <header class="pm-site-header" id="pmSiteHeader">
+    <div class="pm-header-bar">
+      <a href="../../index.html" class="pm-brand" aria-label="Programación Avanzada 2026 - Inicio">
+        <img src="../../assets/logo-profe-macon.png" alt="Profe Macón" class="pm-logo">
+        <div class="pm-brand-text">
+          <span class="pm-course-name">Programación Avanzada</span>
+          <span class="pm-course-sub">2.º BT TI · DGETP / UTU</span>
+        </div>
+      </a>
+      <nav class="pm-site-nav" aria-label="Navegación del curso">
+        <a href="../../index.html" class="pm-nav-link">Inicio</a>
+        <a href="../../index.html#unidad-01" class="pm-nav-link">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02" class="pm-nav-link">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03" class="pm-nav-link is-active">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04" class="pm-nav-link">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html" class="pm-nav-link pm-nav-project">Tienda de Cómics</a>
+      </nav>
+    </div>
+  </header>
+
 <header class="hero"><div class="wrap">
   <div class="brand">
     <img class="full" src="assets/logo-profemacon.png" alt="Profe Macón">
@@ -286,5 +309,58 @@ document.querySelectorAll('.quiz').forEach(function(q){
 });
 </script>
 <script src="scorm.js"></script>
-<style id="site-navigation">#site-back{position:fixed;right:18px;bottom:18px;z-index:99999;display:block;padding:11px 16px;background:#171419;color:#fff!important;font:700 13px Arial,sans-serif;border-radius:999px;text-decoration:none;box-shadow:0 8px 25px #17141940;border:1px solid #988db3}#site-back:hover{background:#756a96}@media print{#site-back{display:none}}</style><a id="site-back" href="../../index.html#unidad-03">← Índice del curso</a></body>
+  <!-- Navegación entre Lecciones -->
+  <nav class="pm-lesson-nav" aria-label="Navegación entre lecciones">
+    <div class="pm-lesson-nav-inner">
+      <div class="pm-lesson-nav-prev">
+        <a href="../02-eventos-tabla/index.html" class="pm-nav-btn pm-prev">
+          <span class="pm-nav-arrow" aria-hidden="true">←</span>
+          <span class="pm-nav-meta">
+            <small>Anterior · Unidad 02</small>
+            <b>ProductoVista: eventos y JTable</b>
+          </span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-center">
+        <a href="../../index.html#unidad-03" class="pm-nav-unit-pill">
+          <span class="pm-unit-badge">UNIDAD 03</span>
+          <span class="pm-unit-name">Lección 01 de 4</span>
+        </a>
+      </div>
+      <div class="pm-lesson-nav-next">
+        <a href="../02-producto-controller/index.html" class="pm-nav-btn pm-next">
+          <span class="pm-nav-meta">
+            <small>Siguiente lección</small>
+            <b>ProductoController</b>
+          </span>
+          <span class="pm-nav-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Pie de Página Institucional -->
+  <footer class="pm-course-footer">
+    <div class="pm-footer-inner">
+      <div class="pm-footer-brand">
+        <strong>Profe Macón</strong> · Programación Avanzada 2026
+      </div>
+      <div class="pm-footer-meta">
+        2.º Bachillerato Tecnológico en Tecnologías de la Información · DGETP / UTU · Uruguay<br>
+        Material didáctico para la tienda de cómics «La Viñeta».
+      </div>
+      <div class="pm-footer-links">
+        <a href="../../index.html">Inicio</a>
+        <a href="../../index.html#unidad-01">Unidad 1 · POO</a>
+        <a href="../../index.html#unidad-02">Unidad 2 · Vista</a>
+        <a href="../../index.html#unidad-03">Unidad 3 · Control y Servicio</a>
+        <a href="../../index.html#unidad-04">Unidad 4 · Persistencia</a>
+        <a href="../proyecto-tienda-comics/index.html">Tienda de Cómics</a>
+        <a href="#top" class="pm-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Volver arriba</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../assets/pm-common.js"></script>
+</body>
 </html>
