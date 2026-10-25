@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cuando algo sale mal · Excepciones en Java · Profe Macón</title>
+<style>
+:root{
+  --violet:#988db3;--violet-deep:#756a96;--teal:#00a99d;--ink:#171419;
+  --paper:#fff;--bg:#f4f2f5;--line:#ddd7df;--muted:#827d7d;--code:#171419;
+  --soft-violet:#f5f1f8;--soft-teal:#eaf8f6;--soft-warn:#faf7ef;--warn:#b68a3c;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:
+linear-gradient(rgba(152,141,179,.05) 1px,transparent 1px),
+linear-gradient(90deg,rgba(152,141,179,.05) 1px,transparent 1px),var(--bg);background-size:24px 24px}
+.wrap{max-width:1100px;margin:auto}
+.hero{padding:28px 18px 44px;background:linear-gradient(135deg,#fff,#f5f1f8 60%,#e7f8f6);border-bottom:5px solid var(--teal)}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:0 12px 34px rgba(0,0,0,.09);margin-bottom:30px}
+.brand .full{width:min(420px,68vw);height:auto}.brand .iso{width:72px;height:auto}.brand small{text-align:right;color:var(--muted);line-height:1.5}
+h1{font-size:clamp(2.1rem,5vw,4rem);line-height:1.02;margin:0 0 14px}h1 em{color:var(--violet);font-style:normal}
+.hero p{max-width:920px;line-height:1.7;font-size:1.08rem}.eyebrow{font-weight:800;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;margin-bottom:8px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.tag{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.83rem;font-weight:700}
+nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow:auto;padding:9px 14px}nav a{text-decoration:none;color:var(--ink);white-space:nowrap;padding:8px 10px;border-radius:8px;font-size:.84rem}nav a:hover{background:#f1edf5}
+main{max-width:1100px;margin:auto;padding:32px 18px 70px}
+section{scroll-margin-top:66px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:24px;box-shadow:0 12px 34px rgba(0,0,0,.08)}
+.step{color:var(--violet);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.8rem}
+h2{font-size:clamp(1.5rem,3vw,2.15rem);margin:8px 0 12px}h3{margin:22px 0 9px}p,li{line-height:1.65}.lead{font-size:1.06rem;color:#403b49}.muted{color:var(--muted)}
+code{font-family:Consolas,"Courier New",monospace}code.inline{background:#f1edf5;padding:2px 6px;border-radius:6px}
+pre{margin:12px 0 0;padding:17px;color:#f8f7fa;background:var(--code);overflow:auto;border-radius:14px;font-family:Consolas,"Courier New",monospace;font-size:.88rem;line-height:1.55;white-space:pre}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:850px){.grid3,.grid4{grid-template-columns:1fr 1fr}}@media(max-width:680px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.brand small{display:none}}
+.card{border:1px solid var(--line);border-radius:14px;background:#fcfbfd;padding:16px}.card h3{margin-top:0}.card strong.big{display:block;color:var(--violet-deep);font-size:1.1rem;margin-bottom:5px}
+.callout{border-left:4px solid var(--violet);background:var(--soft-violet);padding:15px 17px;border-radius:12px;margin:16px 0}.callout.teal{border-color:var(--teal);background:var(--soft-teal)}.callout.warn{border-color:var(--warn);background:var(--soft-warn)}
+.flow{border:1px dashed #b7afbc;background:#fdfcfe;border-radius:15px;padding:18px;text-align:center;overflow:auto}.flow .node{display:inline-block;border:2px solid var(--violet);border-radius:10px;padding:9px 13px;background:#fff;font-weight:700;margin:4px}.flow .teal{border-color:var(--teal);background:var(--soft-teal)}.flow .warn{border-color:var(--warn);background:var(--soft-warn)}.arr{color:#777;font-size:1.25rem;padding:0 3px}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{background:#f3eff6}
+details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fdfcfe;margin:12px 0}summary{cursor:pointer;font-weight:700}
+.responsibility{display:flex;gap:11px;align-items:flex-start;border-bottom:1px solid #eee8ef;padding:10px 0}.responsibility:last-child{border-bottom:0}.badge{min-width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--soft-violet);color:var(--violet-deep);font-weight:800}
+.compare{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:12px}.compare .mid{text-align:center;font-size:2rem;color:var(--teal)}@media(max-width:760px){.compare{grid-template-columns:1fr}.compare .mid{transform:rotate(90deg)}}
+.arch{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fcfbfd}.layer{border:2px solid var(--violet);border-radius:12px;padding:12px;text-align:center;font-weight:800;background:#fff;margin:8px auto;max-width:560px}.layer.future{border-style:dashed;color:#5d5865}.layer.main{border-color:var(--teal);background:var(--soft-teal)}.down{text-align:center;color:#827d7d;font-size:1.4rem}
+.quiz{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:#fcfbfd}.quiz p{margin-top:0;font-weight:700}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #cfc7d3;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.choice:hover{background:#f5f1f8}.choice.correct{border-color:var(--teal);background:var(--soft-teal)}.choice.wrong{border-color:#b56d6d;background:#fbefef}.feedback{margin:10px 0 0;min-height:1.4em;color:#4d4753}
+.footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
+hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
+
+.code-label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:16px;font-size:.8rem;font-weight:800;color:var(--violet);text-transform:uppercase;letter-spacing:.05em}
+.path{font-family:Consolas,"Courier New",monospace;background:#f1edf5;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0;color:#403b49}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}.timeline .card{position:relative;padding-top:38px}.timeline .num{position:absolute;top:12px;left:14px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--violet);color:#fff;font-weight:800;font-size:.75rem}
+@media(max-width:820px){.timeline{grid-template-columns:1fr 1fr}}@media(max-width:520px){.timeline{grid-template-columns:1fr}}
+.goodbad{display:grid;grid-template-columns:1fr 1fr;gap:14px}.goodbad .good{border-top:4px solid var(--teal)}.goodbad .bad{border-top:4px solid var(--warn)}@media(max-width:680px){.goodbad{grid-template-columns:1fr}}
+
+.errorline{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:start;margin:10px 0}.errorline b{color:var(--violet-deep)}
+@media(max-width:620px){.errorline{grid-template-columns:1fr}}
+.stack{border-left:4px solid var(--warn);background:#19171c;color:#f8f7fa;border-radius:14px;padding:16px 18px;font-family:Consolas,"Courier New",monospace;overflow:auto;line-height:1.6}
+.stack .hi{color:#d9c6ff;font-weight:700}.stack .msg{color:#9ce3dc}
+.mini-map{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;border:1px dashed #b7afbc;background:#fdfcfe;border-radius:15px;padding:17px}
+.mini-map span{padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:700}.mini-map .arrow{border:0;background:transparent;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="brand">
+    <img class="full" src="assets/logo-profemacon.png" alt="Profe Macón">
+    <div style="display:flex;align-items:center;gap:14px"><small>Programación Avanzada<br>2.º BT · Tecnologías de la Información</small><img class="iso" src="assets/logo-pm.png" alt="PM"></div>
+  </div>
+  <div class="eyebrow">Tienda de Cómics · Código robusto</div>
+  <h1>Cuando algo <em>sale mal</em></h1>
+  <p>Hasta ahora programamos pensando principalmente en el camino en el que todo funciona. Pero el usuario puede escribir un dato inválido y una regla del negocio puede impedir una operación. Vamos a aprender a <strong>detectar, comunicar y manejar excepciones</strong> sin convertir <code class="inline">try-catch</code> en una receta para copiar.</p>
+  <div class="tags"><span class="tag">CET1</span><span class="tag">Excepciones</span><span class="tag">try / catch</span><span class="tag">throw</span><span class="tag">NumberFormatException</span><span class="tag">IllegalArgumentException</span></div>
+</div></header>
+
+<nav><div class="wrap">
+<a href="#problema">1 · El problema</a><a href="#excepcion">2 · Excepción</a><a href="#leer">3 · Leer el error</a><a href="#try">4 · try</a><a href="#catch">5 · catch</a><a href="#objeto">6 · El objeto e</a><a href="#controller">7 · En Controller</a><a href="#throw">8 · throw</a><a href="#viaje">9 · throw y catch</a><a href="#if">10 · if o excepción</a><a href="#precisiones">11 · Precisiones</a><a href="#practica">12 · Práctica</a><a href="#actividad">13 · Comprobamos</a><a href="#cierre">14 · Cierre</a>
+</div></nav>
+
+<main>
+<section id="problema">
+<div class="step">1 · Partimos de nuestro código</div>
+<h2>¿Qué pasa si el usuario no escribe un número?</h2>
+<p class="lead">En <code class="inline">ProductoController</code> tenemos conversiones como esta:</p>
+<pre>double precio = Double.parseDouble(vista.getTxtPrecio());</pre>
+<p>Funciona si el usuario escribe <code class="inline">450</code> o <code class="inline">450.50</code>. Pero imaginemos que escribe:</p>
+<div class="flow"><span class="node">JTextField</span><span class="arr"> → </span><span class="node warn">"cuatrocientos"</span><span class="arr"> → </span><span class="node">Double.parseDouble(...)</span><span class="arr"> → </span><span class="node warn">¿?</span></div>
+<p>Java no puede inventar un número que no está ahí. La operación no puede continuar normalmente.</p>
+<div class="callout warn"><b>La pregunta de hoy no es “¿cómo evitamos que el usuario se equivoque?”.</b> La pregunta es: <b>¿qué debe hacer nuestro programa cuando ocurre una situación que impide continuar una operación?</b></div>
+</section>
+
+<section id="excepcion">
+<div class="step">2 · Ponemos nombre al problema</div>
+<h2>Una excepción interrumpe el flujo normal de una operación</h2>
+<p>Probemos un ejemplo mínimo, sin Swing:</p>
+<pre>public class Prueba {
+    public static void main(String[] args) {
+        String texto = "hola";
+        int numero = Integer.parseInt(texto);
+        System.out.println(numero);
+    }
+}</pre>
+<p>El programa intenta convertir <code class="inline">"hola"</code> a <code class="inline">int</code>. Como no puede hacerlo, Java genera una excepción.</p>
+<div class="callout"><b>Definición de trabajo:</b> una <strong>excepción</strong> es un objeto que representa una situación anormal ocurrida durante la ejecución y que altera el flujo normal de una operación.</div>
+<div class="grid2">
+<div class="card bad"><strong class="big">Sin manejo</strong><p>La excepción se propaga y la operación termina abruptamente. En una aplicación gráfica veremos el error en la consola y la acción iniciada por el usuario no se completa.</p></div>
+<div class="card good"><strong class="big">Con manejo</strong><p>Podemos detectar esa excepción y decidir qué debe hacer la aplicación: informar, pedir otro dato, cancelar la operación, registrar el problema, etc.</p></div>
+</div>
+</section>
+
+<section id="leer">
+<div class="step">3 · Antes de capturar, aprendemos a leer</div>
+<h2>El texto rojo también nos da información</h2>
+<p>Un mensaje típico podría comenzar así:</p>
+<div class="stack"><span class="hi">java.lang.NumberFormatException</span>: <span class="msg">For input string: "hola"</span><br> &nbsp;&nbsp;at java.base/java.lang.NumberFormatException.forInputString(...)<br> &nbsp;&nbsp;at java.base/java.lang.Integer.parseInt(...)<br> &nbsp;&nbsp;at Prueba.main(Prueba.java:4)</div>
+<div class="errorline"><b>Tipo</b><span><code class="inline">NumberFormatException</code>: nos indica qué clase de problema ocurrió.</span></div>
+<div class="errorline"><b>Mensaje</b><span><code class="inline">For input string: "hola"</code>: aporta datos sobre la causa concreta.</span></div>
+<div class="errorline"><b>Recorrido</b><span>Las líneas que comienzan con <code class="inline">at</code> muestran por dónde pasó la ejecución hasta llegar al problema. Ese recorrido se llama <em>stack trace</em>.</span></div>
+<div class="callout teal"><b>Hábito útil:</b> no empieces por copiar todo el mensaje en un buscador. Primero identificá <strong>el tipo de excepción</strong>, <strong>el mensaje</strong> y <strong>la primera línea que pertenece a tu propio código</strong>.</div>
+</section>
+
+<section id="try">
+<div class="step">4 · Marcamos la operación que puede fallar</div>
+<h2><code class="inline">try</code>: intentá ejecutar este bloque</h2>
+<p>Si sabemos que una operación puede generar una excepción que queremos manejar, podemos colocarla dentro de un bloque <code class="inline">try</code>:</p>
+<pre>try {
+    int numero = Integer.parseInt(texto);
+}</pre>
+<p><code class="inline">try</code> no evita el problema ni hace desaparecer la excepción. Solo delimita un bloque cuyo resultado vamos a controlar.</p>
+<div class="callout warn"><b>Y todavía está incompleto.</b> Si algo falla dentro del <code class="inline">try</code>, necesitamos decir qué queremos hacer con esa excepción.</div>
+</section>
+
+<section id="catch">
+<div class="step">5 · Decidimos qué hacer</div>
+<h2><code class="inline">catch</code>: si ocurre esta excepción, ejecutá este bloque</h2>
+<pre>try {
+    int numero = Integer.parseInt(texto);
+    System.out.println(numero);
+
+} catch (NumberFormatException e) {
+    System.out.println("El dato ingresado no es un número válido.");
+}</pre>
+<div class="flow"><span class="node">try</span><span class="arr"> → </span><span class="node">parseInt()</span><span class="arr"> → </span><span class="node teal">funciona: continúa</span><br><span class="node">try</span><span class="arr"> → </span><span class="node warn">NumberFormatException</span><span class="arr"> → </span><span class="node teal">catch</span></div>
+<div class="callout"><b>Muy importante:</b> <code class="inline">catch</code> no transforma <code class="inline">"hola"</code> en un número. Nos permite <strong>decidir cómo responder</strong> cuando la conversión no puede realizarse.</div>
+<h3>¿Qué código deja de ejecutarse?</h3>
+<pre>try {
+    int numero = Integer.parseInt(texto); // aquí ocurre la excepción
+    System.out.println("Conversión correcta"); // esta línea se salta
+}
+catch (NumberFormatException e) {
+    System.out.println("Dato inválido");
+}
+
+System.out.println("El programa continúa");</pre>
+<p>Cuando se produce la excepción, Java abandona el resto del bloque <code class="inline">try</code>, busca un <code class="inline">catch</code> compatible y continúa desde allí.</p>
+</section>
+
+<section id="objeto">
+<div class="step">6 · Una sintaxis nueva merece explicación</div>
+<h2>¿Qué significa <code class="inline">catch (NumberFormatException e)</code>?</h2>
+<div class="compare">
+<div class="card"><strong class="big">NumberFormatException</strong><p>Es el <b>tipo de excepción</b> que este <code class="inline">catch</code> sabe manejar.</p></div>
+<div class="mid">+</div>
+<div class="card"><strong class="big">e</strong><p>Es una variable que referencia al <b>objeto excepción</b> que ocurrió. Podría llamarse de otra manera; <code class="inline">e</code> es una convención frecuente.</p></div>
+</div>
+<p>Ese objeto contiene información. Por ejemplo:</p>
+<pre>catch (NumberFormatException e) {
+    System.out.println(e.getMessage());
+}</pre>
+<p><code class="inline">getMessage()</code> devuelve el mensaje asociado a la excepción.</p>
+<div class="callout teal"><b>No hacemos magia:</b> igual que con cualquier objeto, tenemos una referencia (<code class="inline">e</code>) y podemos invocar métodos sobre ella.</div>
+</section>
+
+<section id="controller">
+<div class="step">7 · Volvemos a Tienda de Cómics</div>
+<h2>El Controller puede manejar errores de formato</h2>
+<p>Ahora el código que antes podía romper la acción queda protegido:</p>
+<pre>private void agregarProducto() {
+    try {
+        long codigo = Long.parseLong(vista.getTxtCodigo());
+        String nombre = vista.getTxtNombre();
+        double precio = Double.parseDouble(vista.getTxtPrecio());
+        int stock = Integer.parseInt(vista.getTxtStock());
+
+        // después continuaremos con la operación...
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(
+            vista,
+            "Código, precio y stock deben ser números válidos"
+        );
+    }
+}</pre>
+<p>Acá la ubicación tiene sentido: el Controller está interpretando datos que llegan desde la interfaz.</p>
+<table><thead><tr><th>Entrada</th><th>Resultado</th></tr></thead><tbody>
+<tr><td><code class="inline">"450"</code></td><td>La conversión puede continuar.</td></tr>
+<tr><td><code class="inline">"450.50"</code></td><td>Puede convertirse a <code class="inline">double</code>.</td></tr>
+<tr><td><code class="inline">"cuatrocientos"</code></td><td>Se produce <code class="inline">NumberFormatException</code> y el <code class="inline">catch</code> informa al usuario.</td></tr>
+<tr><td>campo vacío <code class="inline">""</code></td><td>También produce <code class="inline">NumberFormatException</code> al intentar convertirlo.</td></tr>
+</tbody></table>
+<div class="callout warn"><b>Esto solo resuelve formato.</b> Si el usuario escribe <code class="inline">-450</code>, Java lo convierte perfectamente a <code class="inline">double</code>. Ahí tenemos otro tipo de problema.</div>
+</section>
+
+<section id="throw">
+<div class="step">8 · A veces Java no ve ningún problema</div>
+<h2><code class="inline">throw</code>: nosotros decidimos que la operación no puede continuar</h2>
+<p>Supongamos que nuestra regla es: <strong>el precio debe ser mayor que cero</strong>.</p>
+<pre>double precio = -450;</pre>
+<p>Para Java ese valor es un <code class="inline">double</code> perfectamente válido. Pero para nuestra aplicación no debería aceptarse.</p>
+<pre>if (precio &lt;= 0) {
+    throw new IllegalArgumentException(
+        "El precio debe ser mayor que cero"
+    );
+}</pre>
+<p>Leamos la línea por partes:</p>
+<div class="grid3">
+<div class="card"><strong class="big">new</strong><p>Creamos un objeto excepción.</p></div>
+<div class="card"><strong class="big">IllegalArgumentException</strong><p>Representa que el método recibió un argumento que no acepta.</p></div>
+<div class="card"><strong class="big">throw</strong><p>Lanzamos la excepción: la ejecución normal del método se interrumpe y el problema se comunica a quien llamó.</p></div>
+</div>
+<div class="callout teal"><b>Diferencia central:</b> algunas excepciones aparecen porque Java detecta una operación imposible; otras las lanzamos nosotros cuando una regla de nuestra aplicación impide continuar.</div>
+</section>
+
+<section id="viaje">
+<div class="step">9 · Son dos momentos diferentes</div>
+<h2>El Service puede lanzar; el Controller puede capturar</h2>
+<p>En <code class="inline">ProductoService</code>:</p>
+<pre>if (precio &lt;= 0) {
+    throw new IllegalArgumentException(
+        "El precio debe ser mayor que cero"
+    );
+}</pre>
+<p>El Service comunica: <b>“no puedo realizar esta operación”</b>.</p>
+<p>En <code class="inline">ProductoController</code>:</p>
+<pre>try {
+    service.agregarProducto(codigo, nombre, precio, stock);
+
+} catch (IllegalArgumentException e) {
+    JOptionPane.showMessageDialog(vista, e.getMessage());
+}</pre>
+<p>El Controller decide: <b>“¿cómo se lo explico al usuario?”</b>.</p>
+<div class="flow"><span class="node warn">Service detecta la regla</span><span class="arr"> → throw → </span><span class="node">excepción viaja</span><span class="arr"> → catch → </span><span class="node teal">Controller decide la respuesta</span></div>
+<div class="callout"><b>La excepción no es un mensaje de pantalla.</b> Es una forma de comunicar que una operación no pudo completarse. El mensaje visual pertenece a quien conoce la interfaz.</div>
+</section>
+
+<section id="if">
+<div class="step">10 · Una pregunta legítima</div>
+<h2>¿Por qué no usar simplemente un <code class="inline">if</code> y <code class="inline">return</code>?</h2>
+<div class="grid2">
+<div class="card"><strong class="big">Solo cortar</strong><pre>if (precio &lt;= 0) {
+    return;
+}</pre><p>La operación termina, pero quien llamó puede no saber <b>qué ocurrió</b> ni por qué.</p></div>
+<div class="card"><strong class="big">Comunicar el problema</strong><pre>if (precio &lt;= 0) {
+    throw new IllegalArgumentException(
+        "Precio inválido"
+    );
+}</pre><p>La operación termina y el motivo puede ser capturado y tratado en otro nivel.</p></div>
+</div>
+<p>Esto no significa que todo <code class="inline">if</code> deba convertirse en excepción. Los <code class="inline">if</code> sirven para tomar decisiones normales del programa. Una excepción tiene sentido cuando estamos diciendo: <strong>esta operación no puede continuar como fue solicitada</strong>.</p>
+<div class="callout teal"><b>Regla práctica:</b> no uses excepciones para reemplazar decisiones normales; usalas para representar situaciones excepcionales o condiciones que impiden completar una operación.</div>
+</section>
+
+<section id="precisiones">
+<div class="step">11 · Un mapa mínimo sin adelantarnos demasiado</div>
+<h2>Java tiene muchas excepciones; hoy necesitamos unas pocas ideas firmes</h2>
+<div class="mini-map"><span>Exception</span><span class="arrow">→</span><span>RuntimeException</span><span class="arrow">→</span><span>NumberFormatException</span><span class="arrow"> / </span><span>IllegalArgumentException</span></div>
+<p>Las excepciones con las que estamos trabajando pertenecen a la familia de excepciones de ejecución. Más adelante veremos otras situaciones en las que Java obliga a declarar o manejar determinadas excepciones.</p>
+<div class="grid3">
+<div class="card"><strong class="big">finally</strong><p>Existe un bloque que puede ejecutarse ocurra o no una excepción. Lo retomaremos cuando trabajemos con recursos externos.</p></div>
+<div class="card"><strong class="big">throws</strong><p>Permite declarar que un método puede propagar determinadas excepciones. No necesitamos desarrollarlo todavía.</p></div>
+<div class="card"><strong class="big">Excepciones propias</strong><p>También podemos crear clases de excepción específicas del dominio. Lo dejaremos para cuando exista una necesidad real.</p></div>
+</div>
+<div class="callout warn"><b>Precisión de vocabulario:</b> en clase solemos decir “manejo de errores” en sentido general. Java también posee una clase técnica llamada <code class="inline">Error</code>, destinada a fallos graves del entorno que normalmente una aplicación no intenta recuperar. En este material estamos trabajando con <b>excepciones</b>.</div>
+</section>
+
+<section id="practica">
+<div class="step">12 · Práctica graduada</div>
+<h2>Probamos, provocamos y manejamos</h2>
+<div class="grid3">
+<div class="card"><strong class="big">Mínimo viable</strong><p>Escribí un programa que intente convertir un texto a <code class="inline">int</code> y maneje <code class="inline">NumberFormatException</code>.</p><p><b>Checkpoint:</b> ante <code class="inline">"hola"</code>, el programa muestra un mensaje propio y luego continúa.</p></div>
+<div class="card"><strong class="big">Estándar</strong><p>Adaptá <code class="inline">agregarProducto()</code> para manejar errores de conversión de código, precio y stock. Después agregá una regla que lance <code class="inline">IllegalArgumentException</code>.</p><p><b>Checkpoint:</b> podés explicar quién lanza y quién captura.</p></div>
+<div class="card"><strong class="big">Desafío</strong><p>Agregá reglas para código, nombre, precio y stock. Diseñá mensajes útiles y evitá <code class="inline">catch (Exception e)</code> cuando conocés el tipo concreto que querés manejar.</p><p><b>Checkpoint:</b> cada excepción tiene un motivo identificable.</p></div>
+</div>
+<h3>Casos para probar</h3>
+<table><thead><tr><th>Código</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>¿Qué debería ocurrir?</th></tr></thead><tbody>
+<tr><td>101</td><td>Batman</td><td>450</td><td>3</td><td>Operación válida.</td></tr>
+<tr><td>abc</td><td>Batman</td><td>450</td><td>3</td><td>Error de formato al convertir código.</td></tr>
+<tr><td>101</td><td>Batman</td><td>caro</td><td>3</td><td>Error de formato al convertir precio.</td></tr>
+<tr><td>101</td><td>Batman</td><td>-450</td><td>3</td><td>La conversión funciona; la regla de negocio debe rechazar el precio.</td></tr>
+<tr><td>101</td><td></td><td>450</td><td>3</td><td>Regla de negocio: nombre vacío.</td></tr>
+</tbody></table>
+<div class="callout warn"><b>Plan de rescate:</b> si <code class="inline">throw</code> y arquitectura se mezclan demasiado, volvemos primero a programas mínimos de consola con una sola conversión. Cuando <code class="inline">try-catch</code> esté firme, regresamos a Tienda de Cómics.</div>
+</section>
+
+<section id="actividad">
+<div class="step">13 · Comprobamos la comprensión</div>
+<h2>No alcanza con reconocer la sintaxis</h2>
+<div class="quiz" data-answer="catch"><p>1. ¿Qué bloque decide qué hacer si ocurre una <code class="inline">NumberFormatException</code>?</p><div class="choices"><button class="choice" data-value="try">try</button><button class="choice" data-value="catch">catch</button><button class="choice" data-value="throw">throw</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="quiz" data-answer="no"><p>2. Si <code class="inline">Double.parseDouble("hola")</code> está dentro de un <code class="inline">try</code>, ¿el <code class="inline">try</code> logra convertirlo correctamente?</p><div class="choices"><button class="choice" data-value="si">Sí</button><button class="choice" data-value="no">No</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="quiz" data-answer="service"><p>3. El precio <code class="inline">-500</code> es un <code class="inline">double</code> válido pero viola nuestra regla. ¿Quién debería detectar esa regla en la arquitectura que estamos construyendo?</p><div class="choices"><button class="choice" data-value="vista">Vista</button><button class="choice" data-value="controller">Controller</button><button class="choice" data-value="service">Service</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="quiz" data-answer="throw"><p>4. ¿Qué palabra usamos cuando nuestro código crea y lanza explícitamente una excepción?</p><div class="choices"><button class="choice" data-value="try">try</button><button class="choice" data-value="catch">catch</button><button class="choice" data-value="throw">throw</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="quiz" data-answer="formato"><p>5. <code class="inline">"tres"</code> escrito en el campo stock provoca un problema de…</p><div class="choices"><button class="choice" data-value="formato">formato / conversión</button><button class="choice" data-value="negocio">regla de negocio</button></div><div class="feedback" aria-live="polite"></div></div>
+</section>
+
+<section id="cierre">
+<div class="step">14 · Cierre</div>
+<h2>Una aplicación robusta no supone que todo saldrá bien</h2>
+<div class="grid3">
+<div class="card"><strong class="big">try</strong><p>Delimita código cuya ejecución puede producir una excepción que queremos manejar.</p></div>
+<div class="card"><strong class="big">catch</strong><p>Captura un tipo de excepción y nos permite decidir qué hacer ante ella.</p></div>
+<div class="card"><strong class="big">throw</strong><p>Permite que nuestro propio código comunique que una operación no puede continuar.</p></div>
+</div>
+<div class="flow"><span class="node">entrada</span><span class="arr"> → </span><span class="node teal">Controller convierte</span><span class="arr"> → </span><span class="node warn">Service valida reglas</span><span class="arr"> → </span><span class="node">operación o excepción</span></div>
+<h3>Micro-entrega de documentación</h3>
+<p>Completá para Tienda de Cómics una tabla como esta:</p>
+<table><thead><tr><th>Situación</th><th>Quién la detecta</th><th>Tipo de problema</th><th>Respuesta esperada</th></tr></thead><tbody>
+<tr><td>Precio = <code class="inline">"abc"</code></td><td>Controller</td><td>Formato / conversión</td><td>Informar que se espera un número.</td></tr>
+<tr><td>Precio = <code class="inline">-450</code></td><td>Service</td><td>Regla de negocio</td><td>Rechazar la operación y comunicar el motivo.</td></tr>
+<tr><td>Stock = <code class="inline">"tres"</code></td><td>Controller</td><td>Formato / conversión</td><td>Informar que se espera un número.</td></tr>
+<tr><td>Código repetido</td><td>Service</td><td>Regla de negocio</td><td>Rechazar la operación.</td></tr>
+</tbody></table>
+<div class="callout teal"><b>Ticket de salida:</b> explicá con tus palabras la diferencia entre <code class="inline">throw</code> y <code class="inline">catch</code>. No describas solo la sintaxis: decí qué responsabilidad cumple cada uno.</div>
+<p class="lead"><b>Puente:</b> ahora ya podemos volver a <code class="inline">ProductoService</code> sin que <code class="inline">throw</code> e <code class="inline">IllegalArgumentException</code> aparezcan de la nada. Sabemos qué significan y cómo viaja el problema hasta quien debe manejarlo.</p>
+</section>
+
+<div class="footer"><div style="display:flex;align-items:center;gap:12px"><img src="assets/logo-pm.png" alt="PM"><div><b>PROFE MACÓN</b><br><span class="muted">Explora, aprende, crea.</span></div></div><div class="site">profemacon.net</div></div>
+</main>
+<div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.18)"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div>
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  q.querySelectorAll('.choice').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong')});
+      var ok=btn.dataset.value===q.dataset.answer;
+      btn.classList.add(ok?'correct':'wrong');
+      q.querySelector('.feedback').textContent=ok?'Correcto. Identificaste qué ocurre y quién tiene esa responsabilidad.':'Revisá qué operación falla y si el problema es de formato, una regla de negocio o la respuesta ante una excepción.';
+    });
+  });
+});
+</script>
+<script src="scorm.js"></script>
+<style id="site-navigation">#site-back{position:fixed;right:18px;bottom:18px;z-index:99999;display:block;padding:11px 16px;background:#171419;color:#fff!important;font:700 13px Arial,sans-serif;border-radius:999px;text-decoration:none;box-shadow:0 8px 25px #17141940;border:1px solid #988db3}#site-back:hover{background:#756a96}@media print{#site-back{display:none}}</style><a id="site-back" href="../../index.html#unidad-03">← Índice del curso</a></body>
+</html>

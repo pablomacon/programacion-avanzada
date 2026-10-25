@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="MANIFEST-PROFEMACON-PRODUCTOVISTA-SWING"
+ xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+ xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="
+ http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd
+ http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>1.2</schemaversion>
+  </metadata>
+  <organizations default="ORG-PRODUCTOVISTA">
+    <organization identifier="ORG-PRODUCTOVISTA">
+      <title>ProductoVista paso a paso - Java Swing</title>
+      <item identifier="ITEM-PRODUCTOVISTA" identifierref="RES-PRODUCTOVISTA" isvisible="true">
+        <title>Construcción de ProductoVista con Java Swing</title>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="RES-PRODUCTOVISTA" type="webcontent"
+      adlcp:scormtype="sco" href="index.html">
+      <file href="index.html"/>
+      <file href="scorm.js"/>
+      <file href="assets/logo_PM.png"/>
+      <file href="assets/LogoProfeMacon.png"/>
+    </resource>
+  </resources>
+</manifest>

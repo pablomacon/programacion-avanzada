@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ProductoService · Profe Macón</title>
+<style>
+:root{
+  --violet:#988db3;--violet-deep:#756a96;--teal:#00a99d;--ink:#171419;
+  --paper:#fff;--bg:#f4f2f5;--line:#ddd7df;--muted:#827d7d;--code:#171419;
+  --soft-violet:#f5f1f8;--soft-teal:#eaf8f6;--soft-warn:#faf7ef;--warn:#b68a3c;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:
+linear-gradient(rgba(152,141,179,.05) 1px,transparent 1px),
+linear-gradient(90deg,rgba(152,141,179,.05) 1px,transparent 1px),var(--bg);background-size:24px 24px}
+.wrap{max-width:1100px;margin:auto}
+.hero{padding:28px 18px 44px;background:linear-gradient(135deg,#fff,#f5f1f8 60%,#e7f8f6);border-bottom:5px solid var(--teal)}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:0 12px 34px rgba(0,0,0,.09);margin-bottom:30px}
+.brand .full{width:min(420px,68vw);height:auto}.brand .iso{width:72px;height:auto}.brand small{text-align:right;color:var(--muted);line-height:1.5}
+h1{font-size:clamp(2.1rem,5vw,4rem);line-height:1.02;margin:0 0 14px}h1 em{color:var(--violet);font-style:normal}
+.hero p{max-width:920px;line-height:1.7;font-size:1.08rem}.eyebrow{font-weight:800;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;margin-bottom:8px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.tag{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.83rem;font-weight:700}
+nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow:auto;padding:9px 14px}nav a{text-decoration:none;color:var(--ink);white-space:nowrap;padding:8px 10px;border-radius:8px;font-size:.84rem}nav a:hover{background:#f1edf5}
+main{max-width:1100px;margin:auto;padding:32px 18px 70px}
+section{scroll-margin-top:66px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:24px;box-shadow:0 12px 34px rgba(0,0,0,.08)}
+.step{color:var(--violet);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.8rem}
+h2{font-size:clamp(1.5rem,3vw,2.15rem);margin:8px 0 12px}h3{margin:22px 0 9px}p,li{line-height:1.65}.lead{font-size:1.06rem;color:#403b49}.muted{color:var(--muted)}
+code{font-family:Consolas,"Courier New",monospace}code.inline{background:#f1edf5;padding:2px 6px;border-radius:6px}
+pre{margin:12px 0 0;padding:17px;color:#f8f7fa;background:var(--code);overflow:auto;border-radius:14px;font-family:Consolas,"Courier New",monospace;font-size:.88rem;line-height:1.55;white-space:pre}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:850px){.grid3,.grid4{grid-template-columns:1fr 1fr}}@media(max-width:680px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.brand small{display:none}}
+.card{border:1px solid var(--line);border-radius:14px;background:#fcfbfd;padding:16px}.card h3{margin-top:0}.card strong.big{display:block;color:var(--violet-deep);font-size:1.1rem;margin-bottom:5px}
+.callout{border-left:4px solid var(--violet);background:var(--soft-violet);padding:15px 17px;border-radius:12px;margin:16px 0}.callout.teal{border-color:var(--teal);background:var(--soft-teal)}.callout.warn{border-color:var(--warn);background:var(--soft-warn)}
+.flow{border:1px dashed #b7afbc;background:#fdfcfe;border-radius:15px;padding:18px;text-align:center;overflow:auto}.flow .node{display:inline-block;border:2px solid var(--violet);border-radius:10px;padding:9px 13px;background:#fff;font-weight:700;margin:4px}.flow .teal{border-color:var(--teal);background:var(--soft-teal)}.flow .warn{border-color:var(--warn);background:var(--soft-warn)}.arr{color:#777;font-size:1.25rem;padding:0 3px}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{background:#f3eff6}
+details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fdfcfe;margin:12px 0}summary{cursor:pointer;font-weight:700}
+.responsibility{display:flex;gap:11px;align-items:flex-start;border-bottom:1px solid #eee8ef;padding:10px 0}.responsibility:last-child{border-bottom:0}.badge{min-width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--soft-violet);color:var(--violet-deep);font-weight:800}
+.compare{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:12px}.compare .mid{text-align:center;font-size:2rem;color:var(--teal)}@media(max-width:760px){.compare{grid-template-columns:1fr}.compare .mid{transform:rotate(90deg)}}
+.arch{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fcfbfd}.layer{border:2px solid var(--violet);border-radius:12px;padding:12px;text-align:center;font-weight:800;background:#fff;margin:8px auto;max-width:560px}.layer.future{border-style:dashed;color:#5d5865}.layer.main{border-color:var(--teal);background:var(--soft-teal)}.down{text-align:center;color:#827d7d;font-size:1.4rem}
+.quiz{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:#fcfbfd}.quiz p{margin-top:0;font-weight:700}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #cfc7d3;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.choice:hover{background:#f5f1f8}.choice.correct{border-color:var(--teal);background:var(--soft-teal)}.choice.wrong{border-color:#b56d6d;background:#fbefef}.feedback{margin:10px 0 0;min-height:1.4em;color:#4d4753}
+.footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
+hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
+
+.code-label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:16px;font-size:.8rem;font-weight:800;color:var(--violet);text-transform:uppercase;letter-spacing:.05em}
+.path{font-family:Consolas,"Courier New",monospace;background:#f1edf5;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0;color:#403b49}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}.timeline .card{position:relative;padding-top:38px}.timeline .num{position:absolute;top:12px;left:14px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--violet);color:#fff;font-weight:800;font-size:.75rem}
+@media(max-width:820px){.timeline{grid-template-columns:1fr 1fr}}@media(max-width:520px){.timeline{grid-template-columns:1fr}}
+.goodbad{display:grid;grid-template-columns:1fr 1fr;gap:14px}.goodbad .good{border-top:4px solid var(--teal)}.goodbad .bad{border-top:4px solid var(--warn)}@media(max-width:680px){.goodbad{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="brand">
+    <img class="full" src="assets/logo-profemacon.png" alt="Profe Macón">
+    <div style="display:flex;align-items:center;gap:14px"><small>Programación Avanzada<br>2.º BT · Tecnologías de la Información</small><img class="iso" src="assets/logo-pm.png" alt="PM"></div>
+  </div>
+  <div class="eyebrow">Tienda de Cómics · Arquitectura de componentes</div>
+  <h1><em>ProductoService</em></h1>
+  <p>Ya sacamos de <code class="inline">Main</code> la coordinación de los botones. Pero ahora nuestro <code class="inline">ProductoController</code> empieza a acumular tareas que no dependen de la pantalla. Vamos a separar la <strong>coordinación de la interfaz</strong> de las <strong>reglas y operaciones del negocio</strong>.</p>
+  <div class="tags"><span class="tag">CET1</span><span class="tag">Service</span><span class="tag">Lógica de negocio</span><span class="tag">Responsabilidades</span><span class="tag">Validación</span><span class="tag">Modularidad</span></div>
+</div></header>
+
+<nav><div class="wrap">
+<a href="#retomamos">1 · Retomamos</a><a href="#dosproblemas">2 · Dos tipos de problema</a><a href="#service">3 · Service</a><a href="#crear">4 · Crear la clase</a><a href="#moverlista">5 · Mover la lista</a><a href="#reglas">6 · Reglas</a><a href="#errores">7 · Comunicar errores</a><a href="#controller">8 · Controller</a><a href="#main">9 · Main</a><a href="#recorrido">10 · Recorrido</a><a href="#practica">11 · Práctica</a><a href="#actividad">12 · Comprobamos</a><a href="#cierre">13 · Cierre</a>
+</div></nav>
+
+<main>
+<section id="retomamos">
+<div class="step">1 · Retomamos el problema</div>
+<h2>El Controller resolvió un problema… pero empezó a heredar otros</h2>
+<p class="lead">Después del material anterior, <code class="inline">Main</code> quedó pequeño. Ahora miremos con lupa el método <code class="inline">agregarProducto()</code> del Controller.</p>
+<pre>private void agregarProducto() {
+    long codigo = Long.parseLong(vista.getTxtCodigo());
+    String nombre = vista.getTxtNombre();
+    double precio = Double.parseDouble(vista.getTxtPrecio());
+    int stock = Integer.parseInt(vista.getTxtStock());
+
+    Producto p = new Producto(codigo, nombre, precio, stock);
+    listaProductos.add(p);
+
+    JOptionPane.showMessageDialog(vista, listaProductos);
+}</pre>
+<p>En pocas líneas aparecen tareas bastante diferentes:</p>
+<div class="grid4">
+<div class="card"><strong class="big">Leer</strong><p>Pedir datos a la Vista.</p></div>
+<div class="card"><strong class="big">Convertir</strong><p>Pasar texto a números.</p></div>
+<div class="card"><strong class="big">Negocio</strong><p>Decidir si un producto es válido y crearlo.</p></div>
+<div class="card"><strong class="big">Datos</strong><p>Guardar el producto en la colección.</p></div>
+</div>
+<div class="callout warn"><b>Nueva pregunta:</b> ¿todo eso forma parte de “controlar la interfaz”, o estamos empezando a trasladar al Controller el mismo problema que antes tenía Main?</div>
+</section>
+
+<section id="dosproblemas">
+<div class="step">2 · Separamos dos tipos de problema</div>
+<h2>“No puedo convertirlo” no es lo mismo que “no debería aceptarlo”</h2>
+<p>Antes de crear ninguna clase nueva, comparemos dos entradas posibles para el precio.</p>
+<div class="grid2">
+<div class="card bad"><h3>El usuario escribe <code class="inline">hola</code></h3><p><code class="inline">Double.parseDouble("hola")</code> no puede convertir ese texto en un número.</p><p><b>Es un problema de entrada o formato.</b></p></div>
+<div class="card good"><h3>El usuario escribe <code class="inline">-500</code></h3><p>Java puede convertirlo perfectamente a <code class="inline">double</code>.</p><p>Pero una tienda no debería aceptar un precio negativo. <b>Es una regla del negocio.</b></p></div>
+</div>
+<table>
+<thead><tr><th>Pregunta</th><th>Responsabilidad</th></tr></thead>
+<tbody>
+<tr><td>¿Lo escrito puede convertirse al tipo que necesitamos?</td><td><b>Controller</b>, porque está interpretando la entrada que llega desde la Vista.</td></tr>
+<tr><td>¿Ese valor tiene sentido para nuestra aplicación?</td><td><b>Service</b>, porque la regla seguiría existiendo aunque cambiáramos Swing por otra interfaz.</td></tr>
+</tbody>
+</table>
+<div class="callout teal"><b>Prueba mental:</b> si mañana reemplazáramos Swing por una aplicación web, “el precio debe ser mayor que cero” seguiría siendo cierto. Esa regla no pertenece a la ventana.</div>
+</section>
+
+<section id="service">
+<div class="step">3 · Aparece una nueva responsabilidad</div>
+<h2>Necesitamos un componente que conozca las operaciones del negocio</h2>
+<p>No vamos a crear <code class="inline">ProductoService</code> porque “la arquitectura dice que tiene que estar”. Lo necesitamos porque encontramos tareas que <strong>no deberían depender de la Vista</strong>.</p>
+<div class="flow"><span class="node">Vista</span><span class="arr"> → </span><span class="node teal">Controller</span><span class="arr"> → </span><span class="node warn">Service</span></div>
+<div class="grid3">
+<div class="card"><strong class="big">Controller</strong><p>Coordina la interacción: escucha eventos, lee la Vista, convierte entradas y decide qué mostrar.</p></div>
+<div class="card"><strong class="big">Service</strong><p>Aplica reglas y realiza operaciones del negocio: crear, agregar, buscar, eliminar, etc.</p></div>
+<div class="card"><strong class="big">Vista</strong><p>Muestra componentes, recibe datos del usuario y expone eventos y valores.</p></div>
+</div>
+<div class="callout"><b>Idea clave:</b> Service no debería saber que existen <code class="inline">JButton</code>, <code class="inline">JTextField</code> ni <code class="inline">JOptionPane</code>.</div>
+</section>
+
+<section id="crear">
+<div class="step">4 · Creamos el paquete y la clase</div>
+<h2>Primero, una clase vacía con una responsabilidad clara</h2>
+<p>Creamos el paquete:</p>
+<div class="path">uy.edu.utu.programacion.service</div>
+<p>y dentro:</p>
+<div class="path">ProductoService.java</div>
+<pre>package uy.edu.utu.programacion.service;
+
+public class ProductoService {
+
+}</pre>
+<p>Por ahora no hace nada. Antes de agregar métodos, decidimos <strong>qué responsabilidad vamos a trasladarle primero</strong>.</p>
+<div class="callout teal"><b>La primera mudanza será la colección.</b> El <code class="inline">ArrayList&lt;Producto&gt;</code> representa los productos con los que trabaja la aplicación; no es un detalle de la pantalla.</div>
+</section>
+
+<section id="moverlista">
+<div class="step">5 · La colección cambia de dueño</div>
+<h2>El ArrayList sale del Controller y pasa al Service</h2>
+<p>En la versión anterior teníamos:</p>
+<pre>public class ProductoController {
+    private Producto_Vista vista;
+    private ArrayList&lt;Producto&gt; listaProductos;
+    ...
+}</pre>
+<p>Ahora el Service será quien mantenga esa colección:</p>
+<pre>package uy.edu.utu.programacion.service;
+
+import java.util.ArrayList;
+import uy.edu.utu.programacion.model.Producto;
+
+public class ProductoService {
+
+    private ArrayList&lt;Producto&gt; listaProductos;
+
+    public ProductoService() {
+        listaProductos = new ArrayList&lt;Producto&gt;();
+    }
+}</pre>
+<div class="callout"><b>¿Por qué la lista es <code class="inline">private</code>?</b> Porque queremos que los demás componentes pidan operaciones al Service, en lugar de modificar libremente su colección desde afuera.</div>
+<h3>Necesitamos una operación para consultar los productos</h3>
+<p>En lugar de entregar la lista interna para que cualquiera pueda modificarla, devolvemos una copia:</p>
+<pre>public ArrayList&lt;Producto&gt; listarProductos() {
+    return new ArrayList&lt;Producto&gt;(listaProductos);
+}</pre>
+<div class="callout teal"><b>¿Qué hace ese <code class="inline">new ArrayList(...)</code>?</b> Construye otra lista con los mismos productos. Quien la recibe puede recorrerla o mostrarla sin tener acceso directo a la colección que administra el Service.</div>
+</section>
+
+<section id="reglas">
+<div class="step">6 · El Service empieza a hacer su trabajo</div>
+<h2>Antes de crear un Producto, comprobamos las reglas del negocio</h2>
+<p>Para nuestra Tienda de Cómics estableceremos estas reglas mínimas:</p>
+<ul>
+<li>el código debe ser mayor que cero;</li>
+<li>el nombre no puede quedar vacío;</li>
+<li>el precio debe ser mayor que cero;</li>
+<li>el stock no puede ser negativo.</li>
+</ul>
+<p>Ahora sí creamos una operación del Service:</p>
+<pre>public Producto agregarProducto(long codigo, String nombre,
+                                double precio, int stock) {
+
+    if (codigo &lt;= 0) {
+        throw new IllegalArgumentException("El código debe ser mayor que cero");
+    }
+
+    if (nombre == null || nombre.isBlank()) {
+        throw new IllegalArgumentException("El nombre no puede estar vacío");
+    }
+
+    if (precio &lt;= 0) {
+        throw new IllegalArgumentException("El precio debe ser mayor que cero");
+    }
+
+    if (stock &lt; 0) {
+        throw new IllegalArgumentException("El stock no puede ser negativo");
+    }
+
+    Producto producto = new Producto(codigo, nombre, precio, stock);
+    listaProductos.add(producto);
+
+    return producto;
+}</pre>
+<div class="callout"><b>Observá el cambio:</b> el Service no recibe textos de <code class="inline">JTextField</code>. Recibe datos ya convertidos. Su pregunta no es “¿puedo transformar esto en un número?”, sino “¿estos valores cumplen las reglas de la aplicación?”.</div>
+</section>
+
+<section id="errores">
+<div class="step">7 · ¿Y qué significa throw?</div>
+<h2>El Service debe poder avisar que una operación no puede realizarse</h2>
+<p>Acaba de aparecer una instrucción nueva, así que no la usamos como si fuera mágica.</p>
+<pre>throw new IllegalArgumentException("El precio debe ser mayor que cero");</pre>
+<p><code class="inline">throw</code> significa: <strong>interrumpí esta operación y avisá que ocurrió un problema</strong>. En este caso usamos <code class="inline">IllegalArgumentException</code> porque los datos recibidos no cumplen las condiciones que exige el método.</p>
+<div class="flow"><span class="node">Controller pide agregar</span><span class="arr"> → </span><span class="node warn">Service detecta regla inválida</span><span class="arr"> → </span><span class="node">lanza excepción</span></div>
+<p>El Service <strong>no muestra un JOptionPane</strong>. Solo comunica el problema. Quien conoce la interfaz decidirá cómo presentarlo.</p>
+<div class="callout teal"><b>Separación importante:</b> una regla de negocio puede fallar sin saber si el programa usa Swing, consola, web o cualquier otra interfaz.</div>
+</section>
+
+<section id="controller">
+<div class="step">8 · El Controller queda como coordinador</div>
+<h2>Ahora le entregamos un Service al Controller</h2>
+<p>Igual que hicimos con la Vista, el Controller no crea el Service por su cuenta: lo recibe por el constructor y guarda una referencia.</p>
+<pre>private Producto_Vista vista;
+private ProductoService service;
+
+public ProductoController(Producto_Vista vista,
+                          ProductoService service) {
+    this.vista = vista;
+    this.service = service;
+    configurarEventos();
+}</pre>
+<p>Después simplificamos <code class="inline">agregarProducto()</code>. Primero intentamos convertir los textos. Si el formato es correcto, pedimos al Service que realice la operación.</p>
+<pre>private void agregarProducto() {
+    try {
+        long codigo = Long.parseLong(vista.getTxtCodigo());
+        String nombre = vista.getTxtNombre();
+        double precio = Double.parseDouble(vista.getTxtPrecio());
+        int stock = Integer.parseInt(vista.getTxtStock());
+
+        service.agregarProducto(codigo, nombre, precio, stock);
+
+        JOptionPane.showMessageDialog(
+            vista,
+            service.listarProductos()
+        );
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(
+            vista,
+            "Código, precio y stock deben ser números válidos"
+        );
+
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(
+            vista,
+            e.getMessage()
+        );
+    }
+}</pre>
+<h3>¿Por qué hay dos <code class="inline">catch</code>?</h3>
+<table>
+<thead><tr><th>Excepción</th><th>Qué significa aquí</th><th>Quién originó el problema</th></tr></thead>
+<tbody>
+<tr><td><code class="inline">NumberFormatException</code></td><td>No se pudo convertir un texto a número.</td><td>La entrada recibida desde la Vista.</td></tr>
+<tr><td><code class="inline">IllegalArgumentException</code></td><td>Los datos sí tienen el tipo correcto, pero violan una regla.</td><td>El Service detectó una condición inválida.</td></tr>
+</tbody>
+</table>
+<div class="callout"><b>El Controller traduce resultados para la interfaz.</b> Recibe un problema del Service y decide mostrarlo con <code class="inline">JOptionPane</code>. El Service sigue sin conocer Swing.</div>
+</section>
+
+<section id="main">
+<div class="step">9 · Main conecta tres piezas</div>
+<h2>Ahora Main arma la aplicación</h2>
+<p>Como el Controller necesita una Vista y un Service, <code class="inline">Main</code> crea ambos y se los entrega:</p>
+<pre>package uy.edu.utu.programacion;
+
+import uy.edu.utu.programacion.controller.ProductoController;
+import uy.edu.utu.programacion.service.ProductoService;
+import uy.edu.utu.programacion.view.Producto_Vista;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Producto_Vista vista = new Producto_Vista();
+        ProductoService service = new ProductoService();
+
+        ProductoController controller =
+                new ProductoController(vista, service);
+
+        vista.setVisible(true);
+    }
+}</pre>
+<div class="arch">
+<div class="layer main">Main · crea y conecta</div><div class="down">↓</div>
+<div class="layer">ProductoController · coordina</div><div class="down">↓</div>
+<div class="layer">ProductoService · aplica reglas y operaciones</div><div class="down">↓</div>
+<div class="layer future">ArrayList&lt;Producto&gt; · almacenamiento temporal</div>
+</div>
+<div class="callout teal"><b>La frase que queremos conservar:</b> Main arma la aplicación. Controller coordina. Service resuelve el negocio.</div>
+</section>
+
+<section id="recorrido">
+<div class="step">10 · Seguimos una operación completa</div>
+<h2>¿Qué ocurre ahora cuando el usuario agrega un producto?</h2>
+<div class="timeline">
+<div class="card"><span class="num">1</span><b>Vista</b><p>El usuario escribe los datos y pulsa Agregar.</p></div>
+<div class="card"><span class="num">2</span><b>Controller</b><p>Lee los textos e intenta convertir código, precio y stock.</p></div>
+<div class="card"><span class="num">3</span><b>Service</b><p>Comprueba las reglas, crea el objeto y lo agrega a su colección.</p></div>
+<div class="card"><span class="num">4</span><b>Controller</b><p>Pide la lista y decide cómo mostrar el resultado en la Vista.</p></div>
+</div>
+<div class="flow"><span class="node">Usuario</span><span class="arr"> → </span><span class="node">Vista</span><span class="arr"> → </span><span class="node teal">Controller</span><span class="arr"> → </span><span class="node warn">Service</span><span class="arr"> → </span><span class="node">ArrayList</span></div>
+<h3>Probemos tres situaciones</h3>
+<table>
+<thead><tr><th>Entrada</th><th>Qué ocurre</th></tr></thead>
+<tbody>
+<tr><td>Precio = <code class="inline">hola</code></td><td>Controller no puede convertirlo y muestra un mensaje de formato.</td></tr>
+<tr><td>Precio = <code class="inline">-500</code></td><td>Controller lo convierte; Service rechaza la regla y comunica el motivo.</td></tr>
+<tr><td>Precio = <code class="inline">500</code></td><td>Service valida, crea el Producto y lo agrega a la colección.</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="practica">
+<div class="step">11 · Práctica graduada</div>
+<h2>Ahora te toca separar el negocio del control</h2>
+<div class="grid3">
+<div class="card"><strong class="big">Mínimo viable</strong><p>Crear <code class="inline">ProductoService</code>, mover allí el <code class="inline">ArrayList</code> y crear <code class="inline">agregarProducto(...)</code>.</p><p><b>Checkpoint:</b> Controller ya no tiene una colección de productos.</p></div>
+<div class="card"><strong class="big">Estándar</strong><p>Agregar las cuatro reglas de negocio y adaptar Controller con los dos tipos de error: formato y regla inválida.</p><p><b>Checkpoint:</b> Service no importa ninguna clase de Swing.</p></div>
+<div class="card"><strong class="big">Desafío</strong><p>Agregar la regla “no puede existir otro producto con el mismo código”. La búsqueda debe hacerse dentro del Service.</p><p><b>Pregunta:</b> ¿por qué esta regla necesita conocer la colección completa?</p></div>
+</div>
+<div class="callout warn"><b>Plan de rescate:</b> si se mezclan demasiados conceptos, hacé la mudanza en dos pasos: primero solo mover <code class="inline">ArrayList</code> y <code class="inline">agregar</code>; después incorporar reglas y excepciones.</div>
+</section>
+
+<section id="actividad">
+<div class="step">12 · Comprobamos la idea</div>
+<h2>¿Controller o Service?</h2>
+<p>Elegí dónde ubicarías cada responsabilidad en la arquitectura que acabamos de construir.</p>
+<div class="quiz" data-answer="controller">
+<p>1. Convertir el texto <code class="inline">"250.50"</code> recibido de un JTextField a <code class="inline">double</code>.</p>
+<div class="choices"><button class="choice" data-value="controller">Controller</button><button class="choice" data-value="service">Service</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="quiz" data-answer="service">
+<p>2. Comprobar que el precio sea mayor que cero.</p>
+<div class="choices"><button class="choice" data-value="controller">Controller</button><button class="choice" data-value="service">Service</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="quiz" data-answer="service">
+<p>3. Crear el objeto Producto y agregarlo a la colección cuando cumple las reglas.</p>
+<div class="choices"><button class="choice" data-value="controller">Controller</button><button class="choice" data-value="service">Service</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="quiz" data-answer="controller">
+<p>4. Mostrar con JOptionPane el mensaje que explica por qué la operación fue rechazada.</p>
+<div class="choices"><button class="choice" data-value="controller">Controller</button><button class="choice" data-value="service">Service</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="quiz" data-answer="service">
+<p>5. Comprobar que no exista otro producto con el mismo código.</p>
+<div class="choices"><button class="choice" data-value="controller">Controller</button><button class="choice" data-value="service">Service</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="callout teal"><b>Regla práctica:</b> preguntate “¿esta decisión seguiría siendo necesaria si cambiara completamente la interfaz?”. Si la respuesta es sí, probablemente no pertenece al Controller.</div>
+</section>
+
+<section id="cierre">
+<div class="step">13 · Cierre</div>
+<h2>Ahora cada componente tiene una responsabilidad más clara</h2>
+<div class="grid3">
+<div class="card"><strong class="big">Main</strong><p>Crea y conecta los componentes principales.</p></div>
+<div class="card"><strong class="big">Controller</strong><p>Coordina la interacción entre la Vista y las operaciones de la aplicación.</p></div>
+<div class="card"><strong class="big">Service</strong><p>Aplica reglas, crea productos y administra las operaciones sobre ellos.</p></div>
+</div>
+<p>Pero todavía hay una limitación evidente:</p>
+<div class="flow"><span class="node">Service</span><span class="arr"> → </span><span class="node warn">ArrayList en memoria</span><span class="arr"> → </span><span class="node">cerramos el programa</span><span class="arr"> → </span><span class="node warn">los datos desaparecen</span></div>
+<div class="callout warn"><b>El próximo problema ya está preparado:</b> el Service no debería tener que saber <em>cómo</em> se almacenan permanentemente los productos. Más adelante necesitaremos separar también esa responsabilidad.</div>
+<h3>Micro-entrega de documentación</h3>
+<ul>
+<li>Dibujá la arquitectura actual: <code class="inline">Vista → Controller → Service → ArrayList</code>.</li>
+<li>Escribí dos ejemplos de <b>validación de formato</b> y dos ejemplos de <b>regla de negocio</b>.</li>
+<li>Explicá por qué <code class="inline">ProductoService</code> no debería usar <code class="inline">JOptionPane</code>.</li>
+<li>Registrá qué responsabilidades salieron del Controller en esta refactorización.</li>
+</ul>
+<div class="callout teal"><b>Ticket de salida:</b> “Si mañana cambiamos Swing por otra interfaz, ¿qué parte de ProductoService debería seguir funcionando sin cambios? ¿Por qué?”</div>
+<p class="lead"><b>Puente hacia lo que viene:</b> hoy el Service guarda en un <code class="inline">ArrayList</code>. Cuando necesitemos persistencia, esa tarea dejará de ser responsabilidad del Service y aparecerá una nueva pieza: el acceso a datos.</p>
+</section>
+
+<div class="footer">
+<div style="display:flex;align-items:center;gap:12px"><img src="assets/logo-pm.png" alt="PM"><div><b>PROFE MACÓN</b><br><span class="muted">Explora, aprende, crea.</span></div></div>
+<div class="site">profemacon.net</div>
+</div>
+</main>
+
+<div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.18)"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div>
+
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  q.querySelectorAll('.choice').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong')});
+      var ok=btn.dataset.value===q.dataset.answer;
+      btn.classList.add(ok?'correct':'wrong');
+      q.querySelector('.feedback').textContent=ok?'Correcto. Pensá qué responsabilidad está tomando esa decisión.':'Revisá la diferencia entre coordinar la interfaz y aplicar reglas u operaciones del negocio.';
+    });
+  });
+});
+</script>
+<script src="scorm.js"></script>
+</body>
+</html>

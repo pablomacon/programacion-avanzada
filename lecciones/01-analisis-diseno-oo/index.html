@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Análisis y diseño OO · Tienda de Cómics · Profe Macón</title>
+<style>
+:root{
+  --violet:#988db3;--violet-deep:#756a96;--teal:#00a99d;--ink:#171419;
+  --paper:#fff;--bg:#f4f2f5;--line:#ddd7df;--muted:#827d7d;--code:#171419;
+  --soft-violet:#f5f1f8;--soft-teal:#eaf8f6;--soft-warn:#faf7ef;--warn:#b68a3c;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:
+linear-gradient(rgba(152,141,179,.05) 1px,transparent 1px),
+linear-gradient(90deg,rgba(152,141,179,.05) 1px,transparent 1px),var(--bg);background-size:24px 24px}
+.wrap{max-width:1100px;margin:auto}
+.hero{padding:28px 18px 44px;background:linear-gradient(135deg,#fff,#f5f1f8 60%,#e7f8f6);border-bottom:5px solid var(--teal)}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:0 12px 34px rgba(0,0,0,.09);margin-bottom:30px}
+.brand .full{width:min(420px,68vw);height:auto}.brand .iso{width:72px;height:auto}.brand small{text-align:right;color:var(--muted);line-height:1.5}
+h1{font-size:clamp(2.1rem,5vw,4rem);line-height:1.02;margin:0 0 14px}h1 em{color:var(--violet);font-style:normal}
+.hero p{max-width:920px;line-height:1.7;font-size:1.08rem}.eyebrow{font-weight:800;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;margin-bottom:8px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.tag{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.83rem;font-weight:700}
+nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow:auto;padding:9px 14px}nav a{text-decoration:none;color:var(--ink);white-space:nowrap;padding:8px 10px;border-radius:8px;font-size:.84rem}nav a:hover{background:#f1edf5}
+main{max-width:1100px;margin:auto;padding:32px 18px 70px}
+section{scroll-margin-top:66px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:24px;box-shadow:0 12px 34px rgba(0,0,0,.08)}
+.step{color:var(--violet);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.8rem}
+h2{font-size:clamp(1.5rem,3vw,2.15rem);margin:8px 0 12px}h3{margin:22px 0 9px}p,li{line-height:1.65}.lead{font-size:1.06rem;color:#403b49}.muted{color:var(--muted)}
+code{font-family:Consolas,"Courier New",monospace}code.inline{background:#f1edf5;padding:2px 6px;border-radius:6px}
+pre{margin:12px 0 0;padding:17px;color:#f8f7fa;background:var(--code);overflow:auto;border-radius:14px;font-family:Consolas,"Courier New",monospace;font-size:.88rem;line-height:1.55;white-space:pre}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:850px){.grid3,.grid4{grid-template-columns:1fr 1fr}}@media(max-width:680px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.brand small{display:none}}
+.card{border:1px solid var(--line);border-radius:14px;background:#fcfbfd;padding:16px}.card h3{margin-top:0}.card strong.big{display:block;color:var(--violet-deep);font-size:1.1rem;margin-bottom:5px}
+.callout{border-left:4px solid var(--violet);background:var(--soft-violet);padding:15px 17px;border-radius:12px;margin:16px 0}.callout.teal{border-color:var(--teal);background:var(--soft-teal)}.callout.warn{border-color:var(--warn);background:var(--soft-warn)}
+.flow{border:1px dashed #b7afbc;background:#fdfcfe;border-radius:15px;padding:18px;text-align:center;overflow:auto}.flow .node{display:inline-block;border:2px solid var(--violet);border-radius:10px;padding:9px 13px;background:#fff;font-weight:700;margin:4px}.flow .teal{border-color:var(--teal);background:var(--soft-teal)}.flow .warn{border-color:var(--warn);background:var(--soft-warn)}.arr{color:#777;font-size:1.25rem;padding:0 3px}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{background:#f3eff6}
+details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fdfcfe;margin:12px 0}summary{cursor:pointer;font-weight:700}
+.responsibility{display:flex;gap:11px;align-items:flex-start;border-bottom:1px solid #eee8ef;padding:10px 0}.responsibility:last-child{border-bottom:0}.badge{min-width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--soft-violet);color:var(--violet-deep);font-weight:800}
+.compare{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:12px}.compare .mid{text-align:center;font-size:2rem;color:var(--teal)}@media(max-width:760px){.compare{grid-template-columns:1fr}.compare .mid{transform:rotate(90deg)}}
+.arch{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fcfbfd}.layer{border:2px solid var(--violet);border-radius:12px;padding:12px;text-align:center;font-weight:800;background:#fff;margin:8px auto;max-width:560px}.layer.future{border-style:dashed;color:#5d5865}.layer.main{border-color:var(--teal);background:var(--soft-teal)}.down{text-align:center;color:#827d7d;font-size:1.4rem}
+.quiz{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:#fcfbfd}.quiz p{margin-top:0;font-weight:700}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #cfc7d3;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.choice:hover{background:#f5f1f8}.choice.correct{border-color:var(--teal);background:var(--soft-teal)}.choice.wrong{border-color:#b56d6d;background:#fbefef}.feedback{margin:10px 0 0;min-height:1.4em;color:#4d4753}
+.footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
+hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
+
+.code-label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:16px;font-size:.8rem;font-weight:800;color:var(--violet);text-transform:uppercase;letter-spacing:.05em}
+.path{font-family:Consolas,"Courier New",monospace;background:#f1edf5;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0;color:#403b49}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}.timeline .card{position:relative;padding-top:38px}.timeline .num{position:absolute;top:12px;left:14px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--violet);color:#fff;font-weight:800;font-size:.75rem}
+@media(max-width:820px){.timeline{grid-template-columns:1fr 1fr}}@media(max-width:520px){.timeline{grid-template-columns:1fr}}
+.goodbad{display:grid;grid-template-columns:1fr 1fr;gap:14px}.goodbad .good{border-top:4px solid var(--teal)}.goodbad .bad{border-top:4px solid var(--warn)}@media(max-width:680px){.goodbad{grid-template-columns:1fr}}
+
+/* Recursos visuales y legibilidad de la unidad */
+figure.uml{margin:18px 0 22px;background:white;border:1px solid var(--line);border-radius:16px;padding:14px;overflow:auto}
+figure.uml img{display:block;margin:auto;max-width:100%;width:auto;height:auto;max-height:520px;object-fit:contain}
+figure.uml figcaption{margin:12px 6px 0;color:#5c5562;font-size:.93rem;line-height:1.5}
+.lesson-number{color:var(--teal);font-weight:800;font-size:.85rem;letter-spacing:.06em}
+.model-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.model-steps>div{padding:18px;border:1px solid var(--line);background:var(--soft-violet);border-radius:12px}.model-steps b{display:block;color:var(--violet-deep);margin-bottom:6px}
+@media(max-width:760px){.model-steps{grid-template-columns:1fr}section{padding:20px 16px}.brand .full{max-width:70vw}}
+@media print{nav,.quiz,#scormProgress{display:none!important}body{background:white}section{box-shadow:none;break-inside:avoid}.hero{padding-bottom:12px}figure.uml img{max-height:430px}}
+</style>
+</head>
+<body><a class="curso-regreso" href="../../index.html#unidad-01" aria-label="Volver al índice de la Unidad 1">← Volver a Unidad 1</a>
+<style>.curso-regreso{position:fixed;bottom:20px;right:20px;z-index:9999;display:block;background:#171419;color:#fff!important;font:700 14px/1.35 Arial,Helvetica,sans-serif;text-decoration:none;padding:12px 16px;border-radius:30px;box-shadow:0 8px 25px #17141945;border:2px solid #00a99d}.curso-regreso:hover,.curso-regreso:focus-visible{background:#756a96;color:#fff!important;outline:2px solid #fff}@media print{.curso-regreso{display:none}}</style>
+
+<header class="hero"><div class="wrap">
+<div class="brand"><img class="full" src="assets/logo-profemacon.png" alt="Profe Macón"><small><b>PROGRAMACIÓN AVANZADA</b><br>2.º BT TI · DGETP/UTU · 2026<br>CET1 · Análisis y diseño OO</small></div>
+<div class="eyebrow">UNIDAD 01 · INTRODUCCIÓN A LA POO · LECCIÓN 01</div>
+<h1>Del problema al <em>modelo de objetos</em></h1>
+<p>Antes de programar una tienda de cómics, necesitamos interpretar qué información guarda, cómo se relacionan sus elementos y qué decisiones exige su implementación.</p>
+<div class="tags"><span class="tag">Análisis orientado a objetos</span><span class="tag">Modelo conceptual</span><span class="tag">UML</span><span class="tag">Diseño orientado a objetos</span><span class="tag">Java</span></div>
+</div></header>
+<nav aria-label="Apartados de la lección"><div class="wrap"><a href="#problema">El problema</a><a href="#analisis">Análisis OO</a><a href="#conceptual">Modelo conceptual</a><a href="#lectura">Leer el diagrama</a><a href="#diseno">Modelo de diseño</a><a href="#decisiones">Decisiones</a><a href="#java">Pasar a Java</a><a href="#cierre">Síntesis</a></div></nav>
+<main>
+<section id="problema"><div class="step">01 · Punto de partida</div><h2>¿Qué necesita gestionar «La Viñeta»?</h2>
+<p class="lead">Imagina una tienda barrial de cómics en Montevideo. Vende historietas, mangas y novelas gráficas. Cada compra se registra como una venta, asociada a un cliente y a uno o varios productos.</p>
+<div class="grid3"><div class="card"><h3>Cliente</h3><p>Se identifica por su cédula y tiene nombre y correo.</p></div><div class="card"><h3>Producto</h3><p>Tiene código, nombre, precio de venta y stock.</p></div><div class="card"><h3>Venta</h3><p>Tiene número y fecha. Puede incluir varios productos y cantidades distintas.</p></div></div>
+<div class="callout teal"><b>Una venta no es solamente una lista de productos.</b> Necesitamos registrar cuántas unidades se vendieron de cada artículo y el precio unitario aplicado en esa venta, incluso si después cambia el precio del catálogo.</div>
+<p><b>Ejemplo:</b> la venta n.º 104 registra para una misma clienta dos unidades de «Historias del Río» a $390 cada una y un ejemplar de «Manga Sur» a $520. Son dos renglones de venta, aunque se facturen en una sola operación.</p>
+</section>
+<section id="analisis"><div class="step">02 · Comprender antes de implementar</div><h2>Qué hacemos en el análisis orientado a objetos</h2>
+<p>El <b>análisis OO</b> describe los conceptos relevantes del problema y sus relaciones. Todavía no decide qué constructor tendrá una clase Java, cómo se guardarán los datos ni qué ventana se utilizará.</p>
+<div class="model-steps"><div><b>1. Identificar</b>Reconocemos entidades del dominio: Cliente, Venta, Producto.</div><div><b>2. Relacionar</b>Establecemos cómo participan unas entidades con otras en una compra.</div><div><b>3. Precisar</b>Detectamos que la relación entre Venta y Producto necesita datos propios: cantidad y precio unitario.</div></div>
+<h3>¿Por qué no empezar directamente por una clase Java?</h3><p>Porque escribir atributos y métodos antes de entender las relaciones puede llevarnos a un modelo que no representa bien el negocio. Primero estudiamos qué ocurre; después decidimos cómo lo programamos.</p>
+</section>
+<section id="conceptual"><div class="step">03 · Primera representación</div><h2>El modelo conceptual de la tienda</h2>
+<p>Este es el primer diagrama que proporcionaste. Léelo como un mapa de los <b>conceptos del negocio</b>, no como una receta para programar.</p>
+<figure class="uml"><img src="assets/uml-conceptual.png" alt="Diagrama conceptual UML: Cliente se asocia con Venta; Venta se relaciona con Producto; DetalleVenta cuelga mediante línea discontinua de la relación Venta-Producto y contiene cantidad y precioUnitario."><figcaption><b>Figura 1.</b> Modelo conceptual aportado para «La Viñeta». <i>DetalleVenta</i> aparece vinculada a la asociación entre Venta y Producto.</figcaption></figure>
+<div class="callout"><b>La pregunta didáctica:</b> ¿qué información pertenece al producto en general y qué información depende de una venta concreta? El precio vigente y el stock describen al producto; la cantidad comprada y el precio acordado en esa operación describen el detalle de venta.</div>
+</section>
+<section id="lectura"><div class="step">04 · Interpretar las relaciones</div><h2>Leer UML sin confundir análisis con código</h2>
+<div class="grid2"><div class="card"><h3>Cliente — Venta</h3><p>Una venta se registra para un cliente. Que el diagrama muestre una asociación no define por sí solo cuántas ventas puede tener cada cliente: faltan multiplicidades.</p></div><div class="card"><h3>Venta — Producto</h3><p>Una venta puede incluir distintos productos. Para describir cada participación necesitamos los datos <code class="inline">cantidad</code> y <code class="inline">precioUnitario</code>.</p></div></div>
+<h3>¿Qué significa la línea discontinua hacia DetalleVenta?</h3><p>En el diagrama conceptual, <b>DetalleVenta se representa como una clase de asociación</b>: sus atributos pertenecen a una ocurrencia de la relación entre una venta y un producto. Esta es una idea conceptual valiosa, aunque al programar puede convenir representarla mediante objetos y referencias explícitas.</p>
+<h3>¿Qué no podemos concluir aún?</h3><p>No se indican multiplicidades (<code class="inline">1</code>, <code class="inline">0..*</code>, etc.) ni todas las reglas de negocio. Por tanto, no afirmamos que el dibujo ya resuelva si una venta admite productos repetidos, si puede quedar vacía o cómo se aplica una devolución.</p>
+</section>
+<section id="diseno"><div class="step">05 · Segunda representación</div><h2>Del modelo conceptual al modelo de diseño</h2>
+<p>El segundo diagrama que proporcionaste añade tipos y atributos pensando en la implementación. <b>Ya aparecen decisiones propias del diseño OO:</b> identificadores, tipos Java y referencias entre clases.</p>
+<figure class="uml"><img src="assets/uml-diseno.png" alt="Diagrama de diseño UML con clases Cliente, Venta, DetalleVenta y Producto. Cliente: cedula long, nombre y correo String. Venta: numero int, fecha Date, cliente Cliente y detalle DetalleVenta (lista). DetalleVenta: producto Producto, cantidad int y precioUnitario double. Producto: código long, nombre String, precio double, stock int."><figcaption><b>Figura 2.</b> Diagrama orientado al diseño aportado. Se conservan su notación y atributos originales para analizarlos en clase.</figcaption></figure>
+<table><thead><tr><th>Concepto</th><th>En el diagrama de diseño</th><th>Qué significa programando</th></tr></thead><tbody>
+<tr><td>Cliente</td><td><code>cedula: long</code>, <code>nombre: String</code>, <code>correo: String</code></td><td>Definir el estado de cada cliente.</td></tr>
+<tr><td>Venta</td><td><code>numero: int</code>, <code>fecha: Date</code>, <code>cliente: Cliente</code>, detalle como lista</td><td>Asociar cada objeto Venta con un Cliente y con sus renglones.</td></tr>
+<tr><td>DetalleVenta</td><td><code>producto: Producto</code>, <code>cantidad: int</code>, <code>precioUnitario: double</code></td><td>Crear un objeto por renglón con referencia al producto.</td></tr>
+<tr><td>Producto</td><td><code>codigo: long</code>, <code>nombre: String</code>, <code>precio: double</code>, <code>stock: int</code></td><td>Representar los artículos del catálogo.</td></tr></tbody></table>
+</section>
+<section id="decisiones"><div class="step">06 · Pensar críticamente el diseño</div><h2>Qué decisiones debemos tomar antes de codificar</h2>
+<div class="grid2"><div class="card"><h3>Los rombos del diagrama</h3><p>En UML, el <b>rombo blanco</b> se utiliza para expresar una agregación compartida. En el diagrama aportado aparece en varias asociaciones. Conviene discutir si esas relaciones realmente representan agregación o si alguna debería modelarse como asociación simple. <b>No cambiaremos el dibujo sin analizarlo.</b></p></div>
+<div class="card"><h3>La lista de detalles</h3><p>La anotación <code class="inline">DetalleVenta(lista)</code> comunica una colección, pero todavía debemos decidir su tipo de implementación: por ejemplo, <code class="inline">List&lt;DetalleVenta&gt;</code> en Java.</p></div>
+<div class="card"><h3>Multiplicidades</h3><p>Sería conveniente documentar si una Venta tiene uno o varios detalles y si un Producto puede intervenir en muchas ventas. La intención de negocio se comprende; la cardinalidad exacta debe explicitarse.</p></div>
+<div class="card"><h3>Datos y tipos</h3><p>El diagrama usa <code class="inline">double</code> para precios y <code class="inline">Date</code> para fechas. Los conservamos para respetar el modelo inicial; más adelante podemos estudiar alternativas como <code class="inline">BigDecimal</code> y <code class="inline">LocalDate</code>.</p></div></div>
+<div class="callout warn"><b>Distinción importante:</b> una relación representada en UML no es automáticamente un atributo, ni un rombo indica por sí solo que debamos destruir objetos cuando desaparece otro. Esas decisiones deben justificarse a partir de las reglas del sistema.</div>
+</section>
+<section id="java"><div class="step">07 · Primer puente hacia Java</div><h2>Cómo comienza a verse el diseño en código</h2>
+<p>Sin construir todavía todo el programa, podemos escribir una versión mínima que muestre la diferencia entre una <b>clase</b> y una <b>relación entre objetos</b>.</p>
+<div class="code-label">DetalleVenta.java <span>Ejemplo de diseño, no implementación completa</span></div>
+<pre><code>public class DetalleVenta {
+    private Producto producto;
+    private int cantidad;
+    private double precioUnitario;
+
+    public DetalleVenta(Producto producto,
+                        int cantidad, double precioUnitario) {
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.precioUnitario = precioUnitario;
+    }
+}</code></pre>
+<p>El atributo <code class="inline">producto</code> es una <b>referencia a otro objeto</b>. La cantidad no se coloca dentro de <code class="inline">Producto</code>, porque el mismo artículo puede venderse en cantidades distintas en operaciones diferentes.</p>
+<div class="code-label">Venta.java <span>Fragmento ilustrativo</span></div>
+<pre><code>import java.util.ArrayList;
+import java.util.List;
+
+public class Venta {
+    private int numero;
+    private Cliente cliente;
+    private List&lt;DetalleVenta&gt; detalles = new ArrayList&lt;&gt;();
+}</code></pre>
+<p>Este fragmento introduce la posibilidad de implementar la asociación con una colección. No completa las reglas del negocio, constructores ni operaciones; esas decisiones aparecerán en las lecciones siguientes.</p>
+</section>
+<section id="cierre"><div class="step">08 · Lo que queremos comprender</div><h2>Dos diagramas, dos momentos distintos</h2>
+<div class="compare"><div class="card"><h3>Modelo conceptual</h3><p>Explica <b>qué entidades</b> son relevantes, <b>qué relaciones</b> existen y qué información pertenece a cada una.</p><p><b>Pregunta:</b> «¿Qué necesitamos representar?»</p></div><div class="mid">→</div><div class="card"><h3>Modelo de diseño</h3><p>Decide <b>cómo organizar clases, atributos, tipos y referencias</b> para construir el programa.</p><p><b>Pregunta:</b> «¿Cómo lo representaremos en Java?»</p></div></div>
+<div class="callout teal"><b>Idea final:</b> analizar no es comenzar a programar: es construir una representación del problema. Diseñar significa tomar decisiones técnicas coherentes con esa representación. El mismo caso de la tienda nos acompañará al estudiar encapsulamiento, asociaciones, colecciones, interfaz gráfica y persistencia.</div>
+<h3>Comprobación rápida</h3><div class="quiz" data-answer="b"><p>¿Dónde debería almacenarse la cantidad de unidades compradas en una venta específica?</p><div class="choices"><button class="choice" data-value="a">En Producto, como cantidad vendida general</button><button class="choice" data-value="b">En DetalleVenta, para esa venta y ese producto</button><button class="choice" data-value="c">En Cliente, porque hizo la compra</button></div><p class="feedback" aria-live="polite"></p></div>
+<div class="callout"><b>Micro-entrega de documentación:</b> conserva ambos diagramas y redacta dos decisiones de diseño: por qué existe DetalleVenta y por qué Venta necesita una colección de detalles.</div>
+</section>
+<div class="footer"><div style="display:flex;align-items:center;gap:12px"><img src="assets/logo-pm.png" alt="PM"><div><b>PROFE MACÓN</b><br><span class="muted">Explora, aprende, crea.</span></div></div><div class="site">profemacon.net</div></div>
+</main>
+<div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div>
+<script>document.querySelectorAll('.quiz').forEach(function(q){q.querySelectorAll('.choice').forEach(function(btn){btn.addEventListener('click',function(){q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong')});var ok=btn.dataset.value===q.dataset.answer;btn.classList.add(ok?'correct':'wrong');q.querySelector('.feedback').textContent=ok?'Correcto: la cantidad corresponde a un renglón de una venta concreta.':'Revisa qué entidad representa una compra de un producto en una venta particular.'})})});</script>
+<script src="scorm.js"></script>
+</body></html>

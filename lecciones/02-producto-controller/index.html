@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ProductoController · Profe Macón</title>
+<style>
+:root{
+  --violet:#988db3;--violet-deep:#756a96;--teal:#00a99d;--ink:#171419;
+  --paper:#fff;--bg:#f4f2f5;--line:#ddd7df;--muted:#827d7d;--code:#171419;
+  --soft-violet:#f5f1f8;--soft-teal:#eaf8f6;--soft-warn:#faf7ef;--warn:#b68a3c;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:
+linear-gradient(rgba(152,141,179,.05) 1px,transparent 1px),
+linear-gradient(90deg,rgba(152,141,179,.05) 1px,transparent 1px),var(--bg);background-size:24px 24px}
+.wrap{max-width:1100px;margin:auto}
+.hero{padding:28px 18px 44px;background:linear-gradient(135deg,#fff,#f5f1f8 60%,#e7f8f6);border-bottom:5px solid var(--teal)}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:0 12px 34px rgba(0,0,0,.09);margin-bottom:30px}
+.brand .full{width:min(420px,68vw);height:auto}.brand .iso{width:72px;height:auto}.brand small{text-align:right;color:var(--muted);line-height:1.5}
+h1{font-size:clamp(2.1rem,5vw,4rem);line-height:1.02;margin:0 0 14px}h1 em{color:var(--violet);font-style:normal}
+.hero p{max-width:920px;line-height:1.7;font-size:1.08rem}.eyebrow{font-weight:800;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;margin-bottom:8px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.tag{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.83rem;font-weight:700}
+nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow:auto;padding:9px 14px}nav a{text-decoration:none;color:var(--ink);white-space:nowrap;padding:8px 10px;border-radius:8px;font-size:.84rem}nav a:hover{background:#f1edf5}
+main{max-width:1100px;margin:auto;padding:32px 18px 70px}
+section{scroll-margin-top:66px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:24px;box-shadow:0 12px 34px rgba(0,0,0,.08)}
+.step{color:var(--violet);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.8rem}
+h2{font-size:clamp(1.5rem,3vw,2.15rem);margin:8px 0 12px}h3{margin:22px 0 9px}p,li{line-height:1.65}.lead{font-size:1.06rem;color:#403b49}.muted{color:var(--muted)}
+code{font-family:Consolas,"Courier New",monospace}code.inline{background:#f1edf5;padding:2px 6px;border-radius:6px}
+pre{margin:12px 0 0;padding:17px;color:#f8f7fa;background:var(--code);overflow:auto;border-radius:14px;font-family:Consolas,"Courier New",monospace;font-size:.88rem;line-height:1.55;white-space:pre}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:850px){.grid3,.grid4{grid-template-columns:1fr 1fr}}@media(max-width:680px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.brand small{display:none}}
+.card{border:1px solid var(--line);border-radius:14px;background:#fcfbfd;padding:16px}.card h3{margin-top:0}.card strong.big{display:block;color:var(--violet-deep);font-size:1.1rem;margin-bottom:5px}
+.callout{border-left:4px solid var(--violet);background:var(--soft-violet);padding:15px 17px;border-radius:12px;margin:16px 0}.callout.teal{border-color:var(--teal);background:var(--soft-teal)}.callout.warn{border-color:var(--warn);background:var(--soft-warn)}
+.flow{border:1px dashed #b7afbc;background:#fdfcfe;border-radius:15px;padding:18px;text-align:center;overflow:auto}.flow .node{display:inline-block;border:2px solid var(--violet);border-radius:10px;padding:9px 13px;background:#fff;font-weight:700;margin:4px}.flow .teal{border-color:var(--teal);background:var(--soft-teal)}.flow .warn{border-color:var(--warn);background:var(--soft-warn)}.arr{color:#777;font-size:1.25rem;padding:0 3px}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{background:#f3eff6}
+details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fdfcfe;margin:12px 0}summary{cursor:pointer;font-weight:700}
+.responsibility{display:flex;gap:11px;align-items:flex-start;border-bottom:1px solid #eee8ef;padding:10px 0}.responsibility:last-child{border-bottom:0}.badge{min-width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--soft-violet);color:var(--violet-deep);font-weight:800}
+.compare{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:12px}.compare .mid{text-align:center;font-size:2rem;color:var(--teal)}@media(max-width:760px){.compare{grid-template-columns:1fr}.compare .mid{transform:rotate(90deg)}}
+.arch{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fcfbfd}.layer{border:2px solid var(--violet);border-radius:12px;padding:12px;text-align:center;font-weight:800;background:#fff;margin:8px auto;max-width:560px}.layer.future{border-style:dashed;color:#5d5865}.layer.main{border-color:var(--teal);background:var(--soft-teal)}.down{text-align:center;color:#827d7d;font-size:1.4rem}
+.quiz{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:#fcfbfd}.quiz p{margin-top:0;font-weight:700}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #cfc7d3;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.choice:hover{background:#f5f1f8}.choice.correct{border-color:var(--teal);background:var(--soft-teal)}.choice.wrong{border-color:#b56d6d;background:#fbefef}.feedback{margin:10px 0 0;min-height:1.4em;color:#4d4753}
+.footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
+hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
+
+.code-label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:16px;font-size:.8rem;font-weight:800;color:var(--violet);text-transform:uppercase;letter-spacing:.05em}
+.path{font-family:Consolas,"Courier New",monospace;background:#f1edf5;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0;color:#403b49}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}.timeline .card{position:relative;padding-top:38px}.timeline .num{position:absolute;top:12px;left:14px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--violet);color:#fff;font-weight:800;font-size:.75rem}
+@media(max-width:820px){.timeline{grid-template-columns:1fr 1fr}}@media(max-width:520px){.timeline{grid-template-columns:1fr}}
+.goodbad{display:grid;grid-template-columns:1fr 1fr;gap:14px}.goodbad .good{border-top:4px solid var(--teal)}.goodbad .bad{border-top:4px solid var(--warn)}@media(max-width:680px){.goodbad{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="brand">
+    <img class="full" src="assets/logo-profemacon.png" alt="Profe Macón">
+    <div style="display:flex;align-items:center;gap:14px"><small>Programación Avanzada<br>2.º BT · Tecnologías de la Información</small><img class="iso" src="assets/logo-pm.png" alt="PM"></div>
+  </div>
+  <div class="eyebrow">Tienda de Cómics · Arquitectura de componentes</div>
+  <h1><em>ProductoController</em></h1>
+  <p>En el material anterior descubrimos que <code class="inline">Main</code> estaba haciendo demasiado. Ahora vamos a crear el primer componente que nos permitirá sacarle una responsabilidad concreta: <strong>coordinar las acciones que nacen en la Vista</strong>.</p>
+  <div class="tags"><span class="tag">CET1</span><span class="tag">Controller</span><span class="tag">Responsabilidades</span><span class="tag">Refactorización</span><span class="tag">Modularidad</span><span class="tag">Eventos</span></div>
+</div></header>
+
+<nav><div class="wrap">
+<a href="#retomamos">1 · Retomamos</a><a href="#controlador">2 · Controller</a><a href="#crear">3 · Crear la clase</a><a href="#dependencia">4 · Conectar Vista</a><a href="#cancelar">5 · Cancelar</a><a href="#agregar">6 · Agregar</a><a href="#eliminar">7 · Eliminar</a><a href="#main">8 · Main</a><a href="#recorrido">9 · Recorrido</a><a href="#practica">10 · Práctica</a><a href="#actividad">11 · Comprobamos</a><a href="#cierre">12 · Cierre</a>
+</div></nav>
+
+<main>
+<section id="retomamos">
+<div class="step">1 · Retomamos el problema</div>
+<h2>Main todavía conoce demasiado</h2>
+<p class="lead">Nuestra aplicación funciona, pero <code class="inline">Main</code> sigue decidiendo qué hacer cuando el usuario pulsa los botones.</p>
+<pre>Producto_Vista ventana = new Producto_Vista();
+ventana.setVisible(true);
+
+ventana.listenerCancelar(e -&gt;
+    ventana.limpiarCampos());
+
+ventana.listenerAgregar(e -&gt; {
+    long codigo = Long.parseLong(ventana.getTxtCodigo());
+    String nombre = ventana.getTxtNombre();
+    double precio = Double.parseDouble(ventana.getTxtPrecio());
+    int stock = Integer.parseInt(ventana.getTxtStock());
+
+    Producto p = new Producto(codigo, nombre, precio, stock);
+    listaProductos.add(p);
+
+    JOptionPane.showMessageDialog(ventana, listaProductos);
+});
+
+ventana.listenerEliminar(e -&gt; {
+    JOptionPane.showConfirmDialog(ventana, "¿Está seguro?");
+});</pre>
+<div class="callout"><b>La pregunta de hoy:</b> si la Vista ya sabe <em>qué botón fue presionado</em>, ¿quién debería coordinar <em>qué ocurre después</em>?</div>
+<p class="muted">En el proyecto actual la clase Swing se llama <code class="inline">Producto_Vista</code>. Mantendremos ese nombre para que el material coincida con el código que ya tienen.</p>
+</section>
+
+<section id="controlador">
+<div class="step">2 · El papel del Controller</div>
+<h2>La Vista recibe la interacción. El Controller coordina la respuesta.</h2>
+<p>El <strong>Controller</strong> es el componente que escucha o recibe acciones originadas en la interfaz y organiza qué debe ocurrir a continuación.</p>
+<div class="arch">
+<div class="layer">Usuario</div><div class="down">↓ clic</div>
+<div class="layer">Producto_Vista</div><div class="down">↓ evento</div>
+<div class="layer main">ProductoController</div><div class="down">↓ coordina</div>
+<div class="layer future">Service · más adelante</div>
+</div>
+<div class="goodbad">
+<div class="card good"><h3>Controller sí debería…</h3><ul><li>registrar qué hacer ante los eventos;</li><li>pedir datos a la Vista;</li><li>coordinar una operación;</li><li>decirle a la Vista cuándo debe limpiarse o actualizarse.</li></ul></div>
+<div class="card bad"><h3>Controller no debería terminar…</h3><ul><li>diseñando botones y paneles;</li><li>acumulando todas las reglas del negocio;</li><li>encargándose para siempre de guardar los datos;</li><li>convirtiéndose en un nuevo <code class="inline">Main</code> gigante.</li></ul></div>
+</div>
+<div class="callout teal"><b>Importante:</b> hoy no vamos a resolver toda la arquitectura. Vamos a mover <strong>una responsabilidad por vez</strong>. Que el Controller quede todavía con tareas de más será justamente el problema del próximo material.</div>
+</section>
+
+<section id="crear">
+<div class="step">3 · Creamos el nuevo componente</div>
+<h2>Un paquete nuevo para una responsabilidad nueva</h2>
+<p>Dentro del proyecto creamos el paquete:</p>
+<div class="path">uy.edu.utu.programacion.controller</div>
+<p>y dentro de él la clase:</p>
+<div class="path">ProductoController.java</div>
+<div class="code-label"><span>Primera versión</span><span>todavía no hace nada</span></div>
+<pre>package uy.edu.utu.programacion.controller;
+
+public class ProductoController {
+
+}</pre>
+<p>La clase ya existe, pero todavía no puede controlar nada porque <strong>no conoce la Vista</strong>.</p>
+<div class="callout"><b>Pregunta guía:</b> ¿conviene que <code class="inline">ProductoController</code> cree una ventana nueva por su cuenta, o que <code class="inline">Main</code> le entregue la misma ventana que ya creó?</div>
+</section>
+
+<section id="dependencia">
+<div class="step">4 · Conectamos Controller y Vista</div>
+<h2>Main crea las piezas. El constructor las conecta.</h2>
+<p>El Controller necesita trabajar con la Vista existente. Por eso guardamos una referencia como atributo y la recibimos por el constructor.</p>
+<pre>package uy.edu.utu.programacion.controller;
+
+import uy.edu.utu.programacion.view.Producto_Vista;
+
+public class ProductoController {
+
+    private Producto_Vista vista;
+
+    public ProductoController(Producto_Vista vista) {
+        this.vista = vista;
+    }
+}</pre>
+<div class="flow"><span class="node teal">Main crea Vista</span><span class="arr"> → </span><span class="node">Main crea Controller</span><span class="arr"> → </span><span class="node">le entrega la Vista</span></div>
+<h3>¿Qué significa <code class="inline">this.vista = vista</code>?</h3>
+<p>El parámetro <code class="inline">vista</code> existe solamente durante la ejecución del constructor. Con <code class="inline">this.vista</code> guardamos esa referencia en el atributo del objeto para poder usarla después desde otros métodos del Controller.</p>
+<div class="callout teal"><b>Una decisión de diseño:</b> el Controller <strong>no crea</strong> su propia Vista. La recibe. Así <code class="inline">Main</code> conserva la tarea de construir y conectar los componentes principales.</div>
+</section>
+
+<section id="cancelar">
+<div class="step">5 · Primera mudanza</div>
+<h2>Empezamos por Cancelar porque es la acción más simple</h2>
+<p>Hoy la respuesta al botón está dentro de <code class="inline">Main</code>:</p>
+<pre>ventana.listenerCancelar(e -&gt;
+    ventana.limpiarCampos());</pre>
+<p>La movemos al Controller. Pero antes de escribir código nuevo aparece una decisión de organización: <strong>¿dónde vamos a registrar los listeners de los botones?</strong></p>
+<div class="callout"><b><code class="inline">configurarEventos()</code> no es un método de Java ni de Swing.</b> Es un método que <strong>creamos nosotros</strong> para reunir en un mismo lugar las conexiones entre los eventos de la Vista y las acciones del Controller. Podríamos poner esas líneas directamente en el constructor, pero cuando tengamos varios botones el constructor empezaría a llenarse de listeners.</div>
+<p>Por eso agregamos al Controller un método privado llamado <code class="inline">configurarEventos()</code>. El nombre también es una decisión nuestra: describe su única tarea.</p>
+<pre>private void configurarEventos() {
+    // Aquí iremos registrando los eventos de la Vista
+}</pre>
+<p>Ahora sí registramos el primer evento. Cuando la Vista avise que se pulsó <strong>Cancelar</strong>, el Controller ejecutará su método <code class="inline">cancelar()</code>:</p>
+<pre>private void configurarEventos() {
+    vista.listenerCancelar(e -&gt; cancelar());
+}</pre>
+<div class="callout teal"><b>Importante:</b> este método tampoco se ejecuta «solo». Más abajo veremos que el constructor de <code class="inline">ProductoController</code> llama explícitamente a <code class="inline">configurarEventos()</code> cuando se crea el controlador.</div>
+<p>Después separamos la acción concreta en otro método:</p>
+<pre>private void cancelar() {
+    vista.limpiarCampos();
+}</pre>
+<p>Finalmente hacemos que el constructor configure los eventos al crear el Controller:</p>
+<pre>public ProductoController(Producto_Vista vista) {
+    this.vista = vista;
+    configurarEventos();
+}</pre>
+<div class="callout"><b>¿Por qué separar <code class="inline">configurarEventos()</code> de <code class="inline">cancelar()</code>?</b> Porque una cosa es decir <em>qué evento dispara una acción</em> y otra es definir <em>qué hace esa acción</em>. El código queda más fácil de leer y después podremos agregar más eventos sin llenar el constructor.</div>
+<div class="callout teal"><b>Probamos ahora.</b> El usuario pulsa Cancelar y ocurre exactamente lo mismo que antes. No agregamos una funcionalidad nueva: <strong>cambiamos la organización interna</strong>.</div>
+<details><summary>¿Eso tiene un nombre?</summary><p>Sí. Llamamos <strong>refactorización</strong> a modificar la estructura interna del código procurando mantener su comportamiento observable. La pantalla hace lo mismo; el código queda mejor organizado.</p></details>
+</section>
+
+<section id="agregar">
+<div class="step">6 · Movemos Agregar</div>
+<h2>Ahora trasladamos una acción que tiene más pasos</h2>
+<p>Para mantener el mismo comportamiento que ya tiene el proyecto, por ahora el Controller también tendrá el <code class="inline">ArrayList&lt;Producto&gt;</code>. <strong>No asumimos que este sea el diseño definitivo.</strong></p>
+<pre>import java.util.ArrayList;
+import uy.edu.utu.programacion.model.Producto;
+
+public class ProductoController {
+
+    private Producto_Vista vista;
+    private ArrayList&lt;Producto&gt; listaProductos;
+
+    public ProductoController(Producto_Vista vista) {
+        this.vista = vista;
+        this.listaProductos = new ArrayList&lt;Producto&gt;();
+        configurarEventos();
+    }
+    ...
+}</pre>
+<p>Registramos el evento:</p>
+<pre>private void configurarEventos() {
+    vista.listenerCancelar(e -&gt; cancelar());
+    vista.listenerAgregar(e -&gt; agregarProducto());
+}</pre>
+<p>y trasladamos la lógica que antes estaba dentro de la lambda de <code class="inline">Main</code>:</p>
+<pre>private void agregarProducto() {
+    long codigo = Long.parseLong(vista.getTxtCodigo());
+    String nombre = vista.getTxtNombre();
+    double precio = Double.parseDouble(vista.getTxtPrecio());
+    int stock = Integer.parseInt(vista.getTxtStock());
+
+    Producto p = new Producto(codigo, nombre, precio, stock);
+    listaProductos.add(p);
+
+    JOptionPane.showMessageDialog(vista, listaProductos);
+}</pre>
+<div class="callout warn"><b>Atención:</b> todavía no estamos resolviendo errores de formato ni reglas como “precio mayor que cero”. Primero queremos que el programa conserve el mismo comportamiento. En el próximo SCORM distinguiremos mejor qué validaciones pertenecen al Controller y cuáles al Service.</div>
+</section>
+
+<section id="eliminar">
+<div class="step">7 · Movemos Eliminar</div>
+<h2>Misma idea, otro evento</h2>
+<p>En el proyecto actual el botón Eliminar todavía solo pregunta si el usuario está seguro. Trasladamos exactamente esa conducta; no inventamos aún el borrado completo.</p>
+<pre>private void configurarEventos() {
+    vista.listenerCancelar(e -&gt; cancelar());
+    vista.listenerAgregar(e -&gt; agregarProducto());
+    vista.listenerEliminar(e -&gt; confirmarEliminar());
+}</pre>
+<pre>private void confirmarEliminar() {
+    JOptionPane.showConfirmDialog(vista, "¿Está seguro?");
+}</pre>
+<div class="callout teal"><b>Regla de la refactorización:</b> primero conservamos el comportamiento. Después agregaremos funcionalidades nuevas. Si cambiamos organización y comportamiento al mismo tiempo, será más difícil descubrir de dónde viene un error.</div>
+<h3>Hasta ahora, ¿qué ganamos?</h3>
+<div class="grid3">
+<div class="card"><strong class="big">Main</strong>Ya no necesita saber qué hacen los botones.</div>
+<div class="card"><strong class="big">Vista</strong>Sigue mostrando componentes y exponiendo eventos, sin decidir la lógica.</div>
+<div class="card"><strong class="big">Controller</strong>Concentra la coordinación de las acciones del usuario.</div>
+</div>
+</section>
+
+<section id="main">
+<div class="step">8 · Volvemos a Main</div>
+<h2>El cambio se hace visible cuando miramos el punto de entrada</h2>
+<p>Ahora <code class="inline">Main</code> puede quedar así:</p>
+<pre>package uy.edu.utu.programacion;
+
+import uy.edu.utu.programacion.controller.ProductoController;
+import uy.edu.utu.programacion.view.Producto_Vista;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Producto_Vista ventana = new Producto_Vista();
+        ProductoController controller =
+                new ProductoController(ventana);
+
+        ventana.setVisible(true);
+    }
+}</pre>
+<div class="compare">
+<div class="card"><h3>Antes</h3><p><code class="inline">Main</code> creaba, escuchaba, leía campos, convertía, construía productos, guardaba y mostraba mensajes.</p></div>
+<div class="mid">→</div>
+<div class="card"><h3>Ahora</h3><p><code class="inline">Main</code> crea los componentes principales, los conecta y pone en marcha la aplicación.</p></div>
+</div>
+<div class="callout"><b>¿Hace falta usar después la variable <code class="inline">controller</code> dentro de Main?</b> No necesariamente. La dejamos porque hace explícito que existe un objeto Controller conectado con la Vista y porque más adelante le entregaremos también un Service.</div>
+</section>
+
+<section id="recorrido">
+<div class="step">9 · Seguimos un clic</div>
+<h2>¿Qué pasa ahora cuando el usuario pulsa “Agregar”?</h2>
+<div class="timeline">
+<div class="card"><span class="num">1</span><b>Vista</b><p>El botón genera un evento.</p></div>
+<div class="card"><span class="num">2</span><b>Controller</b><p>El listener registrado llama a <code class="inline">agregarProducto()</code>.</p></div>
+<div class="card"><span class="num">3</span><b>Controller</b><p>Pide los textos a la Vista, los convierte y crea el objeto.</p></div>
+<div class="card"><span class="num">4</span><b>Controller</b><p>Lo agrega temporalmente a la colección y muestra el resultado.</p></div>
+</div>
+<div class="flow"><span class="node">clic</span><span class="arr"> → </span><span class="node">Vista</span><span class="arr"> → </span><span class="node teal">Controller</span><span class="arr"> → </span><span class="node">Producto / ArrayList</span></div>
+<h3>La Vista sigue siendo pasiva</h3>
+<p>Los botones continúan privados dentro de <code class="inline">Producto_Vista</code>. La Vista solamente ofrece métodos como <code class="inline">listenerAgregar(...)</code> y getters como <code class="inline">getTxtCodigo()</code>. Así, el Controller no necesita acceder directamente a los componentes internos.</p>
+<div class="callout teal"><b>Encapsulamiento aplicado:</b> el Controller pide lo que necesita mediante la interfaz pública de la Vista. No entra a manipular directamente sus atributos privados.</div>
+</section>
+
+<section id="practica">
+<div class="step">10 · Práctica graduada</div>
+<h2>Ahora te toca mover responsabilidades</h2>
+<div class="grid3">
+<div class="card"><strong class="big">Mínimo viable</strong><p>Crear <code class="inline">ProductoController</code>, recibir la Vista por constructor y trasladar únicamente la acción <strong>Cancelar</strong>.</p><p><b>Checkpoint:</b> Main ya no contiene el listener de Cancelar.</p></div>
+<div class="card"><strong class="big">Estándar</strong><p>Trasladar <strong>Cancelar, Agregar y Eliminar</strong>, usando <code class="inline">configurarEventos()</code> y métodos privados para cada acción.</p><p><b>Checkpoint:</b> Main solo crea, conecta y muestra.</p></div>
+<div class="card"><strong class="big">Desafío</strong><p>Sin cambiar el comportamiento, identificar con comentarios cuáles líneas de <code class="inline">agregarProducto()</code> son coordinación de interfaz y cuáles empiezan a parecer lógica que quizá debería vivir en otro componente.</p><p><b>Pista:</b> pensá en el futuro Service.</p></div>
+</div>
+<div class="callout warn"><b>Si algo deja de funcionar:</b> mové una sola acción, ejecutá y verificá. No traslades todo el código de una vez. Una refactorización pequeña permite encontrar errores mucho más rápido.</div>
+</section>
+
+<section id="actividad">
+<div class="step">11 · Comprobamos la idea</div>
+<h2>Controller, Vista o Main</h2>
+<p>Elegí el componente que mejor encaja con cada responsabilidad en la arquitectura que estamos construyendo.</p>
+
+<div class="quiz" data-answer="controller">
+<p>1. Registrar qué método debe ejecutarse cuando se pulsa “Agregar”.</p>
+<div class="choices"><button class="choice" data-value="main">Main</button><button class="choice" data-value="vista">Vista</button><button class="choice" data-value="controller">Controller</button></div>
+<div class="feedback" aria-live="polite"></div>
+</div>
+<div class="quiz" data-answer="vista">
+<p>2. Mantener privados los <code class="inline">JButton</code> y <code class="inline">JTextField</code> y exponer getters o métodos de listeners.</p>
+<div class="choices"><button class="choice" data-value="main">Main</button><button class="choice" data-value="vista">Vista</button><button class="choice" data-value="controller">Controller</button></div>
+<div class="feedback" aria-live="polite"></div>
+</div>
+<div class="quiz" data-answer="main">
+<p>3. Crear la Vista y el Controller y conectarlos al iniciar el programa.</p>
+<div class="choices"><button class="choice" data-value="main">Main</button><button class="choice" data-value="vista">Vista</button><button class="choice" data-value="controller">Controller</button></div>
+<div class="feedback" aria-live="polite"></div>
+</div>
+<div class="quiz" data-answer="controller">
+<p>4. Pedir a la Vista el texto escrito en el campo precio después de que el usuario inicia la operación Agregar.</p>
+<div class="choices"><button class="choice" data-value="main">Main</button><button class="choice" data-value="vista">Vista</button><button class="choice" data-value="controller">Controller</button></div>
+<div class="feedback" aria-live="polite"></div>
+</div>
+
+<div class="callout teal"><b>Chequeo conceptual:</b> el Controller no reemplaza a la Vista. La Vista sigue siendo la dueña de los componentes gráficos; el Controller coordina las acciones que se originan allí.</div>
+</section>
+
+<section id="cierre">
+<div class="step">12 · Cierre</div>
+<h2>Resolvimos un problema… y apareció el siguiente</h2>
+<p>Logramos nuestro objetivo inmediato:</p>
+<div class="flow"><span class="node">Main grande</span><span class="arr"> → </span><span class="node teal">ProductoController</span><span class="arr"> → </span><span class="node">Main pequeño</span></div>
+<p>Pero ahora miremos con atención a <code class="inline">ProductoController</code>. Además de coordinar eventos, está:</p>
+<ul><li>convirtiendo textos a números;</li><li>creando objetos <code class="inline">Producto</code>;</li><li>manteniendo un <code class="inline">ArrayList</code>;</li><li>agregando productos a esa colección.</li></ul>
+<div class="callout warn"><b>Nueva pregunta:</b> ¿estamos empezando a trasladar el problema de Main hacia el Controller?</div>
+<h3>Micro-entrega de documentación</h3>
+<ul>
+<li>Dibujá el recorrido de un clic: <code class="inline">Usuario → Vista → Controller</code>.</li>
+<li>Explicá en dos o tres líneas cuál es la responsabilidad principal de <code class="inline">ProductoController</code>.</li>
+<li>Registrá qué código salió de <code class="inline">Main</code> y qué comportamiento del programa se mantuvo igual.</li>
+<li>Marcá al menos <strong>dos tareas</strong> que hoy tiene Controller y que sospechás que podrían pertenecer a otro componente.</li>
+</ul>
+<div class="callout teal"><b>Ticket de salida:</b> completá la frase: “El Controller no existe para dibujar la interfaz ni para guardar permanentemente los datos; existe principalmente para…”</div>
+<p class="lead"><b>Próximo material:</b> <code class="inline">ProductoService</code>. Vamos a distinguir coordinación de interfaz, validación de entrada y lógica de negocio, y sacaremos del Controller las operaciones que no deberían depender de Swing.</p>
+</section>
+
+<div class="footer">
+<div style="display:flex;align-items:center;gap:12px"><img src="assets/logo-pm.png" alt="PM"><div><b>PROFE MACÓN</b><br><span class="muted">Explora, aprende, crea.</span></div></div>
+<div class="site">profemacon.net</div>
+</div>
+</main>
+
+<div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.18)"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div>
+
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  q.querySelectorAll('.choice').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong');});
+      var ok=btn.dataset.value===q.dataset.answer;
+      btn.classList.add(ok?'correct':'wrong');
+      var f=q.querySelector('.feedback');
+      f.textContent=ok ? 'Correcto. Esa responsabilidad queda mejor localizada ahí.' : 'Revisá si la tarea es de arranque, presentación o coordinación.';
+      if(!ok){
+        var c=q.querySelector('.choice[data-value="'+q.dataset.answer+'"]');
+        if(c) c.classList.add('correct');
+      }
+    });
+  });
+});
+</script>
+<script src="scorm.js"></script>
+<style id="site-navigation">#site-back{position:fixed;right:18px;bottom:18px;z-index:99999;display:block;padding:11px 16px;background:#171419;color:#fff!important;font:700 13px Arial,sans-serif;border-radius:999px;text-decoration:none;box-shadow:0 8px 25px #17141940;border:1px solid #988db3}#site-back:hover{background:#756a96}@media print{#site-back{display:none}}</style><a id="site-back" href="../../index.html#unidad-03">← Índice del curso</a></body>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="MANIFEST-PROFEMACON-MAIN-MODULARIDAD"
+ xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+ xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>1.2</schemaversion>
+  </metadata>
+  <organizations default="ORG-MAIN-MODULARIDAD">
+    <organization identifier="ORG-MAIN-MODULARIDAD">
+      <title>Cuando Main hace demasiado</title>
+      <item identifier="ITEM-MAIN-MODULARIDAD" identifierref="RES-MAIN-MODULARIDAD" isvisible="true">
+        <title>Responsabilidades, modularidad y arquitectura</title>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="RES-MAIN-MODULARIDAD" type="webcontent" adlcp:scormtype="sco" href="index.html">
+      <file href="index.html"/>
+      <file href="scorm.js"/>
+      <file href="assets/logo-pm.png"/>
+      <file href="assets/logo-profemacon.png"/>
+    </resource>
+  </resources>
+</manifest>

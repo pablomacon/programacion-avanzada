@@ -1,0 +1,23 @@
+# Programación Avanzada 2026 · web estática
+
+Sin Astro, Node, npm ni dependencias. El sitio usa HTML, CSS y los SCORM originales.
+
+## Abrir
+
+1. Extraer el ZIP completo en una carpeta vacía (o en la raíz de tu repositorio después de haber retirado el sitio anterior).
+2. Abrir `index.html` con un navegador. Si algún navegador restringe funciones locales, utilizar **Live Server** de VS Code o `python -m http.server 8000` y visitar http://localhost:8000/ .
+3. Navegar por unidades. Los SCORM conservan su HTML/CSS/JS y un enlace flotante **Índice del curso**.
+
+## Contenido
+
+- **12 SCORM existentes**, extraídos íntegros; el HTML original se conserva además como `scorm-original.html`.
+- **8 lecciones nuevas de POO** en HTML autónomo, con el vocabulario y la progresión de los materiales docentes. Estas son una **primera versión editorial**, no equivalen a los SCORM originales de esa unidad y requieren validación didáctica antes de publicación.
+- Incluye el texto integrado de Tienda de Cómics y su código Java tal como fue facilitado; requiere pruebas antes de distribuir ejecutables.
+
+## GitHub Pages
+
+Subir todos los archivos manteniendo la estructura y elegir Settings → Pages → Deploy from a branch → main / root. Comprobar rutas y enlaces antes de publicar. Si se usa un subdominio personalizado, configurar CNAME/DNS por separado.
+
+## Restricciones
+
+La API SCORM de CREA no funciona fuera de un LMS; las páginas y sus elementos HTML/JS independientes sí. No se han tocado originales en Google Drive. El paquete no incluye ejercicios independientes ni evaluaciones.

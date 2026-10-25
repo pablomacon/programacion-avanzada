@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>¿Dónde quedaron nuestros productos? · Persistencia y JDBC · Profe Macón</title>
+<style>
+:root{
+  --violet:#988db3;--violet-deep:#756a96;--teal:#00a99d;--ink:#171419;
+  --paper:#fff;--bg:#f4f2f5;--line:#ddd7df;--muted:#827d7d;--code:#171419;
+  --soft-violet:#f5f1f8;--soft-teal:#eaf8f6;--soft-warn:#faf7ef;--warn:#b68a3c;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:
+linear-gradient(rgba(152,141,179,.05) 1px,transparent 1px),
+linear-gradient(90deg,rgba(152,141,179,.05) 1px,transparent 1px),var(--bg);background-size:24px 24px}
+.wrap{max-width:1100px;margin:auto}
+.hero{padding:28px 18px 44px;background:linear-gradient(135deg,#fff,#f5f1f8 60%,#e7f8f6);border-bottom:5px solid var(--teal)}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:0 12px 34px rgba(0,0,0,.09);margin-bottom:30px}
+.brand .full{width:min(420px,68vw);height:auto}.brand .iso{width:72px;height:auto}.brand small{text-align:right;color:var(--muted);line-height:1.5}
+h1{font-size:clamp(2.1rem,5vw,4rem);line-height:1.02;margin:0 0 14px}h1 em{color:var(--violet);font-style:normal}
+.hero p{max-width:920px;line-height:1.7;font-size:1.08rem}.eyebrow{font-weight:800;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;margin-bottom:8px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.tag{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.83rem;font-weight:700}
+nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow:auto;padding:9px 14px}nav a{text-decoration:none;color:var(--ink);white-space:nowrap;padding:8px 10px;border-radius:8px;font-size:.84rem}nav a:hover{background:#f1edf5}
+main{max-width:1100px;margin:auto;padding:32px 18px 70px}
+section{scroll-margin-top:66px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:24px;box-shadow:0 12px 34px rgba(0,0,0,.08)}
+.step{color:var(--violet);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.8rem}
+h2{font-size:clamp(1.5rem,3vw,2.15rem);margin:8px 0 12px}h3{margin:22px 0 9px}p,li{line-height:1.65}.lead{font-size:1.06rem;color:#403b49}.muted{color:var(--muted)}
+code{font-family:Consolas,"Courier New",monospace}code.inline{background:#f1edf5;padding:2px 6px;border-radius:6px}
+pre{margin:12px 0 0;padding:17px;color:#f8f7fa;background:var(--code);overflow:auto;border-radius:14px;font-family:Consolas,"Courier New",monospace;font-size:.88rem;line-height:1.55;white-space:pre}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:850px){.grid3,.grid4{grid-template-columns:1fr 1fr}}@media(max-width:680px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.brand small{display:none}}
+.card{border:1px solid var(--line);border-radius:14px;background:#fcfbfd;padding:16px}.card h3{margin-top:0}.card strong.big{display:block;color:var(--violet-deep);font-size:1.1rem;margin-bottom:5px}
+.callout{border-left:4px solid var(--violet);background:var(--soft-violet);padding:15px 17px;border-radius:12px;margin:16px 0}.callout.teal{border-color:var(--teal);background:var(--soft-teal)}.callout.warn{border-color:var(--warn);background:var(--soft-warn)}
+.flow{border:1px dashed #b7afbc;background:#fdfcfe;border-radius:15px;padding:18px;text-align:center;overflow:auto}.flow .node{display:inline-block;border:2px solid var(--violet);border-radius:10px;padding:9px 13px;background:#fff;font-weight:700;margin:4px}.flow .teal{border-color:var(--teal);background:var(--soft-teal)}.flow .warn{border-color:var(--warn);background:var(--soft-warn)}.arr{color:#777;font-size:1.25rem;padding:0 3px}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{background:#f3eff6}
+details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fdfcfe;margin:12px 0}summary{cursor:pointer;font-weight:700}
+.responsibility{display:flex;gap:11px;align-items:flex-start;border-bottom:1px solid #eee8ef;padding:10px 0}.responsibility:last-child{border-bottom:0}.badge{min-width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--soft-violet);color:var(--violet-deep);font-weight:800}
+.compare{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:12px}.compare .mid{text-align:center;font-size:2rem;color:var(--teal)}@media(max-width:760px){.compare{grid-template-columns:1fr}.compare .mid{transform:rotate(90deg)}}
+.arch{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fcfbfd}.layer{border:2px solid var(--violet);border-radius:12px;padding:12px;text-align:center;font-weight:800;background:#fff;margin:8px auto;max-width:560px}.layer.future{border-style:dashed;color:#5d5865}.layer.main{border-color:var(--teal);background:var(--soft-teal)}.down{text-align:center;color:#827d7d;font-size:1.4rem}
+.quiz{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:#fcfbfd}.quiz p{margin-top:0;font-weight:700}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #cfc7d3;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.choice:hover{background:#f5f1f8}.choice.correct{border-color:var(--teal);background:var(--soft-teal)}.choice.wrong{border-color:#b56d6d;background:#fbefef}.feedback{margin:10px 0 0;min-height:1.4em;color:#4d4753}
+.footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
+hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+<div class="brand"><img class="full" src="assets/logo-profemacon.png" alt="Profe Macón"><div style="display:flex;align-items:center;gap:14px"><small>Programación Avanzada<br>2.º BT · Tecnologías de la Información</small><img class="iso" src="assets/logo-pm.png" alt="PM"></div></div>
+<div class="eyebrow">Tienda de Cómics · Unidad de persistencia · Material 01</div>
+<h1>¿Dónde quedaron <em>nuestros productos?</em></h1>
+<p>Ya separamos la Vista, el Controller y el Service. Nuestra tienda funciona… hasta que cerramos la aplicación. Ahora vamos a investigar qué ocurre con los datos y por qué necesitamos que Java pueda comunicarse con una base de datos.</p>
+<div class="tags"><span class="tag">CET1 · Objetos</span><span class="tag">CET3 · Persistencia</span><span class="tag">Java + MySQL</span><span class="tag">JDBC</span><span class="tag">Conexión entre sistemas</span></div>
+</div></header>
+<nav><div class="wrap">
+<a href="#partida">1 · Volvemos a la tienda</a><a href="#prueba">2 · La prueba</a><a href="#memoria">3 · Memoria y persistencia</a><a href="#alternativa">4 · Elegimos una solución</a><a href="#sistemas">5 · Java y MySQL</a><a href="#representacion">6 · Objetos y registros</a><a href="#jdbc">7 · JDBC</a><a href="#driver">8 · Driver</a><a href="#comprobacion">9 · Comprobamos</a><a href="#cierre">10 · Lo que sigue</a>
+</div></nav>
+<main>
+<section id="partida"><div class="step">1 · Retomamos el proyecto</div>
+<h2>Antes de agregar código, recordemos lo que ya resolvimos</h2>
+<p class="lead">La aplicación de la tienda de cómics tiene una organización que no existía al comenzar el curso. No vamos a abandonarla: vamos a ampliar sus capacidades.</p>
+<div class="arch"><div class="layer">Producto_Vista<br><small>Presenta los datos y recoge la interacción</small></div><div class="down">↓</div><div class="layer">ProductoController<br><small>Coordina lo que sucede cuando pulsamos un botón</small></div><div class="down">↓</div><div class="layer main">ProductoService<br><small>Trabaja con productos y comprueba reglas de negocio</small></div><div class="down">↓</div><div class="layer future">ArrayList&lt;Producto&gt;<br><small>Almacenamiento que estamos utilizando</small></div></div>
+<p>Cuando el usuario pulsa <b>Agregar</b>, la Vista proporciona los datos escritos en los campos, el Controller coordina la acción y el Service comprueba las condiciones del negocio. Si todo está correcto, el nuevo <code class="inline">Producto</code> se incorpora a una colección.</p>
+<div class="code-label">Recordamos el objeto Producto</div>
+<pre>Producto producto = new Producto(
+        101,
+        "Batman: Año Uno",
+        790.00,
+        8
+);</pre>
+<p>En nuestro modelo, el código es de tipo <code class="inline">long</code>, el nombre es un <code class="inline">String</code>, el precio es <code class="inline">double</code> y el stock es <code class="inline">int</code>.</p>
+<div class="callout teal"><b>Importante:</b> un objeto <code class="inline">Producto</code> representa un producto de la tienda en nuestro programa. Su existencia en memoria no garantiza que sus datos queden guardados después de cerrar la aplicación.</div>
+</section>
+<section id="prueba"><div class="step">2 · Aparece el problema</div><h2>Hagamos una prueba muy sencilla</h2>
+<p>Imagina que ejecutamos la aplicación y agregamos los siguientes productos:</p>
+<table><thead><tr><th>Código</th><th>Nombre</th><th>Precio ($)</th><th>Stock</th></tr></thead><tbody><tr><td>101</td><td>Batman: Año Uno</td><td>790</td><td>8</td></tr><tr><td>102</td><td>Watchmen</td><td>1250</td><td>5</td></tr><tr><td>103</td><td>Mafalda, tomo 1</td><td>650</td><td>12</td></tr></tbody></table>
+<p>Los productos aparecen en nuestra <code class="inline">JTable</code>. Podemos seleccionarlos y trabajar con ellos. Hasta aquí, todo parece correcto.</p>
+<div class="grid3"><div class="card"><strong class="big">1. Abrimos</strong><p>El programa crea los componentes y la lista inicial.</p></div><div class="card"><strong class="big">2. Agregamos</strong><p>La lista comienza a contener objetos <code class="inline">Producto</code>.</p></div><div class="card"><strong class="big">3. Cerramos y reabrimos</strong><p>Los productos agregados ya no aparecen.</p></div></div>
+<div class="callout warn"><b>Pregunta de investigación:</b> ¿desaparecieron porque la <code class="inline">JTable</code> dejó de mostrarlos o porque los datos ya no se conservan en la colección?</div>
+<details><summary>Antes de seguir, piensa qué hace realmente la JTable</summary><p>La tabla presenta información al usuario. No es, por sí misma, un sistema de almacenamiento permanente. Aunque mostrara los datos perfectamente, cerrarla no conservaría los objetos que estaban únicamente en la memoria del programa.</p></details>
+</section>
+<section id="memoria"><div class="step">3 · Entendemos la causa</div><h2>Un <code class="inline">ArrayList</code> no es una base de datos</h2>
+<p>Observemos una instrucción parecida a la que utilizamos en el servicio:</p>
+<div class="code-label">Colección de productos</div>
+<pre>private ArrayList&lt;Producto&gt; listaProductos;
+
+public ProductoService() {
+    listaProductos = new ArrayList&lt;Producto&gt;();
+}</pre>
+<p>La primera línea declara una variable que puede referirse a una colección de productos. En el constructor se crea el <code class="inline">ArrayList</code> al iniciar ese objeto <code class="inline">ProductoService</code>.</p>
+<p>Mientras la aplicación se ejecuta, podemos agregar, eliminar y consultar los elementos de la lista. Pero si los datos solo están en esa colección, cuando finaliza el programa no tenemos una copia persistente para recuperarlos.</p>
+<div class="compare"><div class="card"><h3>Durante la ejecución</h3><p>La aplicación mantiene objetos en memoria y podemos acceder a ellos mediante la colección.</p><pre>listaProductos.add(producto);</pre></div><div class="mid">≠</div><div class="card"><h3>En una nueva ejecución</h3><p>Se crea un nuevo estado de la aplicación. No reaparece automáticamente la colección de la ejecución anterior.</p><pre>new ArrayList&lt;Producto&gt;();</pre></div></div>
+<h3>Dos palabras que necesitamos distinguir</h3>
+<div class="grid2"><div class="card"><strong class="big">Memoria temporal</strong><p>Permite mantener y manipular objetos durante la ejecución. Por sí sola, nuestra lista no conserva datos entre ejecuciones.</p></div><div class="card"><strong class="big">Persistencia</strong><p>Consiste en guardar datos para recuperarlos en otro momento, incluso después de que el programa haya terminado.</p></div></div>
+<div class="callout teal"><b>Una precisión:</b> no se trata de conservar «vivo» el mismo objeto Java. Guardaremos sus datos y, cuando volvamos a necesitarlos, podremos construir nuevos objetos a partir de ellos.</div>
+</section>
+<section id="alternativa"><div class="step">4 · Elegimos una estrategia</div><h2>¿Dónde podríamos guardar los datos?</h2>
+<p>Una posibilidad sería escribirlos en un archivo. Es una alternativa válida para ciertos problemas. Pero cuando una aplicación necesita consultar, modificar, relacionar y organizar registros de distintas entidades, una base de datos relacional ofrece herramientas específicas.</p>
+<p>En nuestro proyecto utilizaremos <b>MySQL</b>, un sistema gestor de bases de datos relacionales, para conservar los productos de la tienda.</p>
+<div class="flow"><span class="node">Creamos un Producto</span><span class="arr"> → </span><span class="node teal">Guardamos sus datos</span><span class="arr"> → </span><span class="node">Cerramos el programa</span><span class="arr"> → </span><span class="node teal">Recuperamos sus datos</span></div>
+<p>Para conseguirlo, nuestra aplicación necesitará enviar y recibir información de un sistema distinto al propio programa Java.</p>
+</section>
+<section id="sistemas"><div class="step">5 · Dos sistemas distintos</div><h2>Java y MySQL tienen responsabilidades diferentes</h2>
+<div class="grid2"><div class="card"><h3>La aplicación Java</h3><p>Ejecuta nuestra interfaz Swing, recibe acciones, aplica las reglas de negocio y crea objetos como <code class="inline">Producto</code>.</p><p>La organización que ya construimos pertenece a esta aplicación.</p></div><div class="card"><h3>El servidor MySQL</h3><p>Gestiona bases de datos, tablas, registros, consultas SQL, conexiones y permisos de acceso.</p><p>Puede ejecutarse en nuestra computadora o en otro equipo.</p></div></div>
+<div class="flow"><span class="node">Aplicación Java</span><span class="arr"> ⇄ </span><span class="node teal">Comunicación</span><span class="arr"> ⇄ </span><span class="node">Servidor MySQL</span></div>
+<h3>¿Qué significa localhost?</h3>
+<p>Si instalamos MySQL en la misma computadora que ejecuta nuestra aplicación, podemos acceder a ese servidor mediante <code class="inline">localhost</code>, una dirección que representa al propio equipo.</p>
+<p>Si MySQL está en otra máquina, necesitaremos la dirección de ese servidor y los permisos correspondientes.</p>
+<div class="callout warn"><b>Una confusión frecuente:</b> para que Java se conecte directamente a MySQL <b>no necesitamos un servidor web Apache</b>. MySQL recibe las conexiones de las aplicaciones mediante su propio servicio de base de datos.</div>
+<h3>¿Qué es entonces una base de datos?</h3>
+<p>Podemos organizar los datos de nuestros productos en una tabla. Cada fila representa un registro y cada columna contiene un tipo de dato.</p>
+<table><thead><tr><th>codigo</th><th>nombre</th><th>precio</th><th>stock</th></tr></thead><tbody><tr><td>101</td><td>Batman: Año Uno</td><td>790.00</td><td>8</td></tr><tr><td>102</td><td>Watchmen</td><td>1250.00</td><td>5</td></tr></tbody></table>
+<p>El servidor administra esa información; nuestra aplicación necesita una forma de solicitar operaciones sobre ella.</p>
+</section>
+<section id="representacion"><div class="step">6 · Un mismo producto, dos representaciones</div><h2>¿Qué relación existe entre un objeto y una fila?</h2>
+<p>En Java escribimos:</p>
+<pre>Producto producto = new Producto(
+        101, "Batman: Año Uno", 790.00, 8
+);</pre>
+<p>En una tabla podríamos almacenar los valores correspondientes a ese producto:</p>
+<table><thead><tr><th>codigo</th><th>nombre</th><th>precio</th><th>stock</th></tr></thead><tbody><tr><td>101</td><td>Batman: Año Uno</td><td>790.00</td><td>8</td></tr></tbody></table>
+<p>No son la misma cosa. El <b>objeto</b> existe dentro de la aplicación Java y puede tener métodos y comportamiento. La <b>fila</b> contiene datos organizados y administrados por MySQL.</p>
+<div class="compare"><div class="card"><h3>De Java a MySQL</h3><p>Tomaremos los valores de un objeto <code class="inline">Producto</code> y realizaremos una operación para guardarlos como registro.</p></div><div class="mid">↔</div><div class="card"><h3>De MySQL a Java</h3><p>Leeremos los valores de un registro y, con ellos, podremos construir un nuevo objeto <code class="inline">Producto</code>.</p></div></div>
+<p>Esta traducción entre los datos del programa y los registros almacenados será una de las responsabilidades de los componentes DAO que incorporaremos más adelante. <b>Todavía no necesitamos programarlos.</b></p>
+</section>
+<section id="jdbc"><div class="step">7 · Necesitamos un mecanismo de comunicación</div><h2>Aparece JDBC</h2>
+<p>Si Java y MySQL son sistemas diferentes, tenemos que disponer de una forma de pedir una conexión, enviar consultas y recibir resultados.</p>
+<p><b>JDBC</b> significa <em>Java Database Connectivity</em>. Es una API que Java proporciona para trabajar con sistemas de bases de datos relacionales.</p>
+<p>Recuerda que una API reúne clases, interfaces y otros elementos que permiten utilizar funcionalidades desde nuestro código.</p>
+<div class="grid3"><div class="card"><strong class="big">Conectar</strong><p>Solicitar una conexión con la base de datos.</p></div><div class="card"><strong class="big">Ejecutar</strong><p>Enviar instrucciones SQL al servidor.</p></div><div class="card"><strong class="big">Recuperar</strong><p>Leer los resultados y trabajar con ellos desde Java.</p></div></div>
+<h3>¿JDBC es un programa que instalamos?</h3>
+<p>No exactamente. Java incluye la API JDBC, cuyos elementos principales están en el paquete <code class="inline">java.sql</code>.</p>
+<div class="code-label">Algunos nombres que encontraremos después</div><pre>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;</pre>
+<p>En esta primera lectura no vamos a utilizar todavía estas clases e interfaces. Solo necesitamos reconocer que forman parte de la API y que cada una tendrá una función concreta cuando comencemos a programar la conexión y las consultas.</p>
+<div class="callout teal"><b>Idea clave:</b> JDBC nos ofrece una manera común de realizar operaciones desde Java, sin que tengamos que programar por nuestra cuenta los detalles del protocolo de comunicación de cada gestor.</div>
+</section>
+<section id="driver"><div class="step">8 · La pieza que falta</div><h2>Si JDBC ya está en Java, ¿para qué necesitamos un driver?</h2>
+<p>JDBC establece una API común, pero los diferentes sistemas gestores de bases de datos necesitan implementaciones que sepan comunicarse con ellos.</p>
+<p>El <b>driver JDBC</b> es una biblioteca que proporciona esa implementación para un sistema concreto.</p>
+<div class="arch"><div class="layer">Nuestro código Java</div><div class="down">↓</div><div class="layer">API JDBC<br><small>Operaciones comunes</small></div><div class="down">↓</div><div class="layer main">Driver MySQL Connector/J<br><small>Implementación para comunicarse con MySQL</small></div><div class="down">↓</div><div class="layer">Servidor MySQL</div></div>
+<h3>No confundamos API con driver</h3>
+<div class="grid2"><div class="card"><h3>JDBC</h3><p>Es la API que utilizamos desde Java. Define operaciones y tipos comunes para trabajar con bases de datos.</p></div><div class="card"><h3>Driver MySQL</h3><p>Es la biblioteca que implementa lo necesario para comunicar esas operaciones con MySQL. La incorporaremos como dependencia de Maven.</p></div></div>
+<p>Si nuestra aplicación utilizara PostgreSQL, necesitaríamos el driver JDBC correspondiente a PostgreSQL. Aunque cambiaría el driver, gran parte de la manera de programar con JDBC seguiría siendo similar.</p>
+<div class="callout warn"><b>Para no adelantarnos:</b> todavía no escribiremos la dependencia Maven ni la clase de conexión. Lo haremos en el material siguiente, cuando estudiemos <code class="inline">DriverManager</code> y <code class="inline">Connection</code> paso a paso.</div>
+</section>
+<section id="comprobacion"><div class="step">9 · Comprobamos que comprendimos</div><h2>Piensa qué está ocurriendo, no memorices definiciones</h2>
+<p>Responde y observa la devolución. Puedes volver a leer cualquier apartado.</p>
+<div class="quiz" data-answer="b" data-explain="Un ArrayList mantiene referencias a objetos durante la ejecución; no guarda automáticamente sus datos entre sesiones."><p>1. Cerramos la tienda y, al abrirla otra vez, no aparecen los productos que agregamos. ¿Cuál es la explicación más adecuada?</p><div class="choices"><button class="choice" data-value="a">La JTable borró los registros de MySQL.</button><button class="choice" data-value="b">Los objetos estaban solo en la lista en memoria.</button><button class="choice" data-value="c">El Controller eliminó automáticamente cada producto.</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="quiz" data-answer="a" data-explain="Persistencia es conservar datos para recuperarlos en ejecuciones posteriores; no mantener vivo el mismo objeto Java."><p>2. ¿Qué queremos conseguir al incorporar persistencia?</p><div class="choices"><button class="choice" data-value="a">Conservar datos y reconstruir objetos cuando sea necesario.</button><button class="choice" data-value="b">Mantener la aplicación Java encendida todo el año.</button><button class="choice" data-value="c">Hacer que una JTable sea una base de datos.</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="quiz" data-answer="c" data-explain="MySQL administra los registros y las consultas; Java ejecuta nuestra aplicación y sus objetos."><p>3. ¿Qué componente administra las tablas y sus registros?</p><div class="choices"><button class="choice" data-value="a">Producto_Vista</button><button class="choice" data-value="b">ProductoService</button><button class="choice" data-value="c">El servidor MySQL</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="quiz" data-answer="b" data-explain="JDBC es la API común que utilizamos desde Java; para MySQL incorporamos un driver específico."><p>4. ¿Cuál es la diferencia principal entre JDBC y el driver MySQL?</p><div class="choices"><button class="choice" data-value="a">Son dos nombres para Apache.</button><button class="choice" data-value="b">JDBC es la API común; el driver implementa la comunicación con MySQL.</button><button class="choice" data-value="c">JDBC guarda registros y el driver muestra botones.</button></div><div class="feedback" aria-live="polite"></div></div>
+<div class="quiz" data-answer="a" data-explain="localhost se refiere al propio equipo. MySQL también puede estar en una computadora distinta."><p>5. Si la base de datos está instalada en el mismo equipo, ¿qué suele indicar localhost?</p><div class="choices"><button class="choice" data-value="a">La computadora local.</button><button class="choice" data-value="b">Un servidor web Apache obligatorio.</button><button class="choice" data-value="c">Cualquier equipo conectado a internet.</button></div><div class="feedback" aria-live="polite"></div></div>
+</section>
+<section id="cierre"><div class="step">10 · Cerramos la primera lectura</div><h2>Ya sabemos qué problema tenemos que resolver</h2>
+<p>La tienda no necesita que volvamos a escribir la interfaz ni que abandonemos el Controller y el Service. Necesita una forma de <b>conservar los datos</b> que hoy solo están en memoria.</p>
+<div class="flow"><span class="node">Objetos Java</span><span class="arr"> → </span><span class="node">Datos persistentes</span><span class="arr"> → </span><span class="node teal">Nueva ejecución</span><span class="arr"> → </span><span class="node">Nuevos objetos</span></div>
+<h3>Micro-entrega de documentación</h3><p>En tu cuaderno o documento del proyecto, registra:</p>
+<ul><li>una explicación de <b>por qué se pierden</b> los productos almacenados solo en un <code class="inline">ArrayList</code>;</li><li>la diferencia entre <b>objeto Java</b> y <b>registro de una tabla</b>, usando uno de los cómics de este material;</li><li>un esquema con <b>Aplicación Java → JDBC → driver → MySQL</b> y una frase sobre la función de cada pieza;</li><li>una pregunta que todavía tengas sobre la comunicación con la base de datos.</li></ul>
+<div class="callout teal"><b>Producto de esta lectura:</b> no se solicita modificar código. La evidencia es una explicación propia del problema y un esquema de los sistemas que intervendrán.</div>
+<p class="lead"><b>Próximo material:</b> vamos a solicitar nuestra primera conexión a MySQL. Allí estudiaremos <code class="inline">DriverManager</code>, <code class="inline">getConnection()</code>, la dirección JDBC, <code class="inline">Connection</code> y los errores que pueden ocurrir.</p>
+</section>
+<div class="footer"><div style="display:flex;align-items:center;gap:12px"><img src="assets/logo-pm.png" alt="PM"><div><b>PROFE MACÓN</b><br><span class="muted">Explora, aprende, crea.</span></div></div><div class="site">profemacon.net</div></div>
+</main>
+<div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.18)"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div>
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  q.querySelectorAll('.choice').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong');});
+      var ok=btn.dataset.value===q.dataset.answer;
+      btn.classList.add(ok?'correct':'wrong');
+      var f=q.querySelector('.feedback');
+      f.textContent=(ok?'Correcto. ':'Revisa la respuesta y la explicación. ')+q.dataset.explain;
+      if(!ok){var c=q.querySelector('.choice[data-value="'+q.dataset.answer+'"]');if(c)c.classList.add('correct');}
+    });
+  });
+});
+</script>
+<script src="scorm.js"></script>
+<style id="site-navigation">#site-back{position:fixed;right:18px;bottom:18px;z-index:99999;display:block;padding:11px 16px;background:#171419;color:#fff!important;font:700 13px Arial,sans-serif;border-radius:999px;text-decoration:none;box-shadow:0 8px 25px #17141940;border:1px solid #988db3}#site-back:hover{background:#756a96}@media print{#site-back{display:none}}</style><a id="site-back" href="../../index.html#unidad-04">← Índice del curso</a></body></html>

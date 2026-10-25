@@ -1,0 +1,164 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Clases abstractas, sobrescritura y polimorfismo · Profe Macón</title><style>
+:root{
+  --violet:#988db3;--violet-deep:#756a96;--teal:#00a99d;--ink:#171419;
+  --paper:#fff;--bg:#f4f2f5;--line:#ddd7df;--muted:#827d7d;--code:#171419;
+  --soft-violet:#f5f1f8;--soft-teal:#eaf8f6;--soft-warn:#faf7ef;--warn:#b68a3c;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:
+linear-gradient(rgba(152,141,179,.05) 1px,transparent 1px),
+linear-gradient(90deg,rgba(152,141,179,.05) 1px,transparent 1px),var(--bg);background-size:24px 24px}
+.wrap{max-width:1100px;margin:auto}
+.hero{padding:28px 18px 44px;background:linear-gradient(135deg,#fff,#f5f1f8 60%,#e7f8f6);border-bottom:5px solid var(--teal)}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:0 12px 34px rgba(0,0,0,.09);margin-bottom:30px}
+.brand .full{width:min(420px,68vw);height:auto}.brand .iso{width:72px;height:auto}.brand small{text-align:right;color:var(--muted);line-height:1.5}
+h1{font-size:clamp(2.1rem,5vw,4rem);line-height:1.02;margin:0 0 14px}h1 em{color:var(--violet);font-style:normal}
+.hero p{max-width:920px;line-height:1.7;font-size:1.08rem}.eyebrow{font-weight:800;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;margin-bottom:8px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.tag{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.83rem;font-weight:700}
+nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow:auto;padding:9px 14px}nav a{text-decoration:none;color:var(--ink);white-space:nowrap;padding:8px 10px;border-radius:8px;font-size:.84rem}nav a:hover{background:#f1edf5}
+main{max-width:1100px;margin:auto;padding:32px 18px 70px}
+section{scroll-margin-top:66px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:24px;box-shadow:0 12px 34px rgba(0,0,0,.08)}
+.step{color:var(--violet);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.8rem}
+h2{font-size:clamp(1.5rem,3vw,2.15rem);margin:8px 0 12px}h3{margin:22px 0 9px}p,li{line-height:1.65}.lead{font-size:1.06rem;color:#403b49}.muted{color:var(--muted)}
+code{font-family:Consolas,"Courier New",monospace}code.inline{background:#f1edf5;padding:2px 6px;border-radius:6px}
+pre{margin:12px 0 0;padding:17px;color:#f8f7fa;background:var(--code);overflow:auto;border-radius:14px;font-family:Consolas,"Courier New",monospace;font-size:.88rem;line-height:1.55;white-space:pre}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:850px){.grid3,.grid4{grid-template-columns:1fr 1fr}}@media(max-width:680px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.brand small{display:none}}
+.card{border:1px solid var(--line);border-radius:14px;background:#fcfbfd;padding:16px}.card h3{margin-top:0}.card strong.big{display:block;color:var(--violet-deep);font-size:1.1rem;margin-bottom:5px}
+.callout{border-left:4px solid var(--violet);background:var(--soft-violet);padding:15px 17px;border-radius:12px;margin:16px 0}.callout.teal{border-color:var(--teal);background:var(--soft-teal)}.callout.warn{border-color:var(--warn);background:var(--soft-warn)}
+.flow{border:1px dashed #b7afbc;background:#fdfcfe;border-radius:15px;padding:18px;text-align:center;overflow:auto}.flow .node{display:inline-block;border:2px solid var(--violet);border-radius:10px;padding:9px 13px;background:#fff;font-weight:700;margin:4px}.flow .teal{border-color:var(--teal);background:var(--soft-teal)}.flow .warn{border-color:var(--warn);background:var(--soft-warn)}.arr{color:#777;font-size:1.25rem;padding:0 3px}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{background:#f3eff6}
+details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fdfcfe;margin:12px 0}summary{cursor:pointer;font-weight:700}
+.responsibility{display:flex;gap:11px;align-items:flex-start;border-bottom:1px solid #eee8ef;padding:10px 0}.responsibility:last-child{border-bottom:0}.badge{min-width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--soft-violet);color:var(--violet-deep);font-weight:800}
+.compare{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:12px}.compare .mid{text-align:center;font-size:2rem;color:var(--teal)}@media(max-width:760px){.compare{grid-template-columns:1fr}.compare .mid{transform:rotate(90deg)}}
+.arch{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fcfbfd}.layer{border:2px solid var(--violet);border-radius:12px;padding:12px;text-align:center;font-weight:800;background:#fff;margin:8px auto;max-width:560px}.layer.future{border-style:dashed;color:#5d5865}.layer.main{border-color:var(--teal);background:var(--soft-teal)}.down{text-align:center;color:#827d7d;font-size:1.4rem}
+.quiz{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:#fcfbfd}.quiz p{margin-top:0;font-weight:700}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #cfc7d3;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.choice:hover{background:#f5f1f8}.choice.correct{border-color:var(--teal);background:var(--soft-teal)}.choice.wrong{border-color:#b56d6d;background:#fbefef}.feedback{margin:10px 0 0;min-height:1.4em;color:#4d4753}
+.footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
+hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
+
+.code-label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:16px;font-size:.8rem;font-weight:800;color:var(--violet);text-transform:uppercase;letter-spacing:.05em}
+.path{font-family:Consolas,"Courier New",monospace;background:#f1edf5;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0;color:#403b49}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}.timeline .card{position:relative;padding-top:38px}.timeline .num{position:absolute;top:12px;left:14px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--violet);color:#fff;font-weight:800;font-size:.75rem}
+@media(max-width:820px){.timeline{grid-template-columns:1fr 1fr}}@media(max-width:520px){.timeline{grid-template-columns:1fr}}
+.goodbad{display:grid;grid-template-columns:1fr 1fr;gap:14px}.goodbad .good{border-top:4px solid var(--teal)}.goodbad .bad{border-top:4px solid var(--warn)}@media(max-width:680px){.goodbad{grid-template-columns:1fr}}
+
+/* Recursos visuales y legibilidad de la unidad */
+figure.uml{margin:18px 0 22px;background:white;border:1px solid var(--line);border-radius:16px;padding:14px;overflow:auto}
+figure.uml img{display:block;margin:auto;max-width:100%;width:auto;height:auto;max-height:520px;object-fit:contain}
+figure.uml figcaption{margin:12px 6px 0;color:#5c5562;font-size:.93rem;line-height:1.5}
+.lesson-number{color:var(--teal);font-weight:800;font-size:.85rem;letter-spacing:.06em}
+.model-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.model-steps>div{padding:18px;border:1px solid var(--line);background:var(--soft-violet);border-radius:12px}.model-steps b{display:block;color:var(--violet-deep);margin-bottom:6px}
+@media(max-width:760px){.model-steps{grid-template-columns:1fr}section{padding:20px 16px}.brand .full{max-width:70vw}}
+@media print{nav,.quiz,#scormProgress{display:none!important}body{background:white}section{box-shadow:none;break-inside:avoid}.hero{padding-bottom:12px}figure.uml img{max-height:430px}}
+
+.object-window{padding:16px;background:#faf8fc;border:1px solid var(--line);border-radius:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:15px 0}
+.object-card{background:white;border:2px solid var(--violet);border-radius:12px;overflow:hidden}
+.object-card header{padding:11px 13px;background:var(--soft-violet);font-weight:800;color:#574b74;font-family:Consolas,monospace}
+.object-card ul{list-style:none;padding:10px 13px;margin:0;line-height:1.7;font: .9rem/1.65 Consolas,monospace}
+.object-card li{border-bottom:1px dashed #eee;padding:4px 0}.object-card li:last-child{border:0}
+.important-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.important-row .card{border-top:4px solid var(--teal)}
+.photo-note{margin:14px 0;border-radius:12px;background:#f0faf8;padding:14px 17px;border-left:4px solid var(--teal)}
+@media(max-width:680px){.object-window,.important-row{grid-template-columns:1fr}}
+@media print{.object-window,.flow,.card{break-inside:avoid}}
+
+.relationship{display:grid;grid-template-columns:1fr auto 1fr;gap:13px;align-items:center;margin:20px 0}
+.relationship .entity{border:2px solid var(--violet);border-radius:12px;padding:18px 12px;background:#fff;text-align:center;font-weight:bold}
+.relationship .relation{text-align:center;color:#5f507a;font-weight:bold;font-size:.9rem}
+.microcaption{font-size:.85rem;color:#665e69;margin:8px 0 20px}
+.compare-relations{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.compare-relations>.card{border-top:4px solid var(--violet)}
+.compare-relations>.card:nth-child(2){border-top-color:var(--teal)}
+.compare-relations>.card:nth-child(3){border-top-color:#dc9d4a}
+.lifecycle{padding:18px 20px;background:#f5f1f8;border-radius:14px;border:1px solid var(--line);margin:15px 0}
+.example-label{display:inline-block;background:#e9f6f3;padding:5px 11px;border-radius:16px;color:#007f76;font-weight:700;font-size:.85rem}
+@media(max-width:750px){.compare-relations{grid-template-columns:1fr}.relationship{grid-template-columns:1fr}.relationship .relation{padding:4px}}
+
+.collection-map{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.collection-map .node{padding:16px;border-radius:13px;background:white;border:2px solid #d9d0e5;text-align:center}.collection-map .top{grid-column:1/-1;background:#f0ebf8;border-color:#988db3}.collection-map small{display:block;font-weight:400;color:#555;margin-top:5px}.tradeoff td:first-child{font-weight:700}.pill{display:inline-block;padding:3px 9px;border-radius:99px;background:#e7f7f4;color:#007d74;font-size:.82rem;font-weight:700}.code-label{margin-top:18px}.single-line{white-space:normal}.flow-cards{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0}.flow-cards strong{padding:12px;background:#efeaf6;border:1px solid #d9cee5;border-radius:9px}.flow-cards span{font-size:1.5rem;color:#756a96}@media(max-width:700px){.collection-map{grid-template-columns:1fr}.collection-map .top{grid-column:1}}
+.inheritance{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0}.inherit-parent{grid-column:1/-1;justify-self:center;width:min(460px,100%);background:#f0ecf7;border:2px solid #988db3;padding:17px;text-align:center;border-radius:15px}.inherit-child{background:#fff;border:2px solid #00a99d;border-radius:15px;text-align:center;padding:16px}.inherit-branch{grid-column:1/-1;text-align:center;font-size:2rem;color:#756a96;line-height:1}.inheritance small{display:block;color:#5f5968;font-weight:400;margin-top:5px}.method-compare{display:grid;grid-template-columns:1fr 1fr;gap:15px}.method-compare>div{background:white;padding:18px;border-radius:14px;border:1px solid #dfd8e6}.code-label{margin-top:18px}.mini-rule{border-left:5px solid #00a99d;padding:14px 20px;background:#e9f8f5;border-radius:0 11px 11px 0;margin:22px 0}@media(max-width:700px){.method-compare{grid-template-columns:1fr}}
+</style></head><body><a class="curso-regreso" href="../../index.html#unidad-01" aria-label="Volver al índice de la Unidad 1">← Volver a Unidad 1</a>
+<style>.curso-regreso{position:fixed;bottom:20px;right:20px;z-index:9999;display:block;background:#171419;color:#fff!important;font:700 14px/1.35 Arial,Helvetica,sans-serif;text-decoration:none;padding:12px 16px;border-radius:30px;box-shadow:0 8px 25px #17141945;border:2px solid #00a99d}.curso-regreso:hover,.curso-regreso:focus-visible{background:#756a96;color:#fff!important;outline:2px solid #fff}@media print{.curso-regreso{display:none}}</style><header class="hero"><div class="wrap"><div class="brand"><img class="full" src="assets/logo-profemacon.png" alt="Profe Macón"><small><b>PROGRAMACIÓN AVANZADA</b><br>2.º BT TI · DGETP/UTU · 2026<br>CET1 · CET2</small></div><div class="eyebrow">UNIDAD 01 · INTRODUCCIÓN A LA POO · LECCIÓN 05</div><h1>Clases abstractas, sobrescritura <em>y polimorfismo</em></h1><p>¿Qué sucede cuando diferentes tipos de producto comparten una base, pero responden de manera distinta a la misma operación? Ampliamos «La Viñeta» para descubrirlo.</p><div class="tags"><span class="tag">abstract</span><span class="tag">extends</span><span class="tag">@Override</span><span class="tag">super</span><span class="tag">Despacho dinámico</span></div></div></header><nav aria-label="Apartados de la lección"><div class="wrap"><a href="#retomamos">Problema</a><a href="#abstracta">Abstracta</a><a href="#override">Sobrescritura</a><a href="#super">super</a><a href="#polimorfismo">Polimorfismo</a><a href="#lista">Colecciones</a><a href="#comparacion">Comparación</a><a href="#cierre">Comprobación</a></div></nav><main><section id="retomamos"><div class="step">01 · Punto de partida</div><h2>¿Cuándo conviene especializar una clase?</h2><p class="lead">En «La Viñeta» tenemos <b>Producto</b>, <b>Cliente</b>, <b>Venta</b> y <b>DetalleVenta</b>. Hasta ahora un producto tiene código, nombre, precio y stock. Supongamos que la tienda empieza a vender dos tipos de artículos con maneras distintas de calcular su precio final.</p><figure class="uml"><img src="assets/uml-diseno.png" alt="Diagrama UML de diseño original de La Viñeta"><figcaption>Modelo original: seguimos utilizando sus entidades. Las subclases de Producto que veremos a continuación son una ampliación exclusivamente didáctica.</figcaption></figure><div class="grid2"><div class="card"><h3>Cómic</h3><p>Ejemplo inventado: un cómic cuyo precio final tiene un recargo por edición especial.</p></div><div class="card"><h3>Figura coleccionable</h3><p>Ejemplo inventado: una figura con un recargo por embalaje de protección.</p></div></div><div class="callout teal"><b>Decisión de análisis:</b> no crearemos subclases porque sí. La herencia solo se justifica cuando necesitamos representar tipos verdaderamente especializados con comportamientos diferenciados. Si solo cambia un dato, puede ser suficiente un atributo.</div></section>
+<section id="abstracta"><div class="step">02 · Concepto nuevo</div><h2>¿Qué es una clase abstracta?</h2><p>Una <b>clase abstracta</b> representa una base común para otras clases. Puede declarar atributos, constructores y métodos con código, pero también métodos abstractos, que no tienen implementación en esa clase.</p><div class="inheritance"><div class="inherit-parent"><b>«abstract» Producto</b><small>codigo · nombre · precioBase · stock<br>calcularPrecioFinal() — abstracto</small></div><div class="inherit-branch">↙ &nbsp;&nbsp;&nbsp;&nbsp; ↘</div><div class="inherit-child"><b>Comic</b><small>recargoEdicion<br>calcularPrecioFinal()</small></div><div class="inherit-child"><b>FiguraColeccionable</b><small>costoProteccion<br>calcularPrecioFinal()</small></div></div><div class="code-label">Producto.java — una base abstracta</div><pre><code>public abstract class Producto {
+    private long codigo;
+    private String nombre;
+    private double precioBase;
+    private int stock;
+
+    public Producto(long codigo, String nombre,
+                    double precioBase, int stock) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.precioBase = precioBase;
+        this.stock = stock;
+    }
+
+    public String getNombre() { return nombre; }
+    public double getPrecioBase() { return precioBase; }
+    public long getCodigo() { return codigo; }
+    public int getStock() { return stock; }
+
+    public abstract double calcularPrecioFinal();
+}</code></pre><p>La palabra <code class="inline">abstract</code> impide crear directamente un objeto de <code class="inline">Producto</code>. Sí podremos declarar variables de tipo <code class="inline">Producto</code> para guardar referencias a objetos de clases concretas.</p><div class="callout warn"><b>No confundir:</b> el atributo <code class="inline">precioBase</code> es un dato común; el método abstracto <code class="inline">calcularPrecioFinal()</code> es una operación que las subclases deben concretar, salvo que ellas también sean abstractas.</div></section>
+<section id="override"><div class="step">03 · Sobrescritura</div><h2>La misma operación, dos implementaciones</h2><p>Cuando una subclase da su propia implementación de un método heredado hablamos de <b>sobrescritura</b> (override). Usamos <code class="inline">@Override</code> para pedirle al compilador que compruebe que realmente estamos sobrescribiendo un método.</p><div class="code-label">Comic.java</div><pre><code>public class Comic extends Producto {
+    private double recargoEdicion;
+
+    public Comic(long codigo, String nombre, double precioBase,
+                 int stock, double recargoEdicion) {
+        super(codigo, nombre, precioBase, stock);
+        this.recargoEdicion = recargoEdicion;
+    }
+
+    @Override
+    public double calcularPrecioFinal() {
+        return getPrecioBase() + recargoEdicion;
+    }
+}</code></pre><div class="code-label">FiguraColeccionable.java</div><pre><code>public class FiguraColeccionable extends Producto {
+    private double costoProteccion;
+
+    public FiguraColeccionable(long codigo, String nombre,
+                               double precioBase, int stock,
+                               double costoProteccion) {
+        super(codigo, nombre, precioBase, stock);
+        this.costoProteccion = costoProteccion;
+    }
+
+    @Override
+    public double calcularPrecioFinal() {
+        return getPrecioBase() + costoProteccion;
+    }
+}</code></pre><p>Ambas clases <b>son productos</b> y comparten estado y operaciones. Pero calculan el precio final de manera distinta. En esta simplificación, los recargos son importes fijos en pesos uruguayos.</p><div class="mini-rule"><b>Importante:</b> sobrescribir no es sobrecargar. <b>Sobrescritura</b>: una subclase redefine una operación heredada con una firma compatible. <b>Sobrecarga</b>: varios métodos comparten nombre, pero tienen distintos parámetros.</div></section>
+<section id="super"><div class="step">04 · Dos usos diferentes</div><h2>super() no es lo mismo que super.metodo()</h2><div class="method-compare"><div><h3>super(...)</h3><p>Invoca el constructor de la superclase para inicializar la parte heredada. En nuestro ejemplo:</p><p><code class="inline">super(codigo, nombre, precioBase, stock);</code></p></div><div><h3>super.metodo()</h3><p>Invoca una implementación concreta heredada desde la superclase. No se puede invocar un método abstracto como si tuviera código.</p><p><code class="inline">super.descripcion();</code></p></div></div><p>Para observar <code class="inline">super.metodo()</code>, supongamos que agregamos a <code class="inline">Producto</code> un método concreto:</p><div class="code-label">Fragmento adicional en Producto.java</div><pre><code>public String descripcion() {
+    return getCodigo() + &quot; - &quot; + getNombre();
+}</code></pre><div class="code-label">Fragmento adicional en Comic.java</div><pre><code>@Override
+public String descripcion() {
+    return super.descripcion() + &quot; (cómic)&quot;;
+}</code></pre><div class="callout"><b>Otra precisión:</b> <code class="inline">private</code> mantiene los atributos encapsulados. Por eso las subclases consultan <code class="inline">getPrecioBase()</code> en lugar de acceder directamente al campo. El modificador <code class="inline">protected</code> existe, pero no necesitamos exponer atributos para que la herencia funcione.</div></section>
+<section id="polimorfismo"><div class="step">05 · Idea fundamental</div><h2>Polimorfismo por herencia</h2><p>Una variable de tipo <code class="inline">Producto</code> puede contener una referencia a un <code class="inline">Comic</code> o una <code class="inline">FiguraColeccionable</code>. Cuando llamamos a un método sobrescrito, <b>Java ejecuta la implementación del objeto real</b> (despacho dinámico).</p><div class="code-label">Main.java — programa de ejemplo</div><pre><code>public class Main {
+    public static void main(String[] args) {
+        Producto a = new Comic(101, &quot;Mafalda especial&quot;, 450, 5, 50);
+        Producto b = new FiguraColeccionable(
+                202, &quot;Figura robot&quot;, 1200, 3, 180);
+
+        System.out.println(a.calcularPrecioFinal()); // 500.0
+        System.out.println(b.calcularPrecioFinal()); // 1380.0
+    }
+}</code></pre><div class="grid2"><div class="card"><h3>Tipo declarado</h3><p>Ambas variables son <code class="inline">Producto</code>; desde ellas accedemos a las operaciones disponibles en ese tipo.</p></div><div class="card"><h3>Tipo real del objeto</h3><p>En <code class="inline">a</code> hay un <code class="inline">Comic</code>; en <code class="inline">b</code>, una <code class="inline">FiguraColeccionable</code>. Eso determina el cálculo.</p></div></div><div class="callout teal"><b>No hace falta preguntar el tipo con <code class="inline">if</code>:</b> cada objeto responde a <code class="inline">calcularPrecioFinal()</code> usando su propia implementación. Así podemos incorporar nuevos tipos de productos sin reescribir las operaciones generales que trabajan con <code class="inline">Producto</code>.</div></section>
+<section id="lista"><div class="step">06 · Conexión con el SCORM anterior</div><h2>Una lista de productos de diferentes tipos</h2><p>El SCORM 04 presentó <code class="inline">List</code>, <code class="inline">ArrayList</code> y polimorfismo por interfaces. Ahora combinamos esos conocimientos con polimorfismo por herencia.</p><div class="code-label">Ejemplo — recorrer productos polimórficos</div><pre><code>import java.util.ArrayList;
+import java.util.List;
+
+public class CatalogoDemo {
+    public static void main(String[] args) {
+        List&lt;Producto&gt; catalogo = new ArrayList&lt;&gt;();
+        catalogo.add(new Comic(101, &quot;Mafalda&quot;, 450, 5, 50));
+        catalogo.add(new FiguraColeccionable(
+                202, &quot;Figura robot&quot;, 1200, 3, 180));
+
+        for (Producto producto : catalogo) {
+            System.out.println(producto.getNombre() + &quot; : $&quot;
+                    + producto.calcularPrecioFinal());
+        }
+    }
+}</code></pre><p>La lista admite ambos objetos porque ambos son subtipos de <code class="inline">Producto</code>. El recorrido no necesita conocer las clases concretas para calcular y mostrar el precio final.</p><div class="callout"><b>Dos polimorfismos en el mismo ejemplo:</b> <code class="inline">List</code> es una interfaz cuya implementación es <code class="inline">ArrayList</code>. Y <code class="inline">Producto</code> es una superclase cuyas implementaciones concretas son <code class="inline">Comic</code> y <code class="inline">FiguraColeccionable</code>.</div></section>
+<section id="comparacion"><div class="step">07 · Diseñar con criterio</div><h2>Clase abstracta e interfaz: ¿cuál utilizamos?</h2><table><thead><tr><th>Pregunta</th><th>Clase abstracta</th><th>Interfaz</th></tr></thead><tbody><tr><td>¿Puede guardar estado de instancia?</td><td>Sí, mediante atributos.</td><td>No, no contiene campos de instancia.</td></tr><tr><td>¿Puede tener constructor?</td><td>Sí, para inicializar la parte común.</td><td>No.</td></tr><tr><td>¿Puede ofrecer métodos con implementación?</td><td>Sí.</td><td>Sí, por ejemplo con métodos <code class="inline">default</code> y <code class="inline">static</code>.</td></tr><tr><td>¿Cómo se utiliza?</td><td><code class="inline">extends</code>.</td><td><code class="inline">implements</code>.</td></tr><tr><td>¿Puede una clase usar varias?</td><td>Una sola superclase directa.</td><td>Puede implementar varias interfaces.</td></tr></tbody></table><p>En «La Viñeta», una clase abstracta <code class="inline">Producto</code> podría reunir estado y operaciones comunes a tipos de productos. Una interfaz como <code class="inline">List</code> define operaciones disponibles para distintas estructuras de datos.</p><div class="callout warn"><b>No transformar nuestro proyecto sin motivo:</b> el modelo original de la tienda utiliza <code class="inline">Producto</code> como clase concreta. Este SCORM explora una <b>variante didáctica alternativa</b>. Si luego quisiéramos aplicarla al proyecto integrador, tendríamos que revisar constructores, instanciación y persistencia JDBC de manera coherente.</div></section>
+<section id="cierre"><div class="step">08 · Comprobación y documentación</div><h2>¿Qué hemos aprendido?</h2><div class="quiz" data-answer="b"><p><b>1.</b> ¿Qué instrucción construye correctamente una referencia polimórfica?</p><div class="choices"><button class="choice" data-value="a">Producto p = new Producto(...); si Producto es abstracta</button><button class="choice" data-value="b">Producto p = new Comic(...);</button><button class="choice" data-value="c">Comic p = new Producto(...);</button></div><div class="feedback" aria-live="polite"></div></div><div class="quiz" data-answer="a"><p><b>2.</b> ¿Qué método se ejecuta al invocar p.calcularPrecioFinal() si el objeto real es un Comic?</p><div class="choices"><button class="choice" data-value="a">El método sobrescrito en Comic</button><button class="choice" data-value="b">Un método sin cuerpo de Producto</button><button class="choice" data-value="c">Siempre el de FiguraColeccionable</button></div><div class="feedback" aria-live="polite"></div></div><div class="quiz" data-answer="c"><p><b>3.</b> ¿Para qué sirve super(...) en el constructor de Comic?</p><div class="choices"><button class="choice" data-value="a">Para crear una segunda figura</button><button class="choice" data-value="b">Para llamar al método abstracto</button><button class="choice" data-value="c">Para invocar el constructor de Producto</button></div><div class="feedback" aria-live="polite"></div></div><div class="quiz" data-answer="b"><p><b>4.</b> ¿Por qué conviene usar @Override?</p><div class="choices"><button class="choice" data-value="a">Hace que el método sea estático</button><button class="choice" data-value="b">Ayuda a comprobar que el método realmente sobrescribe otro</button><button class="choice" data-value="c">Evita declarar un constructor</button></div><div class="feedback" aria-live="polite"></div></div><div class="callout teal"><b>Microentrega de documentación:</b> dibuja un UML sencillo con <code class="inline">Producto</code> abstracta y sus dos subclases. Incluye el método abstracto, identifica cuáles métodos se sobrescriben y redacta dos oraciones para justificar por qué esta jerarquía sería útil —o innecesaria— para nuestra tienda.</div><p><b>Cierre de la unidad:</b> pasamos de analizar entidades y responsabilidades a construir objetos, relacionarlos, organizarlos en colecciones y aprovechar herencia y polimorfismo. Ya tenemos una base para comprender Swing y la futura arquitectura de la aplicación.</p></section><div class="footer"><div style="display:flex;align-items:center;gap:12px"><img src="assets/logo-pm.png" alt="PM"><div><b>PROFE MACÓN</b><br><span class="muted">Explora, aprende, crea.</span></div></div><div class="site">profemacon.net</div></div></main><div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div><script>document.querySelectorAll('.quiz').forEach(function(q){q.querySelectorAll('.choice').forEach(function(btn){btn.addEventListener('click',function(){q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong')});var ok=btn.dataset.value===q.dataset.answer;btn.classList.add(ok?'correct':'wrong');q.querySelector('.feedback').textContent=ok?'Correcto. La clave es entender el contrato y el objeto concreto.':'Revisa los ejemplos de la lección e inténtalo nuevamente.'})})});</script><script src="scorm.js"></script></body></html>

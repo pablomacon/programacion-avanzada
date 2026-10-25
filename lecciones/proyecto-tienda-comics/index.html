@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tienda de Cómics · Proyecto completo · Profe Macón</title>
+  <link rel="stylesheet" href="../../assets/style.css">
+  <style>
+    .proj-hero{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:start}
+    .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:20px}
+    .summary-card{background:#f7f4fa;border:1px solid #ddd7df;border-top:5px solid #988db3;border-radius:16px;padding:18px}
+    .summary-card h3{margin:0 0 8px;font-size:1.06rem}
+    .summary-card p,.summary-card li{font-size:16px;margin:.25rem 0;color:#403a45}
+    .summary-card ul{padding-left:18px;margin:10px 0 0}
+    .note{background:#eef9f7;border-left:6px solid #00a99d;border-radius:12px;padding:14px 16px;margin:18px 0;color:#2a2a2a}
+    .diagram-box{background:#fff;border:1px solid #ddd7df;border-radius:18px;padding:16px;box-shadow:0 8px 22px rgba(0,0,0,.05)}
+    .diagram-box img{width:100%;display:block;border-radius:12px}
+    .diagram-box figcaption{font-size:14px;color:#655e68;margin-top:8px}
+    .package-tree{background:#fbfbfc;border:1px solid #e5e0e8;border-radius:16px;padding:16px 18px;font:15px/1.6 Consolas,'Courier New',monospace;white-space:pre-wrap}
+    .class-nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+    .chip{display:inline-flex;align-items:center;padding:8px 12px;border-radius:999px;border:1px solid #d9d1e3;background:#fff;text-decoration:none;color:#56487d;font-weight:700;font-size:14px}
+    .chip:hover{background:#f1edf7}
+    .class-section{scroll-margin-top:90px}
+    .class-section + .class-section{margin-top:26px}
+    .class-header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+    .pkg{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#756a96}
+    .class-title{margin:0;font-size:clamp(24px,2.5vw,34px);line-height:1.15}
+    .purpose{margin:6px 0 0;color:#514a54}
+    .codebox{margin:16px 0 12px}
+    .codebox pre{tab-size:4}
+    .codebox .c{color:#72d28c;font-style:italic}
+    .codebox .kw{color:#e7a7ff}
+    .codebox .ty{color:#7ed0ff}
+    .codebox .st{color:#f7d67c}
+    .codebox .an{color:#f5a3a3}
+    .mini-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+    .mini-flow div{background:#fff;border:1px solid #ded6e6;border-radius:14px;padding:12px 14px}
+    .mini-flow strong{display:block;color:#171419;margin-bottom:4px}
+    @media(max-width:860px){.proj-hero{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="lesson-head">
+    <a href="../../index.html#proyecto"><img src="../../assets/logo-profe-macon.png" alt="Profe Macón"></a>
+    <a class="back" href="../../index.html#proyecto">← Índice del curso</a>
+  </header>
+  <main class="article">
+    <span class="eyebrow">REFERENCIA INTEGRADA · JAVA / JDBC / SWING / MAVEN</span>
+    <h1>Tienda de Cómics: proyecto completo y comentado</h1>
+    <p class="lead">Versión ordenada del proyecto <strong>Producto</strong>, con separación por clases y paquetes para que se vea con claridad dónde empieza y dónde termina cada parte del sistema.</p>
+
+    <section class="panel">
+      <div class="proj-hero">
+        <div>
+          <h2>1. Qué vamos a ver aquí</h2>
+          <p>Esta página reúne la versión de referencia del proyecto <strong>Tienda de Cómics</strong>. La idea no es solo mostrar el código, sino también explicar la función de cada clase y la relación entre las capas.</p>
+          <div class="note"><strong>Decisiones que conservamos:</strong> la vista construye la interfaz, el controlador coordina eventos, el servicio valida reglas del negocio y el DAO trabaja con SQL mediante JDBC. <code>ProductoDAO</code> implementa <code>CrudDAO&lt;Producto&gt;</code>.</div>
+          <div class="mini-flow">
+            <div><strong>Vista</strong>captura datos y muestra resultados.</div>
+            <div><strong>Controller</strong>recibe eventos y coordina acciones.</div>
+            <div><strong>Service</strong>valida reglas del negocio.</div>
+            <div><strong>DAO</strong>ejecuta operaciones SQL.</div>
+            <div><strong>Config</strong>abre conexiones JDBC.</div>
+            <div><strong>Main</strong>conecta todos los objetos.</div>
+          </div>
+        </div>
+        <figure class="diagram-box">
+          <img src="assets/infografia-maven.png" alt="Infografía de la estructura Maven y paquetes del proyecto">
+          <figcaption>Tomamos esta organización como base y la ajustamos a nuestra versión final: <strong>model</strong>, <strong>view</strong>, <strong>controller</strong>, <strong>service</strong>, <strong>dao</strong>, <strong>config</strong> y <strong>exceptions</strong>.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>2. Organización final del proyecto Maven</h2>
+      <p>Esta es la estructura que conviene mostrar a los estudiantes en la versión integrada final.</p>
+      <div class="package-tree">uy.edu.utu.programacion
+├── Main.java
+├── model
+│   └── Producto.java
+├── view
+│   └── Producto_Vista.java
+├── controller
+│   └── ProductoController.java
+├── service
+│   └── ProductoService.java
+├── dao
+│   ├── CrudDAO.java
+│   └── ProductoDAO.java
+├── config
+│   └── Conexion.java
+└── exceptions
+    ├── CampoVacioException.java
+    └── NumeroNegativoException.java</div>
+      <div class="summary-grid">
+        <div class="summary-card"><h3>model</h3><p>Representa los datos del sistema. Aquí vive <code>Producto</code>.</p></div>
+        <div class="summary-card"><h3>view</h3><p>Construye la interfaz gráfica y expone métodos para que el controlador trabaje con ella.</p></div>
+        <div class="summary-card"><h3>controller</h3><p>Registra listeners, convierte datos y coordina las operaciones entre vista y servicio.</p></div>
+        <div class="summary-card"><h3>service</h3><p>Aplica las reglas de negocio y usa el contrato DAO, no la implementación concreta.</p></div>
+        <div class="summary-card"><h3>dao</h3><p>Define el contrato CRUD y la clase que lo implementa con SQL.</p></div>
+        <div class="summary-card"><h3>config / exceptions</h3><p>Centralizan la conexión JDBC y las excepciones de negocio.</p></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>3. Recorrido de una operación</h2>
+      <p>Cuando el usuario pulsa <strong>Agregar</strong>, la información sigue este recorrido:</p>
+      <div class="route">
+        <strong>Producto_Vista</strong><span class="step">→</span>
+        <strong>ProductoController</strong><span class="step">→</span>
+        <strong>ProductoService</strong><span class="step">→</span>
+        <strong>CrudDAO&lt;Producto&gt;</strong><span class="step">→</span>
+        <strong>ProductoDAO</strong><span class="step">→</span>
+        <strong>Conexion</strong><span class="step">→</span>
+        <strong>MySQL</strong>
+      </div>
+      <div class="class-nav">
+        <a class="chip" href="#producto">Producto</a>
+        <a class="chip" href="#conexion">Conexion</a>
+        <a class="chip" href="#cruddao">CrudDAO</a>
+        <a class="chip" href="#productodao">ProductoDAO</a>
+        <a class="chip" href="#exceptions">Excepciones</a>
+        <a class="chip" href="#productoservice">ProductoService</a>
+        <a class="chip" href="#producto-vista">Producto_Vista</a>
+        <a class="chip" href="#producto-controller">ProductoController</a>
+        <a class="chip" href="#main">Main</a>
+        <a class="chip" href="#sql">SQL</a>
+      </div>
+    </section>
+
+    <section class="panel class-section" id="producto">
+      <div class="class-header">
+        <div>
+          <div class="pkg">model</div>
+          <h2 class="class-title">Producto.java</h2>
+          <p class="purpose">Entidad del sistema. Representa un producto de la tienda sin conocer ni JDBC ni MySQL.</p>
+        </div>
+      </div>
+      <div class="codebox"><div class="code-label">JAVA · model</div><pre><code><span class="kw">package</span> uy.edu.utu.programacion.model;
+
+<span class="kw">public class</span> <span class="ty">Producto</span> {
+
+    <span class="kw">private</span> <span class="ty">long</span> codigo;
+    <span class="kw">private</span> <span class="ty">String</span> nombre;
+    <span class="kw">private</span> <span class="ty">double</span> precio;
+    <span class="kw">private</span> <span class="ty">int</span> stock;
+
+    <span class="kw">public</span> <span class="ty">Producto</span>(<span class="ty">long</span> codigo, <span class="ty">String</span> nombre,
+                    <span class="ty">double</span> precio, <span class="ty">int</span> stock) {
+        <span class="kw">this</span>.codigo = codigo;
+        <span class="kw">this</span>.nombre = nombre;
+        <span class="kw">this</span>.precio = precio;
+        <span class="kw">this</span>.stock = stock;
+    }
+
+    <span class="c">// getters</span>
+    <span class="kw">public</span> <span class="ty">long</span> getCodigo() { <span class="kw">return</span> codigo; }
+    <span class="kw">public</span> <span class="ty">String</span> getNombre() { <span class="kw">return</span> nombre; }
+    <span class="kw">public</span> <span class="ty">double</span> getPrecio() { <span class="kw">return</span> precio; }
+    <span class="kw">public</span> <span class="ty">int</span> getStock() { <span class="kw">return</span> stock; }
+
+    <span class="c">// setters de los datos modificables</span>
+    <span class="kw">public void</span> setNombre(<span class="ty">String</span> nombre) { <span class="kw">this</span>.nombre = nombre; }
+    <span class="kw">public void</span> setPrecio(<span class="ty">double</span> precio) { <span class="kw">this</span>.precio = precio; }
+    <span class="kw">public void</span> setStock(<span class="ty">int</span> stock) { <span class="kw">this</span>.stock = stock; }
+
+    <span class="an">@Override</span>
+    <span class="kw">public</span> <span class="ty">String</span> toString() {
+        <span class="kw">return</span> codigo + <span class="st">" - "</span> + nombre
+                + <span class="st">" - $"</span> + precio
+                + <span class="st">" - Stock: "</span> + stock;
+    }
+}</code></pre></div>
+      <p><strong>Idea clave:</strong> el código identifica al producto. Por eso lo tratamos como un dato estable y no ofrecemos un setter para cambiarlo.</p>
+    </section>
+
+    <section class="panel class-section" id="conexion">
+      <div class="class-header"><div><div class="pkg">config</div><h2 class="class-title">Conexion.java</h2><p class="purpose">Centraliza la apertura de la conexión JDBC con MySQL.</p></div></div>
+      <div class="codebox"><div class="code-label">JAVA · config</div><pre><code><span class="kw">package</span> uy.edu.utu.programacion.config;
+
+<span class="kw">import</span> java.sql.Connection;
+<span class="kw">import</span> java.sql.DriverManager;
+<span class="kw">import</span> java.sql.SQLException;
+
+<span class="kw">public class</span> <span class="ty">Conexion</span> {
+
+    <span class="kw">private</span> <span class="ty">Connection</span> conexion;
+
+    <span class="kw">private static final</span> <span class="ty">String</span> URL =
+            <span class="st">"jdbc:mysql://localhost:3306/tiendacomics"</span>;
+    <span class="kw">private static final</span> <span class="ty">String</span> USUARIO = <span class="st">"usuario_tienda"</span>;
+    <span class="kw">private static final</span> <span class="ty">String</span> CLAVE = <span class="st">"clave_de_ejemplo"</span>;
+
+    <span class="kw">public</span> <span class="ty">Conexion</span>() <span class="kw">throws</span> <span class="ty">SQLException</span> {
+        conexion = <span class="ty">DriverManager</span>.getConnection(URL, USUARIO, CLAVE);
+    }
+
+    <span class="kw">public</span> <span class="ty">Connection</span> getConexion() {
+        <span class="kw">return</span> conexion;
+    }
+}</code></pre></div>
+      <p><strong>Ojo:</strong> en este diseño, cada operación del DAO crea su propia conexión. Es una solución sencilla y adecuada para nuestra etapa de aprendizaje.</p>
+    </section>
+
+    <section class="panel class-section" id="cruddao">
+      <div class="class-header"><div><div class="pkg">dao</div><h2 class="class-title">CrudDAO.java</h2><p class="purpose">Contrato genérico con las operaciones CRUD que el servicio necesita usar.</p></div></div>
+      <div class="codebox"><div class="code-label">JAVA · dao</div><pre><code><span class="kw">package</span> uy.edu.utu.programacion.dao;
+
+<span class="kw">import</span> java.sql.SQLException;
+<span class="kw">import</span> java.util.List;
+
+<span class="kw">public interface</span> <span class="ty">CrudDAO</span>&lt;T&gt; {
+
+    <span class="kw">void</span> guardar(T objeto) <span class="kw">throws</span> <span class="ty">SQLException</span>;
+    <span class="kw">void</span> modificar(T objeto) <span class="kw">throws</span> <span class="ty">SQLException</span>;
+    <span class="kw">void</span> eliminar(<span class="ty">long</span> codigo) <span class="kw">throws</span> <span class="ty">SQLException</span>;
+    <span class="ty">List</span>&lt;T&gt; listar() <span class="kw">throws</span> <span class="ty">SQLException</span>;
+}</code></pre></div>
+      <p>Cuando escribimos <code>CrudDAO&lt;Producto&gt;</code>, el servicio sabe <em>qué operaciones existen</em>, pero no necesita saber <em>cómo se implementan</em>.</p>
+    </section>
+
+    <section class="panel class-section" id="productodao">
+      <div class="class-header"><div><div class="pkg">dao</div><h2 class="class-title">ProductoDAO.java</h2><p class="purpose">Implementación concreta del contrato. Aquí aparece SQL, JDBC y el trabajo con <code>ResultSet</code>.</p></div></div>
+      <div class="codebox"><div class="code-label">JAVA · dao</div><pre><code><span class="kw">package</span> uy.edu.utu.programacion.dao;
+
+<span class="kw">import</span> java.sql.Connection;
+<span class="kw">import</span> java.sql.PreparedStatement;
+<span class="kw">import</span> java.sql.ResultSet;
+<span class="kw">import</span> java.sql.SQLException;
+<span class="kw">import</span> java.util.ArrayList;
+<span class="kw">import</span> java.util.List;
+
+<span class="kw">import</span> uy.edu.utu.programacion.config.Conexion;
+<span class="kw">import</span> uy.edu.utu.programacion.model.Producto;
+
+<span class="kw">public class</span> <span class="ty">ProductoDAO</span> <span class="kw">implements</span> <span class="ty">CrudDAO</span>&lt;<span class="ty">Producto</span>&gt; {
+
+    <span class="an">@Override</span>
+    <span class="kw">public void</span> guardar(<span class="ty">Producto</span> producto) <span class="kw">throws</span> <span class="ty">SQLException</span> {
+        <span class="ty">String</span> sql = <span class="st">"INSERT INTO producto (codigo, nombre, precio, stock) VALUES (?, ?, ?, ?)"</span>;
+
+        <span class="kw">try</span> (<span class="ty">Connection</span> conexion = <span class="kw">new</span> <span class="ty">Conexion</span>().getConexion();
+             <span class="ty">PreparedStatement</span> sentencia = conexion.prepareStatement(sql)) {
+
+            sentencia.setLong(1, producto.getCodigo());
+            sentencia.setString(2, producto.getNombre());
+            sentencia.setDouble(3, producto.getPrecio());
+            sentencia.setInt(4, producto.getStock());
+            sentencia.executeUpdate();
+        }
+    }
+
+    <span class="an">@Override</span>
+    <span class="kw">public void</span> modificar(<span class="ty">Producto</span> producto) <span class="kw">throws</span> <span class="ty">SQLException</span> {
+        <span class="ty">String</span> sql = <span class="st">"UPDATE producto SET nombre = ?, precio = ?, stock = ? WHERE codigo = ?"</span>;
+        <span class="kw">try</span> (<span class="ty">Connection</span> conexion = <span class="kw">new</span> <span class="ty">Conexion</span>().getConexion();
+             <span class="ty">PreparedStatement</span> sentencia = conexion.prepareStatement(sql)) {
+            sentencia.setString(1, producto.getNombre());
+            sentencia.setDouble(2, producto.getPrecio());
+            sentencia.setInt(3, producto.getStock());
+            sentencia.setLong(4, producto.getCodigo());
+            sentencia.executeUpdate();
+        }
+    }
+
+    <span class="an">@Override</span>
+    <span class="kw">public void</span> eliminar(<span class="ty">long</span> codigo) <span class="kw">throws</span> <span class="ty">SQLException</span> {
+        <span class="ty">String</span> sql = <span class="st">"DELETE FROM producto WHERE codigo = ?"</span>;
+        <span class="kw">try</span> (<span class="ty">Connection</span> conexion = <span class="kw">new</span> <span class="ty">Conexion</span>().getConexion();
+             <span class="ty">PreparedStatement</span> sentencia = conexion.prepareStatement(sql)) {
+            sentencia.setLong(1, codigo);
+            sentencia.executeUpdate();
+        }
+    }
+
+    <span class="an">@Override</span>
+    <span class="kw">public</span> <span class="ty">List</span>&lt;<span class="ty">Producto</span>&gt; listar() <span class="kw">throws</span> <span class="ty">SQLException</span> {
+        <span class="ty">List</span>&lt;<span class="ty">Producto</span>&gt; productos = <span class="kw">new</span> <span class="ty">ArrayList</span>&lt;&gt;();
+        <span class="ty">String</span> sql = <span class="st">"SELECT codigo, nombre, precio, stock FROM producto ORDER BY codigo"</span>;
+
+        <span class="kw">try</span> (<span class="ty">Connection</span> conexion = <span class="kw">new</span> <span class="ty">Conexion</span>().getConexion();
+             <span class="ty">PreparedStatement</span> sentencia = conexion.prepareStatement(sql);
+             <span class="ty">ResultSet</span> resultado = sentencia.executeQuery()) {
+
+            <span class="kw">while</span> (resultado.next()) {
+                <span class="ty">long</span> codigo = resultado.getLong(<span class="st">"codigo"</span>);
+                <span class="ty">String</span> nombre = resultado.getString(<span class="st">"nombre"</span>);
+                <span class="ty">double</span> precio = resultado.getDouble(<span class="st">"precio"</span>);
+                <span class="ty">int</span> stock = resultado.getInt(<span class="st">"stock"</span>);
+                productos.add(<span class="kw">new</span> <span class="ty">Producto</span>(codigo, nombre, precio, stock));
+            }
+        }
+        <span class="kw">return</span> productos;
+    }
+}</code></pre></div>
+      <div class="note"><strong>Dos ideas importantes:</strong> <code>implements CrudDAO&lt;Producto&gt;</code> muestra el contrato que cumple la clase, y el <code>try-with-resources</code> se encarga de cerrar conexión, sentencia y resultados.</div>
+    </section>
+
+    <section class="panel class-section" id="exceptions">
+      <div class="class-header"><div><div class="pkg">exceptions</div><h2 class="class-title">CampoVacioException y NumeroNegativoException</h2><p class="purpose">Expresan errores del negocio, no errores de JDBC.</p></div></div>
+      <div class="summary-grid">
+        <div>
+          <div class="codebox"><div class="code-label">JAVA · exceptions</div><pre><code><span class="kw">package</span> uy.edu.utu.programacion.exceptions;
+
+<span class="kw">public class</span> <span class="ty">CampoVacioException</span> <span class="kw">extends</span> <span class="ty">Exception</span> {
+    <span class="kw">public</span> <span class="ty">CampoVacioException</span>(<span class="ty">String</span> mensaje) {
+        <span class="kw">super</span>(mensaje);
+    }
+}</code></pre></div>
+        </div>
+        <div>
+          <div class="codebox"><div class="code-label">JAVA · exceptions</div><pre><code><span class="kw">package</span> uy.edu.utu.programacion.exceptions;
+
+<span class="kw">public class</span> <span class="ty">NumeroNegativoException</span> <span class="kw">extends</span> <span class="ty">Exception</span> {
+    <span class="kw">public</span> <span class="ty">NumeroNegativoException</span>(<span class="ty">String</span> mensaje) {
+        <span class="kw">super</span>(mensaje);
+    }
+}</code></pre></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel class-section" id="productoservice">
+      <div class="class-header"><div><div class="pkg">service</div><h2 class="class-title">ProductoService.java</h2><p class="purpose">Aplica las reglas del negocio y aprovecha el polimorfismo al trabajar con la interfaz <code>CrudDAO&lt;Producto&gt;</code>.</p></div></div>
+      <div class="codebox"><div class="code-label">JAVA · service</div><pre><code><span class="kw">package</span> uy.edu.utu.programacion.service;
+
+<span class="kw">import</span> java.sql.SQLException;
+<span class="kw">import</span> java.util.List;
+
+<span class="kw">import</span> uy.edu.utu.programacion.dao.CrudDAO;
+<span class="kw">import</span> uy.edu.utu.programacion.model.Producto;
+<span class="kw">import</span> uy.edu.utu.programacion.exceptions.CampoVacioException;
+<span class="kw">import</span> uy.edu.utu.programacion.exceptions.NumeroNegativoException;
+
+<span class="kw">public class</span> <span class="ty">ProductoService</span> {
+
+    <span class="kw">private</span> <span class="ty">CrudDAO</span>&lt;<span class="ty">Producto</span>&gt; productoDAO;
+
+    <span class="kw">public</span> <span class="ty">ProductoService</span>(<span class="ty">CrudDAO</span>&lt;<span class="ty">Producto</span>&gt; productoDAO) {
+        <span class="kw">this</span>.productoDAO = productoDAO;
+    }
+
+    <span class="kw">public void</span> agregar(<span class="ty">Producto</span> producto)
+            <span class="kw">throws</span> <span class="ty">CampoVacioException</span>, <span class="ty">NumeroNegativoException</span>, <span class="ty">SQLException</span> {
+        validar(producto);
+        productoDAO.guardar(producto);
+    }
+
+    <span class="kw">public void</span> modificar(<span class="ty">Producto</span> producto)
+            <span class="kw">throws</span> <span class="ty">CampoVacioException</span>, <span class="ty">NumeroNegativoException</span>, <span class="ty">SQLException</span> {
+        validar(producto);
+        productoDAO.modificar(producto);
+    }
+
+    <span class="kw">public void</span> eliminar(<span class="ty">long</span> codigo) <span class="kw">throws</span> <span class="ty">SQLException</span> {
+        productoDAO.eliminar(codigo);
+    }
+
+    <span class="kw">public</span> <span class="ty">List</span>&lt;<span class="ty">Producto</span>&gt; listar() <span class="kw">throws</span> <span class="ty">SQLException</span> {
+        <span class="kw">return</span> productoDAO.listar();
+    }
+
+    <span class="kw">private void</span> validar(<span class="ty">Producto</span> producto)
+            <span class="kw">throws</span> <span class="ty">CampoVacioException</span>, <span class="ty">NumeroNegativoException</span> {
+
+        <span class="kw">if</span> (producto.getNombre() == <span class="kw">null</span> || producto.getNombre().isBlank()) {
+            <span class="kw">throw new</span> <span class="ty">CampoVacioException</span>(<span class="st">"El nombre del producto no puede estar vacío"</span>);
+        }
+        <span class="kw">if</span> (!<span class="ty">Double</span>.isFinite(producto.getPrecio()) || producto.getPrecio() &lt; 0) {
+            <span class="kw">throw new</span> <span class="ty">NumeroNegativoException</span>(<span class="st">"El precio debe ser un número válido y no negativo"</span>);
+        }
+        <span class="kw">if</span> (producto.getStock() &lt; 0) {
+            <span class="kw">throw new</span> <span class="ty">NumeroNegativoException</span>(<span class="st">"El stock no puede ser negativo"</span>);
+        }
+        <span class="kw">if</span> (producto.getCodigo() &lt;= 0) {
+            <span class="kw">throw new</span> <span class="ty">NumeroNegativoException</span>(<span class="st">"El código debe ser mayor que cero"</span>);
+        }
+    }
+}</code></pre></div>
+      <p><strong>La clave didáctica:</strong> el servicio declara su atributo como <code>CrudDAO&lt;Producto&gt;</code> y no como <code>ProductoDAO</code>. Así conoce el contrato, no la implementación concreta.</p>
+    </section>
+
+    <section class="panel class-section" id="producto-vista">
+      <div class="class-header"><div><div class="pkg">view</div><h2 class="class-title">Producto_Vista.java</h2><p class="purpose">Construye la interfaz y ofrece métodos de apoyo para que el controlador capture datos, limpie campos y actualice la tabla.</p></div></div>
+      <div class="codebox"><div class="code-label">JAVA · view</div><pre><code><span class="kw">package</span> uy.edu.utu.programacion.view;
+
+<span class="c">// imports abreviados para facilitar la lectura</span>
+<span class="kw">import</span> java.awt.*;
+<span class="kw">import</span> java.awt.event.ActionListener;
+<span class="kw">import</span> java.util.List;
+<span class="kw">import</span> javax.swing.*;
+<span class="kw">import</span> javax.swing.table.DefaultTableModel;
+
+<span class="kw">import</span> uy.edu.utu.programacion.model.Producto;
+
+<span class="kw">public class</span> <span class="ty">Producto_Vista</span> <span class="kw">extends</span> <span class="ty">JFrame</span> {
+
+    <span class="kw">private</span> JTextField txtCodigo, txtNombre, txtPrecio, txtStock;
+    <span class="kw">private</span> JButton btnAgregar, btnModificar, btnEliminar, btnCancelar;
+    <span class="kw">private</span> JTable tabla;
+    <span class="kw">private</span> DefaultTableModel modeloTabla;
+
+    <span class="kw">public</span> <span class="ty">Producto_Vista</span>() {
+        crearVentana();
+    }
+
+    <span class="kw">private void</span> crearVentana() {
+        setTitle(<span class="st">"Tienda de Cómics"</span>);
+        setSize(750, 500);
+        setLocationRelativeTo(<span class="kw">null</span>);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panelPrincipal = <span class="kw">new</span> JPanel(<span class="kw">new</span> BorderLayout(10, 10));
+        JPanel panelFormulario = <span class="kw">new</span> JPanel(<span class="kw">new</span> BorderLayout(5, 5));
+        panelFormulario.add(<span class="kw">new</span> JLabel(<span class="st">"Administración de productos"</span>), BorderLayout.NORTH);
+
+        JPanel panelCampos = <span class="kw">new</span> JPanel(<span class="kw">new</span> GridLayout(4, 2, 5, 5));
+        txtCodigo = <span class="kw">new</span> JTextField();
+        txtNombre = <span class="kw">new</span> JTextField();
+        txtPrecio = <span class="kw">new</span> JTextField();
+        txtStock = <span class="kw">new</span> JTextField();
+
+        panelCampos.add(<span class="kw">new</span> JLabel(<span class="st">"Código:"</span>)); panelCampos.add(txtCodigo);
+        panelCampos.add(<span class="kw">new</span> JLabel(<span class="st">"Nombre:"</span>)); panelCampos.add(txtNombre);
+        panelCampos.add(<span class="kw">new</span> JLabel(<span class="st">"Precio:"</span>)); panelCampos.add(txtPrecio);
+        panelCampos.add(<span class="kw">new</span> JLabel(<span class="st">"Stock:"</span>)); panelCampos.add(txtStock);
+
+        panelFormulario.add(panelCampos, BorderLayout.CENTER);
+
+        JPanel panelBotones = <span class="kw">new</span> JPanel(<span class="kw">new</span> FlowLayout());
+        btnAgregar = <span class="kw">new</span> JButton(<span class="st">"Agregar"</span>);
+        btnModificar = <span class="kw">new</span> JButton(<span class="st">"Modificar"</span>);
+        btnEliminar = <span class="kw">new</span> JButton(<span class="st">"Eliminar"</span>);
+        btnCancelar = <span class="kw">new</span> JButton(<span class="st">"Cancelar"</span>);
+        panelBotones.add(btnAgregar); panelBotones.add(btnModificar);
+        panelBotones.add(btnEliminar); panelBotones.add(btnCancelar);
+        panelFormulario.add(panelBotones, BorderLayout.SOUTH);
+        panelPrincipal.add(panelFormulario, BorderLayout.NORTH);
+
+        modeloTabla = <span class="kw">new</span> DefaultTableModel(<span class="kw">new</span> Object[]{<span class="st">"Código"</span>, <span class="st">"Nombre"</span>, <span class="st">"Precio"</span>, <span class="st">"Stock"</span>}, 0) {
+            <span class="an">@Override</span>
+            <span class="kw">public boolean</span> isCellEditable(<span class="ty">int</span> fila, <span class="ty">int</span> columna) { <span class="kw">return false</span>; }
+        };
+
+        tabla = <span class="kw">new</span> JTable(modeloTabla);
+        panelPrincipal.add(<span class="kw">new</span> JScrollPane(tabla), BorderLayout.CENTER);
+        setContentPane(panelPrincipal);
+    }
+
+    <span class="c">// getters, listeners, limpiarCampos(), actualizarTabla() y cargarFilaSeleccionada()</span>
+}</code></pre></div>
+      <p>Para no volver interminable la lectura, aquí mostramos la parte estructural de la clase. Los métodos auxiliares de la vista se conservan en el proyecto y cumplen la misma lógica que trabajamos en los SCORM de Vista.</p>
+    </section>
+
+    <section class="panel class-section" id="producto-controller">
+      <div class="class-header"><div><div class="pkg">controller</div><h2 class="class-title">ProductoController.java</h2><p class="purpose">Conecta las acciones de la vista con el servicio y gestiona la conversión de texto a números.</p></div></div>
+      <div class="codebox"><div class="code-label">JAVA · controller</div><pre><code><span class="kw">package</span> uy.edu.utu.programacion.controller;
+
+<span class="kw">import</span> java.sql.SQLException;
+<span class="kw">import</span> javax.swing.JOptionPane;
+
+<span class="kw">import</span> uy.edu.utu.programacion.model.Producto;
+<span class="kw">import</span> uy.edu.utu.programacion.service.ProductoService;
+<span class="kw">import</span> uy.edu.utu.programacion.view.Producto_Vista;
+<span class="kw">import</span> uy.edu.utu.programacion.exceptions.CampoVacioException;
+<span class="kw">import</span> uy.edu.utu.programacion.exceptions.NumeroNegativoException;
+
+<span class="kw">public class</span> <span class="ty">ProductoController</span> {
+
+    <span class="kw">private</span> Producto_Vista vista;
+    <span class="kw">private</span> ProductoService servicio;
+
+    <span class="kw">public</span> <span class="ty">ProductoController</span>(Producto_Vista vista, ProductoService servicio) {
+        <span class="kw">this</span>.vista = vista;
+        <span class="kw">this</span>.servicio = servicio;
+        agregar(); modificar(); eliminar(); cancelar(); seleccionarProducto(); actualizarTabla();
+    }
+
+    <span class="kw">private</span> Producto leerProducto() {
+        <span class="ty">long</span> codigo = Long.parseLong(vista.getTxtCodigo().trim());
+        <span class="ty">String</span> nombre = vista.getTxtNombre();
+        <span class="ty">double</span> precio = Double.parseDouble(vista.getTxtPrecio().trim());
+        <span class="ty">int</span> stock = Integer.parseInt(vista.getTxtStock().trim());
+        <span class="kw">return new</span> Producto(codigo, nombre, precio, stock);
+    }
+
+    <span class="c">// cada listener captura datos, llama al servicio y actualiza la tabla</span>
+    <span class="kw">public void</span> agregar() {
+        vista.listenerAgregar(e -&gt; {
+            <span class="kw">try</span> {
+                Producto producto = leerProducto();
+                servicio.agregar(producto);
+                actualizarTabla();
+                vista.limpiarCampos();
+                JOptionPane.showMessageDialog(vista, <span class="st">"Producto agregado correctamente"</span>);
+            } <span class="kw">catch</span> (NumberFormatException ex) {
+                mostrarError(<span class="st">"Código, precio o stock incorrectos"</span>);
+            } <span class="kw">catch</span> (CampoVacioException | NumeroNegativoException ex) {
+                mostrarError(ex.getMessage());
+            } <span class="kw">catch</span> (SQLException ex) {
+                mostrarError(<span class="st">"Error de base de datos: "</span> + ex.getMessage());
+            }
+        });
+    }
+
+    <span class="c">// también existen modificar(), eliminar(), cancelar(), seleccionarProducto() y actualizarTabla()</span>
+    <span class="kw">private void</span> mostrarError(<span class="ty">String</span> mensaje) {
+        JOptionPane.showMessageDialog(vista, mensaje, <span class="st">"Error"</span>, JOptionPane.ERROR_MESSAGE);
+    }
+}</code></pre></div>
+      <p>El controlador <strong>no</strong> escribe SQL y <strong>no</strong> valida reglas de negocio profundas: coordina y distribuye responsabilidades.</p>
+    </section>
+
+    <section class="panel class-section" id="main">
+      <div class="class-header"><div><div class="pkg">raíz del proyecto</div><h2 class="class-title">Main.java</h2><p class="purpose">Construye los objetos principales y establece las relaciones entre ellos.</p></div></div>
+      <div class="codebox"><div class="code-label">JAVA · main</div><pre><code><span class="kw">package</span> uy.edu.utu.programacion;
+
+<span class="kw">import</span> javax.swing.SwingUtilities;
+<span class="kw">import</span> com.formdev.flatlaf.FlatLightLaf;
+
+<span class="kw">import</span> uy.edu.utu.programacion.dao.CrudDAO;
+<span class="kw">import</span> uy.edu.utu.programacion.dao.ProductoDAO;
+<span class="kw">import</span> uy.edu.utu.programacion.model.Producto;
+<span class="kw">import</span> uy.edu.utu.programacion.service.ProductoService;
+<span class="kw">import</span> uy.edu.utu.programacion.controller.ProductoController;
+<span class="kw">import</span> uy.edu.utu.programacion.view.Producto_Vista;
+
+<span class="kw">public class</span> <span class="ty">Main</span> {
+    <span class="kw">public static void</span> main(<span class="ty">String</span>[] args) {
+        FlatLightLaf.setup();
+
+        SwingUtilities.invokeLater(() -&gt; {
+            Producto_Vista vista = <span class="kw">new</span> Producto_Vista();
+            CrudDAO&lt;Producto&gt; dao = <span class="kw">new</span> ProductoDAO();
+            ProductoService servicio = <span class="kw">new</span> ProductoService(dao);
+            <span class="kw">new</span> ProductoController(vista, servicio);
+            vista.setVisible(<span class="kw">true</span>);
+        });
+    }
+}</code></pre></div>
+      <div class="note"><strong>Acá aparece el polimorfismo aplicado:</strong> la variable <code>dao</code> se declara con la interfaz <code>CrudDAO&lt;Producto&gt;</code>, aunque el objeto concreto creado es <code>new ProductoDAO()</code>.</div>
+    </section>
+
+    <section class="panel class-section" id="sql">
+      <div class="class-header"><div><div class="pkg">mysql</div><h2 class="class-title">Script básico de base de datos</h2><p class="purpose">Tabla mínima necesaria para que el DAO funcione.</p></div></div>
+      <div class="codebox"><div class="code-label">SQL</div><pre><code><span class="kw">CREATE DATABASE</span> <span class="kw">IF NOT EXISTS</span> tiendacomics;
+
+<span class="kw">USE</span> tiendacomics;
+
+<span class="kw">CREATE TABLE</span> <span class="kw">IF NOT EXISTS</span> producto (
+    codigo BIGINT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    precio DECIMAL(10,2) NOT NULL,
+    stock INT NOT NULL
+);</code></pre></div>
+      <p>En este curso mantenemos <code>double</code> en el modelo porque acompaña el trabajo previo del grupo. En contextos comerciales reales conviene usar <code>BigDecimal</code> para representar importes monetarios.</p>
+    </section>
+
+    <section class="panel">
+      <h2>4. Qué resuelve esta versión y qué mejoraría después</h2>
+      <ul>
+        <li>Integra las capas que venimos estudiando: <strong>Vista, Controller, Service, DAO y Config</strong>.</li>
+        <li>Muestra JDBC directo con <strong>PreparedStatement</strong>, <strong>ResultSet</strong> y <strong>try-with-resources</strong>.</li>
+        <li>Aplica <strong>polimorfismo</strong> al trabajar con la interfaz <code>CrudDAO&lt;Producto&gt;</code>.</li>
+        <li>Separa errores de negocio de errores de persistencia.</li>
+      </ul>
+      <p>Más adelante, podríamos mejorar tres cosas: informar cuando un <code>UPDATE</code> o <code>DELETE</code> no afectó filas, crear excepciones propias de persistencia y trabajar con transacciones que agrupen varias operaciones.</p>
+    </section>
+
+    <div class="footnav"><a href="../../index.html#proyecto">← Índice del curso</a></div>
+  </main>
+  <footer>PROFE MACÓN · Programación Avanzada 2026</footer>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cuando Main hace demasiado · Profe Macón</title>
+<style>
+:root{
+  --violet:#988db3;--violet-deep:#756a96;--teal:#00a99d;--ink:#171419;
+  --paper:#fff;--bg:#f4f2f5;--line:#ddd7df;--muted:#827d7d;--code:#171419;
+  --soft-violet:#f5f1f8;--soft-teal:#eaf8f6;--soft-warn:#faf7ef;--warn:#b68a3c;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:
+linear-gradient(rgba(152,141,179,.05) 1px,transparent 1px),
+linear-gradient(90deg,rgba(152,141,179,.05) 1px,transparent 1px),var(--bg);background-size:24px 24px}
+.wrap{max-width:1100px;margin:auto}
+.hero{padding:28px 18px 44px;background:linear-gradient(135deg,#fff,#f5f1f8 60%,#e7f8f6);border-bottom:5px solid var(--teal)}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:0 12px 34px rgba(0,0,0,.09);margin-bottom:30px}
+.brand .full{width:min(420px,68vw);height:auto}.brand .iso{width:72px;height:auto}.brand small{text-align:right;color:var(--muted);line-height:1.5}
+h1{font-size:clamp(2.1rem,5vw,4rem);line-height:1.02;margin:0 0 14px}h1 em{color:var(--violet);font-style:normal}
+.hero p{max-width:920px;line-height:1.7;font-size:1.08rem}.eyebrow{font-weight:800;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;margin-bottom:8px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.tag{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.83rem;font-weight:700}
+nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow:auto;padding:9px 14px}nav a{text-decoration:none;color:var(--ink);white-space:nowrap;padding:8px 10px;border-radius:8px;font-size:.84rem}nav a:hover{background:#f1edf5}
+main{max-width:1100px;margin:auto;padding:32px 18px 70px}
+section{scroll-margin-top:66px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:24px;box-shadow:0 12px 34px rgba(0,0,0,.08)}
+.step{color:var(--violet);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.8rem}
+h2{font-size:clamp(1.5rem,3vw,2.15rem);margin:8px 0 12px}h3{margin:22px 0 9px}p,li{line-height:1.65}.lead{font-size:1.06rem;color:#403b49}.muted{color:var(--muted)}
+code{font-family:Consolas,"Courier New",monospace}code.inline{background:#f1edf5;padding:2px 6px;border-radius:6px}
+pre{margin:12px 0 0;padding:17px;color:#f8f7fa;background:var(--code);overflow:auto;border-radius:14px;font-family:Consolas,"Courier New",monospace;font-size:.88rem;line-height:1.55;white-space:pre}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:850px){.grid3,.grid4{grid-template-columns:1fr 1fr}}@media(max-width:680px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.brand small{display:none}}
+.card{border:1px solid var(--line);border-radius:14px;background:#fcfbfd;padding:16px}.card h3{margin-top:0}.card strong.big{display:block;color:var(--violet-deep);font-size:1.1rem;margin-bottom:5px}
+.callout{border-left:4px solid var(--violet);background:var(--soft-violet);padding:15px 17px;border-radius:12px;margin:16px 0}.callout.teal{border-color:var(--teal);background:var(--soft-teal)}.callout.warn{border-color:var(--warn);background:var(--soft-warn)}
+.flow{border:1px dashed #b7afbc;background:#fdfcfe;border-radius:15px;padding:18px;text-align:center;overflow:auto}.flow .node{display:inline-block;border:2px solid var(--violet);border-radius:10px;padding:9px 13px;background:#fff;font-weight:700;margin:4px}.flow .teal{border-color:var(--teal);background:var(--soft-teal)}.flow .warn{border-color:var(--warn);background:var(--soft-warn)}.arr{color:#777;font-size:1.25rem;padding:0 3px}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{background:#f3eff6}
+details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fdfcfe;margin:12px 0}summary{cursor:pointer;font-weight:700}
+.responsibility{display:flex;gap:11px;align-items:flex-start;border-bottom:1px solid #eee8ef;padding:10px 0}.responsibility:last-child{border-bottom:0}.badge{min-width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--soft-violet);color:var(--violet-deep);font-weight:800}
+.compare{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:12px}.compare .mid{text-align:center;font-size:2rem;color:var(--teal)}@media(max-width:760px){.compare{grid-template-columns:1fr}.compare .mid{transform:rotate(90deg)}}
+.arch{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fcfbfd}.layer{border:2px solid var(--violet);border-radius:12px;padding:12px;text-align:center;font-weight:800;background:#fff;margin:8px auto;max-width:560px}.layer.future{border-style:dashed;color:#5d5865}.layer.main{border-color:var(--teal);background:var(--soft-teal)}.down{text-align:center;color:#827d7d;font-size:1.4rem}
+.quiz{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:#fcfbfd}.quiz p{margin-top:0;font-weight:700}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #cfc7d3;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.choice:hover{background:#f5f1f8}.choice.correct{border-color:var(--teal);background:var(--soft-teal)}.choice.wrong{border-color:#b56d6d;background:#fbefef}.feedback{margin:10px 0 0;min-height:1.4em;color:#4d4753}
+.footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
+hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="brand">
+    <img class="full" src="assets/logo-profemacon.png" alt="Profe Macón">
+    <div style="display:flex;align-items:center;gap:14px"><small>Programación Avanzada<br>2.º BT · Tecnologías de la Información</small><img class="iso" src="assets/logo-pm.png" alt="PM"></div>
+  </div>
+  <div class="eyebrow">Tienda de Cómics · Arquitectura de componentes</div>
+  <h1>Cuando <em>Main</em> hace demasiado</h1>
+  <p>El programa funciona. Ese no es el problema. El problema es que <code class="inline">Main</code> empezó a conocer demasiadas cosas y a tomar demasiadas decisiones. Vamos a entender por qué conviene separar responsabilidades antes de crear <code class="inline">ProductoController</code> y <code class="inline">ProductoService</code>.</p>
+  <div class="tags"><span class="tag">CET1</span><span class="tag">Modularidad</span><span class="tag">Mantenibilidad</span><span class="tag">Reutilización</span><span class="tag">Escalabilidad</span><span class="tag">Patrones</span></div>
+</div></header>
+
+<nav><div class="wrap">
+<a href="#punto">1 · Punto de partida</a><a href="#radiografia">2 · Radiografía</a><a href="#crece">3 · Cuando crece</a><a href="#responsabilidad">4 · Responsabilidad</a><a href="#modularidad">5 · Modularidad</a><a href="#arquitectura">6 · Arquitectura</a><a href="#patrones">7 · Patrones</a><a href="#mapa">8 · Nuestro mapa</a><a href="#actividad">9 · Comprobamos</a><a href="#cierre">10 · Cierre</a>
+</div></nav>
+
+<main>
+<section id="punto">
+<div class="step">1 · Punto de partida</div>
+<h2>Primero: nuestro programa funciona</h2>
+<p class="lead">No estamos corrigiendo un error de sintaxis ni un botón roto. Estamos entrando en otro tipo de problema: <strong>cómo organizar un programa que crece</strong>.</p>
+<p>En el proyecto actual, <code class="inline">Main</code> crea la lista de productos y la ventana, registra las acciones de los botones, obtiene los datos escritos por el usuario, convierte esos datos, crea un <code class="inline">Producto</code> y lo agrega a la colección.</p>
+<pre>public static void main(String[] args) {
+
+    ArrayList&lt;Producto&gt; listaProductos =
+            new ArrayList&lt;Producto&gt;();
+
+    Producto_Vista ventana = new Producto_Vista();
+    ventana.setVisible(true);
+
+    ventana.listenerCancelar(e -&gt;
+        ventana.limpiarCampos());
+
+    ventana.listenerAgregar(e -&gt; {
+        long codigo = Long.parseLong(ventana.getTxtCodigo());
+        String nombre = ventana.getTxtNombre();
+        double precio = Double.parseDouble(ventana.getTxtPrecio());
+        int stock = Integer.parseInt(ventana.getTxtStock());
+
+        Producto p = new Producto(codigo, nombre, precio, stock);
+        listaProductos.add(p);
+
+        JOptionPane.showMessageDialog(ventana, listaProductos);
+    });
+
+    ventana.listenerEliminar(e -&gt; {
+        JOptionPane.showConfirmDialog(ventana, "¿Está seguro?");
+    });
+}</pre>
+<div class="callout teal"><b>Idea clave:</b> que el código funcione no significa que su organización vaya a seguir siendo cómoda cuando agreguemos más funcionalidades.</div>
+</section>
+
+<section id="radiografia">
+<div class="step">2 · Radiografía</div>
+<h2>¿Cuántos trabajos está haciendo Main?</h2>
+<p>Leamos el código por <strong>responsabilidades</strong>, no por líneas.</p>
+<div class="grid2">
+<div class="card">
+  <div class="responsibility"><span class="badge">1</span><div><b>Datos</b><br><span class="muted">Mantiene el <code class="inline">ArrayList&lt;Producto&gt;</code>.</span></div></div>
+  <div class="responsibility"><span class="badge">2</span><div><b>Arranque</b><br><span class="muted">Crea y muestra la ventana.</span></div></div>
+  <div class="responsibility"><span class="badge">3</span><div><b>Eventos</b><br><span class="muted">Decide qué ocurre al pulsar botones.</span></div></div>
+  <div class="responsibility"><span class="badge">4</span><div><b>Entrada</b><br><span class="muted">Lee los datos de los <code class="inline">JTextField</code>.</span></div></div>
+</div>
+<div class="card">
+  <div class="responsibility"><span class="badge">5</span><div><b>Conversión</b><br><span class="muted">Transforma texto en <code class="inline">long</code>, <code class="inline">double</code> e <code class="inline">int</code>.</span></div></div>
+  <div class="responsibility"><span class="badge">6</span><div><b>Modelo</b><br><span class="muted">Construye objetos <code class="inline">Producto</code>.</span></div></div>
+  <div class="responsibility"><span class="badge">7</span><div><b>Operaciones</b><br><span class="muted">Agrega elementos a la colección.</span></div></div>
+  <div class="responsibility"><span class="badge">8</span><div><b>Interfaz</b><br><span class="muted">Muestra mensajes con <code class="inline">JOptionPane</code>.</span></div></div>
+</div>
+</div>
+<div class="callout"><b>Pregunta guía:</b> si dentro de tres meses queremos cambiar una regla de productos, ¿deberíamos tener que buscar esa regla dentro del mismo método que arranca toda la aplicación?</div>
+</section>
+
+<section id="crece">
+<div class="step">3 · Cuando el sistema crece</div>
+<h2>El problema todavía es pequeño… porque la aplicación todavía es pequeña</h2>
+<p>Imaginemos que continuamos agregando funcionalidades sin cambiar la organización actual.</p>
+<div class="flow"><span class="node">Agregar</span><span class="arr"> → </span><span class="node">Eliminar</span><span class="arr"> → </span><span class="node">Modificar</span><span class="arr"> → </span><span class="node">Buscar</span><span class="arr"> → </span><span class="node">Ventas</span><span class="arr"> → </span><span class="node">Clientes</span><span class="arr"> → </span><span class="node warn">Base de datos</span></div>
+<p>Si cada nueva función termina dentro de <code class="inline">Main</code>, ocurre algo previsible: cualquier cambio obliga a volver siempre al mismo lugar.</p>
+<div class="grid3">
+<div class="card"><strong class="big">Más difícil de leer</strong>Para encontrar una tarea hay que recorrer código de muchas tareas diferentes.</div>
+<div class="card"><strong class="big">Más fácil de romper</strong>Modificar una parte aumenta la posibilidad de afectar otras que estaban funcionando.</div>
+<div class="card"><strong class="big">Más difícil de reutilizar</strong>La lógica queda pegada al arranque y a una interfaz concreta.</div>
+</div>
+<div class="callout warn"><b>No existe una cantidad “correcta” de líneas para Main.</b> El problema no es que tenga 20, 50 o 100 líneas. El problema es que acumule responsabilidades que deberían poder cambiar por motivos diferentes.</div>
+</section>
+
+<section id="responsabilidad">
+<div class="step">4 · Una idea de diseño</div>
+<h2>Una clase debería tener una responsabilidad principal clara</h2>
+<p>En diseño orientado a objetos aparece una regla muy útil: intentar que cada clase tenga una <strong>responsabilidad principal bien identificable</strong>.</p>
+<div class="compare">
+<div class="card"><h3>Todo mezclado</h3><p><code class="inline">Main</code> arranca, escucha, valida, crea, guarda y muestra.</p><p class="muted">Un cambio en casi cualquier parte de la aplicación puede llevarnos a la misma clase.</p></div>
+<div class="mid">→</div>
+<div class="card"><h3>Responsabilidades separadas</h3><p>Cada componente resuelve un tipo de problema y colabora con los demás.</p><p class="muted">Los cambios quedan más localizados.</p></div>
+</div>
+<details><summary>¿Esto tiene relación con SOLID?</summary><p>Sí. La idea se relaciona con el <strong>Principio de Responsabilidad Única</strong> (SRP), la “S” de SOLID. Una formulación más precisa dice que una clase debería tener un motivo principal de cambio. Por ahora no necesitamos memorizar los cinco principios: nos alcanza con reconocer el problema que este principio intenta evitar.</p></details>
+<div class="callout teal"><b>Una buena pregunta:</b> “¿Cómo explicaría en una sola frase para qué existe esta clase?”. Si necesitamos responder con una larga lista de tareas no relacionadas, probablemente convenga revisar el diseño.</div>
+</section>
+
+<section id="modularidad">
+<div class="step">5 · Modularidad</div>
+<h2>Separar para poder cambiar</h2>
+<p class="lead">La <strong>modularidad</strong> consiste en organizar un sistema en partes con responsabilidades claras y relaciones controladas entre ellas.</p>
+<p>Crear paquetes ayuda a ordenar físicamente los archivos, pero <strong>modularidad no significa solamente crear carpetas</strong>. Si dividimos el código en cinco paquetes pero todos dependen de todos, el problema continúa.</p>
+<div class="grid4">
+<div class="card"><strong class="big">Mantenibilidad</strong>Encontrar y modificar una responsabilidad sin recorrer toda la aplicación.</div>
+<div class="card"><strong class="big">Reutilización</strong>Usar una parte en otro contexto sin arrastrar todo el sistema.</div>
+<div class="card"><strong class="big">Escalabilidad</strong>Agregar funcionalidad sin tener que rediseñar todo desde cero.</div>
+<div class="card"><strong class="big">Comprensión</strong>Pensar el sistema por partes y no como un bloque único.</div>
+</div>
+<hr class="sep">
+<h3>Dos conceptos que vamos a volver a encontrar</h3>
+<div class="grid2">
+<div class="card"><strong class="big">Cohesión</strong>Una clase tiene buena cohesión cuando sus tareas están relacionadas entre sí y responden a una finalidad clara.</div>
+<div class="card"><strong class="big">Acoplamiento</strong>Describe cuánto depende un componente de los detalles de otro. Más adelante las interfaces nos ayudarán a reducir dependencias innecesarias.</div>
+</div>
+</section>
+
+<section id="arquitectura">
+<div class="step">6 · Arquitectura</div>
+<h2>Antes de programar más, decidimos dónde debería vivir cada responsabilidad</h2>
+<p>La arquitectura de software nos ayuda a pensar cuáles son las partes principales de una aplicación, qué responsabilidad tiene cada una y cómo se comunican.</p>
+<div class="arch">
+<div class="layer main">Main · ensambla e inicia la aplicación</div>
+<div class="down">↓</div>
+<div class="layer">Vista · presenta información y recibe interacción</div>
+<div class="down">↕</div>
+<div class="layer">Controller · coordina las acciones del usuario</div>
+<div class="down">↓</div>
+<div class="layer future">Service · operaciones y reglas del negocio</div>
+<div class="down">↓</div>
+<div class="layer future">DAO · persistencia de datos (más adelante)</div>
+</div>
+<p class="muted">Las líneas punteadas representan componentes que todavía no construimos. Este es un mapa de llegada, no código para copiar ahora.</p>
+<div class="callout"><b>Objetivo de Main:</b> que se encargue principalmente de <strong>crear las piezas, conectarlas e iniciar la aplicación</strong>. El trabajo cotidiano de la aplicación debe ocurrir fuera de él.</div>
+<details><summary>Un término opcional: “composition root”</summary><p>En aplicaciones más grandes se llama <em>composition root</em> al lugar donde se crean y conectan los objetos principales. Nuestro <code class="inline">Main</code> se acercará a ese papel. No necesitamos usar este término para programar bien, pero explica por qué un Main pequeño puede seguir siendo importante.</p></details>
+</section>
+
+<section id="patrones">
+<div class="step">7 · Patrones</div>
+<h2>No somos los primeros en encontrarnos con estos problemas</h2>
+<p>En programación aparecen problemas de diseño que se repiten. Un <strong>patrón</strong> describe una forma conocida de organizar una solución. No es un bloque de código que se copia sin pensar: es una idea que se adapta al problema concreto.</p>
+<table>
+<tr><th>Nivel</th><th>Qué organiza</th><th>Ejemplos</th></tr>
+<tr><td><b>Patrones de diseño</b></td><td>Colaboraciones concretas entre clases u objetos.</td><td>Observer, Strategy, Factory.</td></tr>
+<tr><td><b>Patrones / estilos arquitectónicos</b></td><td>La organización general de partes importantes de una aplicación.</td><td>MVC, arquitectura en capas.</td></tr>
+</table>
+<div class="callout teal"><b>Ya vimos una idea relacionada con un patrón:</b> los listeners de Swing trabajan mediante notificaciones de eventos, una idea estrechamente relacionada con <strong>Observer</strong>. No necesitamos estudiarlo completo todavía.</div>
+<h3>¿Qué vamos a utilizar nosotros?</h3>
+<p>En Tienda de Cómics construiremos una <strong>arquitectura en capas</strong> y, en la parte de interacción, tomaremos la separación de responsabilidades propia de MVC: una Vista que muestra, un Controller que coordina y componentes de negocio que resuelven operaciones.</p>
+<div class="callout warn"><b>Precisión importante:</b> no necesitamos afirmar que estamos implementando “MVC puro”. Estamos usando una arquitectura pedagógica en capas, inspirada en esa separación, adaptada a nuestra aplicación Swing y a los objetivos del curso.</div>
+</section>
+
+<section id="mapa">
+<div class="step">8 · Nuestro mapa de avance</div>
+<h2>No vamos a crear todas las capas de golpe</h2>
+<p class="lead">Cada componente aparecerá cuando el código nos muestre qué problema viene a resolver.</p>
+<div class="grid3">
+<div class="card"><strong class="big">Ahora</strong><p><b>Problema:</b> Main coordina demasiadas acciones.</p><p><b>Siguiente solución:</b> <code class="inline">ProductoController</code>.</p></div>
+<div class="card"><strong class="big">Después</strong><p><b>Problema:</b> Controller empieza a acumular reglas y operaciones.</p><p><b>Solución:</b> <code class="inline">ProductoService</code>.</p></div>
+<div class="card"><strong class="big">Más adelante</strong><p><b>Problema:</b> los datos del <code class="inline">ArrayList</code> desaparecen al cerrar.</p><p><b>Solución:</b> DAO + JDBC + base de datos.</p></div>
+</div>
+<div class="flow"><span class="node teal">Main</span><span class="arr"> → </span><span class="node">Controller</span><span class="arr"> → </span><span class="node">Service</span><span class="arr"> → </span><span class="node warn">DAO / BD</span></div>
+<p>La arquitectura no se aprende repitiendo ese dibujo. Se aprende entendiendo <strong>por qué cada flecha y cada componente terminaron siendo necesarios</strong>.</p>
+</section>
+
+<section id="actividad">
+<div class="step">9 · Comprobamos la idea</div>
+<h2>¿Qué tipo de componente debería hacerse cargo?</h2>
+<p>Elegí una opción. No estamos evaluando sintaxis: estamos pensando responsabilidades.</p>
+
+<div class="quiz" data-answer="vista">
+<p>1. Cambiar el color y el texto del botón “Agregar”.</p>
+<div class="choices"><button class="choice" data-value="main">Main</button><button class="choice" data-value="vista">Vista</button><button class="choice" data-value="controller">Controller</button><button class="choice" data-value="service">Service</button></div>
+<div class="feedback" aria-live="polite"></div>
+</div>
+<div class="quiz" data-answer="controller">
+<p>2. Recibir el clic en “Agregar” y coordinar qué debe ocurrir a continuación.</p>
+<div class="choices"><button class="choice" data-value="main">Main</button><button class="choice" data-value="vista">Vista</button><button class="choice" data-value="controller">Controller</button><button class="choice" data-value="service">Service</button></div>
+<div class="feedback" aria-live="polite"></div>
+</div>
+<div class="quiz" data-answer="service">
+<p>3. Decidir que un producto no puede guardarse con precio negativo.</p>
+<div class="choices"><button class="choice" data-value="main">Main</button><button class="choice" data-value="vista">Vista</button><button class="choice" data-value="controller">Controller</button><button class="choice" data-value="service">Service</button></div>
+<div class="feedback" aria-live="polite"></div>
+</div>
+<div class="quiz" data-answer="main">
+<p>4. Crear los componentes principales al iniciar el programa y conectarlos.</p>
+<div class="choices"><button class="choice" data-value="main">Main</button><button class="choice" data-value="vista">Vista</button><button class="choice" data-value="controller">Controller</button><button class="choice" data-value="service">Service</button></div>
+<div class="feedback" aria-live="polite"></div>
+</div>
+
+<div class="callout teal"><b>Importante:</b> estas fronteras no son leyes físicas. En proyectos reales existen variantes. Lo que buscamos es poder <strong>justificar</strong> dónde colocamos cada responsabilidad y evitar que todo termine nuevamente en una sola clase.</div>
+</section>
+
+<section id="cierre">
+<div class="step">10 · Cierre</div>
+<h2>La pregunta ya cambió</h2>
+<p>Al principio preguntábamos:</p>
+<div class="callout"><b>“¿Cómo hago para que el botón Agregar funcione?”</b></div>
+<p>Ahora podemos formular una pregunta de diseño:</p>
+<div class="callout teal"><b>“¿Qué componente debería hacerse responsable de coordinar esa acción?”</b></div>
+<p>Ese cambio de pregunta marca el paso de escribir funcionalidades aisladas a <strong>diseñar una aplicación que pueda crecer</strong>.</p>
+<h3>Micro-entrega de documentación</h3>
+<p>Antes de continuar, registrá en el cuaderno o documento del proyecto:</p>
+<ul>
+<li>al menos <strong>cuatro responsabilidades</strong> que hoy tiene <code class="inline">Main</code>;</li>
+<li>una explicación de dos o tres líneas de qué entendés por <strong>modularidad</strong>;</li>
+<li>un esquema simple del recorrido futuro: <code class="inline">Main → Controller → Service → DAO</code>;</li>
+<li>una frase que complete: <strong>“Main no debería hacer el trabajo de la aplicación; debería…”</strong></li>
+</ul>
+<div class="flow"><span class="node">Main creció</span><span class="arr"> → </span><span class="node">separamos responsabilidades</span><span class="arr"> → </span><span class="node teal">próximo: ProductoController</span></div>
+<p class="lead"><b>Próximo material:</b> vamos a crear <code class="inline">ProductoController</code> y trasladar allí la coordinación de eventos que hoy está dentro de <code class="inline">Main</code>, sin cambiar lo que el usuario ve.</p>
+</section>
+
+<div class="footer">
+<div style="display:flex;align-items:center;gap:12px"><img src="assets/logo-pm.png" alt="PM"><div><b>PROFE MACÓN</b><br><span class="muted">Explora, aprende, crea.</span></div></div>
+<div class="site">profemacon.net</div>
+</div>
+</main>
+
+<div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.18)"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div>
+
+<script>
+document.querySelectorAll('.quiz').forEach(function(q){
+  q.querySelectorAll('.choice').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong');});
+      var ok=btn.dataset.value===q.dataset.answer;
+      btn.classList.add(ok?'correct':'wrong');
+      var f=q.querySelector('.feedback');
+      f.textContent=ok ? 'Correcto. Esa responsabilidad queda mejor localizada ahí.' : 'Revisá qué tipo de decisión es: presentación, coordinación, negocio o arranque.';
+      if(!ok){
+        var c=q.querySelector('.choice[data-value="'+q.dataset.answer+'"]');
+        if(c) c.classList.add('correct');
+      }
+    });
+  });
+});
+</script>
+<script src="scorm.js"></script>
+</body>
+</html>

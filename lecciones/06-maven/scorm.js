@@ -1,0 +1,1 @@
+(function(){function find(){try{var w=window;for(var i=0;i<8;i++){if(w.API)return w.API;if(w.parent===w)break;w=w.parent;}}catch(e){}return null;}var a=find();if(a){try{a.LMSInitialize("");a.LMSSetValue("cmi.core.lesson_status","completed");window.addEventListener("beforeunload",function(){try{a.LMSCommit("");a.LMSFinish("");}catch(e){}});}catch(e){}}})();

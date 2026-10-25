@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>De los diagramas al proyecto Java | Maven y paquetes</title>
+    <style>
+      :root {
+        --white: #ffffff;
+        --gray-light: #f4f2f5;
+        --gray: #b2acac;
+        --gray-mid: #949494;
+        --gray-dark: #827d7d;
+        --black: #000000;
+        --violet: #988db3;
+        --teal: #00a99d;
+        --usuario: #3b82f6;
+        --programa: #22c55e;
+        --programador: #f97316;
+        --shadow: 0 14px 35px rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Montserrat", "Segoe UI", Arial, sans-serif;
+        background: linear-gradient(135deg, var(--gray-light), var(--white));
+        color: #171717;
+        line-height: 1.65;
+      }
+
+      header {
+        background:
+          radial-gradient(
+            circle at 10% 20%,
+            rgba(152, 141, 179, 0.35),
+            transparent 34%
+          ),
+          radial-gradient(
+            circle at 90% 5%,
+            rgba(0, 169, 157, 0.22),
+            transparent 32%
+          ),
+          linear-gradient(135deg, #ffffff, #f4f2f5);
+        border-bottom: 1px solid rgba(130, 125, 125, 0.25);
+        padding: 28px 7vw 34px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 30px;
+      }
+
+      .logo-wrap {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .logo-box {
+        background: rgba(255, 255, 255, 0.86);
+        border: 1px solid rgba(152, 141, 179, 0.35);
+        border-radius: 22px;
+        padding: 10px 14px;
+        box-shadow: var(--shadow);
+      }
+
+      .logo-box img {
+        display: block;
+        height: 56px;
+        max-width: 230px;
+        object-fit: contain;
+      }
+
+      .course-tag {
+        color: var(--gray-dark);
+        font-size: 0.96rem;
+        font-weight: 600;
+      }
+
+      .hero {
+        max-width: 1120px;
+        display: grid;
+        grid-template-columns: 1.3fr 0.7fr;
+        gap: 32px;
+        align-items: center;
+      }
+
+      h1 {
+        font-size: clamp(2.1rem, 4.4vw, 4.5rem);
+        line-height: 1.05;
+        margin: 0 0 18px;
+        color: var(--black);
+        letter-spacing: -0.04em;
+      }
+
+      .accent {
+        color: var(--teal);
+      }
+
+      .subtitle {
+        font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+        max-width: 760px;
+        color: #333;
+        margin: 0 0 24px;
+      }
+
+      .hero-card {
+        background: var(--white);
+        border-radius: 28px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(178, 172, 172, 0.35);
+      }
+
+      .route {
+        display: grid;
+        gap: 10px;
+        font-weight: 700;
+      }
+
+      .route span {
+        display: block;
+        background: var(--gray-light);
+        border-left: 6px solid var(--violet);
+        border-radius: 14px;
+        padding: 10px 14px;
+      }
+
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(178, 172, 172, 0.35);
+        padding: 10px 7vw;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: var(--black);
+        font-weight: 700;
+        font-size: 0.92rem;
+        border: 1px solid rgba(152, 141, 179, 0.35);
+        border-radius: 999px;
+        padding: 8px 13px;
+        background: var(--white);
+      }
+
+      nav a:hover {
+        background: var(--violet);
+        color: var(--white);
+      }
+
+      main {
+        padding: 38px 7vw 70px;
+        max-width: 1280px;
+        margin: 0 auto;
+      }
+
+      section {
+        margin: 0 0 34px;
+      }
+
+      .section-card {
+        background: var(--white);
+        border-radius: 28px;
+        padding: clamp(22px, 3vw, 36px);
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(178, 172, 172, 0.35);
+      }
+
+      h2 {
+        margin: 0 0 16px;
+        font-size: clamp(1.45rem, 2.2vw, 2.25rem);
+        color: #1f1f1f;
+        letter-spacing: -0.02em;
+      }
+
+      h3 {
+        margin: 22px 0 10px;
+        color: #222;
+        font-size: 1.25rem;
+      }
+
+      .lead {
+        font-size: 1.08rem;
+        color: #333;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px;
+      }
+
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .mini-card {
+        border-radius: 22px;
+        padding: 20px;
+        background: var(--gray-light);
+        border: 1px solid rgba(178, 172, 172, 0.45);
+      }
+
+      .mini-card strong {
+        display: block;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+      }
+
+      .model {
+        border-top: 6px solid var(--programa);
+      }
+      .view {
+        border-top: 6px solid var(--usuario);
+      }
+      .dao {
+        border-top: 6px solid var(--violet);
+      }
+      .service {
+        border-top: 6px solid var(--programador);
+      }
+
+      pre {
+        margin: 16px 0;
+        padding: 18px 20px;
+        overflow-x: auto;
+        background: #121212;
+        color: #f4f2f5;
+        border-radius: 18px;
+        font-family: "Fira Code", "Consolas", monospace;
+        font-size: 0.94rem;
+        line-height: 1.5;
+        white-space: pre;
+        break-inside: avoid;
+      }
+
+      code {
+        font-family: "Fira Code", "Consolas", monospace;
+        background: rgba(152, 141, 179, 0.15);
+        padding: 0.12em 0.35em;
+        border-radius: 0.35em;
+      }
+
+      pre code {
+        background: transparent;
+        padding: 0;
+        border-radius: 0;
+      }
+
+      .flow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin-top: 18px;
+      }
+
+      .flow .step {
+        background: var(--black);
+        color: var(--white);
+        padding: 10px 14px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.94rem;
+      }
+
+      .flow .arrow {
+        color: var(--teal);
+        font-size: 1.35rem;
+        font-weight: 900;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 18px 0 4px;
+        overflow: hidden;
+        border-radius: 18px;
+        box-shadow: 0 0 0 1px rgba(178, 172, 172, 0.35);
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 13px 14px;
+        border-bottom: 1px solid rgba(178, 172, 172, 0.35);
+        vertical-align: top;
+      }
+
+      th {
+        background: var(--black);
+        color: var(--white);
+      }
+
+      tr:nth-child(even) td {
+        background: var(--gray-light);
+      }
+
+      .callout {
+        border-left: 7px solid var(--teal);
+        background: rgba(0, 169, 157, 0.08);
+        border-radius: 18px;
+        padding: 18px 20px;
+        margin: 20px 0;
+      }
+
+      .warning {
+        border-left-color: var(--programador);
+        background: rgba(249, 115, 22, 0.08);
+      }
+
+      .package-strip {
+        display: grid;
+        gap: 14px;
+      }
+
+      .package-row {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 16px;
+        align-items: start;
+        background: var(--gray-light);
+        border-radius: 18px;
+        padding: 14px;
+        border: 1px solid rgba(178, 172, 172, 0.4);
+      }
+
+      .package-name {
+        font-weight: 900;
+        font-size: 1.1rem;
+        color: var(--black);
+      }
+
+      .pill {
+        display: inline-block;
+        padding: 4px 9px;
+        border-radius: 999px;
+        font-weight: 800;
+        font-size: 0.84rem;
+        background: var(--violet);
+        color: var(--white);
+        margin-right: 6px;
+      }
+
+      ul,
+      ol {
+        padding-left: 1.25rem;
+      }
+
+      li {
+        margin-bottom: 0.45rem;
+      }
+
+      footer {
+        text-align: center;
+        padding: 28px 7vw;
+        color: var(--gray-dark);
+        border-top: 1px solid rgba(178, 172, 172, 0.35);
+        background: var(--white);
+        font-weight: 600;
+      }
+
+      .footer-logo {
+        height: 40px;
+        display: block;
+        margin: 0 auto 10px;
+        opacity: 0.85;
+      }
+
+      @media (max-width: 900px) {
+        .hero,
+        .grid-2,
+        .grid-4 {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .package-row {
+          grid-template-columns: 1fr;
+        }
+
+        nav {
+          position: static;
+        }
+      }
+
+      @media print {
+        nav {
+          display: none;
+        }
+
+        header,
+        main,
+        footer {
+          padding-left: 1.2cm;
+          padding-right: 1.2cm;
+        }
+
+        .section-card,
+        .hero-card,
+        .mini-card {
+          box-shadow: none;
+          break-inside: avoid;
+        }
+
+        pre {
+          white-space: pre-wrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="topbar">
+        <div class="logo-wrap">
+          <div class="logo-box">
+            <img src="LogoProfeMacon.png" alt="Logo Profe Macón" />
+          </div>
+          <div>
+            <div class="course-tag">
+              Programación Avanzada · 2.º BT TI · DGETP/UTU
+            </div>
+            <div class="course-tag">Prof. Pablo Macón · 2026</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero">
+        <div>
+          <h1>De los diagramas al <span class="accent">proyecto Java</span></h1>
+          <p class="subtitle">
+            Maven, paquetes y organización inicial del código para empezar a
+            transformar el modelo conceptual y el diagrama de clases en una
+            aplicación Java ordenada.
+          </p>
+          <div class="flow" aria-label="Recorrido de trabajo">
+            <span class="step">Problema real</span><span class="arrow">→</span>
+            <span class="step">Modelo conceptual</span
+            ><span class="arrow">→</span>
+            <span class="step">Diagrama de clases</span
+            ><span class="arrow">→</span>
+            <span class="step">Proyecto Java</span>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <h3>Idea central</h3>
+          <p>
+            Ya no vamos a escribir clases sueltas. Vamos a trabajar con una
+            estructura clara, separando responsabilidades para que el código sea
+            más fácil de entender, corregir y ampliar.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <nav>
+      <a href="#objetivo">Qué haremos</a>
+      <a href="#packages">Packages</a>
+      <a href="#maven">Maven</a>
+      <a href="#estructura">Estructura</a>
+      <a href="#capas">Capas</a>
+      <a href="#codigo">Del diagrama al código</a>
+      <a href="#ticket">Ticket</a>
+    </nav>
+
+    <main>
+      <section id="objetivo" class="section-card">
+        <h2>1. ¿Qué vamos a hacer?</h2>
+        <p class="lead">
+          Hasta ahora trabajamos en comprender problemas, reconocer objetos
+          importantes y representarlos mediante modelos y diagramas. El
+          siguiente paso es comenzar a convertir esas ideas en código Java
+          organizado.
+        </p>
+
+        <div class="callout">
+          <strong>Recorrido de trabajo:</strong> comprender el problema,
+          construir el modelo conceptual, pasar al diagrama de clases y crear un
+          proyecto Java organizado con Maven.
+        </div>
+
+        <p>
+          La idea no es escribir código “suelto”, sino empezar a trabajar como
+          se trabaja en proyectos reales: con una estructura clara, nombres
+          consistentes y responsabilidades separadas.
+        </p>
+      </section>
+
+      <section class="section-card">
+        <h2>2. ¿Por qué no alcanza con crear archivos Java sueltos?</h2>
+        <p>
+          Cuando un programa tiene una sola clase, parece suficiente guardar
+          todo en un archivo. Pero en una aplicación real aparecen varias
+          clases: algunas representan datos, otras aplican reglas, otras
+          muestran información al usuario y otras, más adelante, se comunican
+          con una base de datos.
+        </p>
+        <p>
+          Si mezclamos todo, el programa funciona al principio, pero se vuelve
+          difícil de entender, corregir y ampliar. Por eso vamos a organizar el
+          código en paquetes.
+        </p>
+      </section>
+
+      <section id="packages" class="section-card">
+        <h2>3. ¿Qué es un <em>package</em> en Java?</h2>
+        <p>
+          Un <strong>package</strong> es una forma de agrupar clases
+          relacionadas. En Java, los paquetes ayudan a ordenar el código y a
+          evitar confusiones cuando el proyecto crece.
+        </p>
+
+        <p>
+          Por ejemplo, en un sistema de biblioteca podemos tener un paquete
+          principal:
+        </p>
+        <pre><code>uy.edu.utu.biblioteca</code></pre>
+
+        <p>
+          Y dentro de ese paquete principal, otros paquetes más específicos:
+        </p>
+        <pre><code>uy.edu.utu.biblioteca.model
+uy.edu.utu.biblioteca.service
+uy.edu.utu.biblioteca.dao
+uy.edu.utu.biblioteca.view</code></pre>
+
+        <p>Cada clase debe declarar arriba a qué paquete pertenece:</p>
+        <pre><code>package uy.edu.utu.biblioteca.model;
+
+public class Libro {
+    // atributos y métodos
+}</code></pre>
+
+        <h3>Relación entre carpetas y paquetes</h3>
+        <p>
+          En Java, el <code>package</code> y la ubicación del archivo tienen que
+          coincidir. Cada punto del package se transforma en una carpeta.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Package</th>
+              <th>Carpeta correspondiente</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>uy.edu.utu.biblioteca</code></td>
+              <td><code>src/main/java/uy/edu/utu/biblioteca/</code></td>
+            </tr>
+            <tr>
+              <td><code>uy.edu.utu.biblioteca.model</code></td>
+              <td><code>src/main/java/uy/edu/utu/biblioteca/model/</code></td>
+            </tr>
+            <tr>
+              <td><code>uy.edu.utu.biblioteca.service</code></td>
+              <td><code>src/main/java/uy/edu/utu/biblioteca/service/</code></td>
+            </tr>
+            <tr>
+              <td><code>uy.edu.utu.biblioteca.view</code></td>
+              <td><code>src/main/java/uy/edu/utu/biblioteca/view/</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="maven" class="section-card">
+        <h2>4. ¿Qué es Maven?</h2>
+        <p>
+          Maven es una herramienta muy usada en proyectos Java. Para nosotros,
+          al comienzo, Maven va a cumplir una función sencilla: ayudarnos a
+          crear un proyecto ordenado y con una estructura estándar.
+        </p>
+
+        <div class="grid-2">
+          <div class="mini-card">
+            <strong>Maven no es el programa.</strong>
+            <p>
+              Maven es la herramienta que nos ayuda a ordenar, compilar y
+              preparar ese programa.
+            </p>
+          </div>
+          <div class="mini-card">
+            <strong>Más adelante será clave.</strong>
+            <p>
+              Nos permitirá agregar bibliotecas externas, por ejemplo FlatLaf o
+              un conector JDBC para base de datos.
+            </p>
+          </div>
+        </div>
+
+        <h3>¿Por qué conviene usar Maven?</h3>
+        <ul>
+          <li>
+            Nos da una estructura de carpetas común para todos los proyectos.
+          </li>
+          <li>Facilita que otro programador entienda dónde está cada cosa.</li>
+          <li>
+            Permite agregar dependencias, como FlatLaf o un conector JDBC.
+          </li>
+          <li>Nos acerca a una forma de trabajo más profesional en Java.</li>
+        </ul>
+      </section>
+
+      <section id="estructura" class="section-card">
+        <h2>5. Estructura básica de un proyecto Maven</h2>
+        <p>Un proyecto Maven tiene esta estructura general:</p>
+
+        <pre><code>biblioteca/
+│
+├── pom.xml
+│
+└── src/
+    └── main/
+        ├── java/
+        └── resources/</code></pre>
+
+        <p>Por ahora nos vamos a concentrar especialmente en dos elementos:</p>
+        <ul>
+          <li>
+            <code>pom.xml</code>: archivo de configuración del proyecto Maven.
+          </li>
+          <li>
+            <code>src/main/java</code>: carpeta donde va el código Java
+            principal.
+          </li>
+        </ul>
+
+        <h3>El archivo <code>pom.xml</code></h3>
+        <p>
+          El archivo <code>pom.xml</code> identifica el proyecto y le indica a
+          Maven cómo debe trabajar.
+        </p>
+        <pre><code>&lt;groupId&gt;uy.edu.utu&lt;/groupId&gt;
+&lt;artifactId&gt;biblioteca&lt;/artifactId&gt;
+&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;</code></pre>
+
+        <ul>
+          <li>
+            <strong>groupId:</strong> identifica al grupo, institución u
+            organización: <code>uy.edu.utu</code>.
+          </li>
+          <li>
+            <strong>artifactId:</strong> identifica el proyecto concreto:
+            <code>biblioteca</code>.
+          </li>
+          <li>
+            <strong>version:</strong> indica la versión actual del proyecto.
+          </li>
+        </ul>
+
+        <div class="warning callout">
+          <strong>En VS Code:</strong> asumimos que al crear el proyecto Maven
+          con <code>Group Id: uy.edu.utu</code> y
+          <code>Artifact Id: biblioteca</code>, la clase
+          <code>Main</code> quedará en el paquete
+          <code>uy.edu.utu.biblioteca</code>.
+        </div>
+      </section>
+
+      <section id="capas" class="section-card">
+        <h2>6. Estructura que vamos a usar en el curso</h2>
+        <pre><code>src/main/java/
+└── uy/
+    └── edu/
+        └── utu/
+            └── biblioteca/
+                ├── Main.java
+                ├── model/
+                ├── service/
+                ├── dao/
+                └── view/</code></pre>
+
+        <p>
+          Esta estructura nos permite separar responsabilidades. Cada paquete
+          tiene un propósito.
+        </p>
+
+        <div class="grid-4">
+          <div class="mini-card model">
+            <strong>model</strong>
+            <p>Clases que representan los objetos principales del problema.</p>
+            <p><span class="pill">Ej.</span> Libro, Socio, Prestamo</p>
+          </div>
+          <div class="mini-card service">
+            <strong>service</strong>
+            <p>
+              Clases que contienen reglas de negocio y operaciones del sistema.
+            </p>
+            <p><span class="pill">Ej.</span> BibliotecaService</p>
+          </div>
+          <div class="mini-card dao">
+            <strong>dao</strong>
+            <p>Clases que más adelante se comunicarán con la base de datos.</p>
+            <p><span class="pill">Ej.</span> LibroDAO, ConexionBD</p>
+          </div>
+          <div class="mini-card view">
+            <strong>view</strong>
+            <p>Clases que interactúan con el usuario.</p>
+            <p><span class="pill">Ej.</span> MenuConsola, VentanaPrincipal</p>
+          </div>
+        </div>
+
+        <h3>Resumen de responsabilidades</h3>
+        <div class="package-strip">
+          <div class="package-row">
+            <div class="package-name">Main</div>
+            <div>
+              Arranca el programa. Es la puerta de entrada de la aplicación.
+            </div>
+          </div>
+          <div class="package-row">
+            <div class="package-name">view</div>
+            <div>Habla con el usuario: muestra información y pide datos.</div>
+          </div>
+          <div class="package-row">
+            <div class="package-name">service</div>
+            <div>Aplica reglas de negocio y coordina operaciones.</div>
+          </div>
+          <div class="package-row">
+            <div class="package-name">model</div>
+            <div>
+              Representa objetos del problema: datos y comportamientos propios
+              de cada entidad.
+            </div>
+          </div>
+          <div class="package-row">
+            <div class="package-name">dao</div>
+            <div>
+              Guarda y recupera datos. Lo usaremos cuando trabajemos con base de
+              datos.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="codigo" class="section-card">
+        <h2>7. Ejemplos mínimos de código</h2>
+
+        <h3>Clase del paquete <code>model</code></h3>
+        <pre><code>package uy.edu.utu.biblioteca.model;
+
+public class Libro {
+    private String titulo;
+    private String autor;
+    private boolean disponible;
+
+    public Libro(String titulo, String autor) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.disponible = true;
+    }
+}</code></pre>
+
+        <h3>Clase del paquete <code>service</code></h3>
+        <pre><code>package uy.edu.utu.biblioteca.service;
+
+import uy.edu.utu.biblioteca.model.Libro;
+
+public class BibliotecaService {
+
+    public boolean prestarLibro(Libro libro) {
+        if (!libro.isDisponible()) {
+            return false;
+        }
+
+        libro.prestar();
+        return true;
+    }
+}</code></pre>
+
+        <h3>Clase del paquete <code>view</code></h3>
+        <pre><code>package uy.edu.utu.biblioteca.view;
+
+public class MenuConsola {
+
+    public void iniciar() {
+        System.out.println("1. Listar libros");
+        System.out.println("2. Prestar libro");
+        System.out.println("0. Salir");
+    }
+}</code></pre>
+
+        <h3>Clase <code>Main</code></h3>
+        <pre><code>package uy.edu.utu.biblioteca;
+
+import uy.edu.utu.biblioteca.view.MenuConsola;
+
+public class Main {
+    public static void main(String[] args) {
+        MenuConsola menu = new MenuConsola();
+        menu.iniciar();
+    }
+}</code></pre>
+
+        <h3>Del diagrama de clases al código</h3>
+        <ul>
+          <li>
+            Cada clase del diagrama se convierte en una clase Java dentro de
+            <code>model</code>.
+          </li>
+          <li>
+            Cada atributo del diagrama se convierte en un atributo privado.
+          </li>
+          <li>
+            Las relaciones entre clases pueden aparecer como atributos que
+            tienen como tipo otra clase.
+          </li>
+          <li>
+            Las reglas importantes del sistema se colocan en
+            <code>service</code>.
+          </li>
+          <li>La interacción con el usuario queda en <code>view</code>.</li>
+          <li>
+            El acceso a base de datos, cuando llegue, quedará en
+            <code>dao</code>.
+          </li>
+        </ul>
+
+        <pre><code>public class Prestamo {
+    private Socio socio;
+    private Libro libro;
+}</code></pre>
+
+        <p>
+          Esto significa que un préstamo no guarda solamente textos sueltos,
+          sino referencias a objetos completos: un <code>Socio</code> y un
+          <code>Libro</code>.
+        </p>
+      </section>
+
+      <section class="section-card">
+        <h2>8. Cierre: ¿por qué hacemos todo esto?</h2>
+        <p>
+          Organizar un proyecto no es un detalle decorativo. Es parte de
+          programar bien. Un programa puede funcionar aunque esté desordenado,
+          pero será difícil de mantener, corregir y ampliar.
+        </p>
+        <p>
+          A partir de ahora vamos a intentar que nuestros proyectos tengan una
+          estructura clara desde el comienzo. No se trata de hacer algo
+          complicado, sino de acostumbrarnos a una forma de trabajo más ordenada
+          y cercana a la programación profesional.
+        </p>
+
+        <div class="flow">
+          <span class="step">Pensar</span><span class="arrow">→</span>
+          <span class="step">Diseñar</span><span class="arrow">→</span>
+          <span class="step">Organizar</span><span class="arrow">→</span>
+          <span class="step">Codificar</span><span class="arrow">→</span>
+          <span class="step">Probar</span><span class="arrow">→</span>
+          <span class="step">Mejorar</span>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <img class="footer-logo" src="logo_PM.png" alt="Logo PM" />
+      Programación Avanzada – Maven y paquetes – Prof. Pablo Macón – 2026
+    </footer>
+  </body>
+</html>

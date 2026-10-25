@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="MANIFEST-PROFEMACON-PRODUCTO-CONTROLLER"
+ xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+ xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>1.2</schemaversion>
+  </metadata>
+  <organizations default="ORG-PRODUCTO-CONTROLLER">
+    <organization identifier="ORG-PRODUCTO-CONTROLLER">
+      <title>ProductoController</title>
+      <item identifier="ITEM-PRODUCTO-CONTROLLER" identifierref="RES-PRODUCTO-CONTROLLER" isvisible="true">
+        <title>Separando el control de la aplicación</title>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="RES-PRODUCTO-CONTROLLER" type="webcontent" adlcp:scormtype="sco" href="index.html">
+      <file href="index.html"/>
+      <file href="scorm.js"/>
+      <file href="assets/logo-pm.png"/>
+      <file href="assets/logo-profemacon.png"/>
+    </resource>
+  </resources>
+</manifest>

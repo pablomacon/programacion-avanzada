@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Asociaciones, agregación, composición y herencia · Profe Macón</title><style>
+:root{
+  --violet:#988db3;--violet-deep:#756a96;--teal:#00a99d;--ink:#171419;
+  --paper:#fff;--bg:#f4f2f5;--line:#ddd7df;--muted:#827d7d;--code:#171419;
+  --soft-violet:#f5f1f8;--soft-teal:#eaf8f6;--soft-warn:#faf7ef;--warn:#b68a3c;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:
+linear-gradient(rgba(152,141,179,.05) 1px,transparent 1px),
+linear-gradient(90deg,rgba(152,141,179,.05) 1px,transparent 1px),var(--bg);background-size:24px 24px}
+.wrap{max-width:1100px;margin:auto}
+.hero{padding:28px 18px 44px;background:linear-gradient(135deg,#fff,#f5f1f8 60%,#e7f8f6);border-bottom:5px solid var(--teal)}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:0 12px 34px rgba(0,0,0,.09);margin-bottom:30px}
+.brand .full{width:min(420px,68vw);height:auto}.brand .iso{width:72px;height:auto}.brand small{text-align:right;color:var(--muted);line-height:1.5}
+h1{font-size:clamp(2.1rem,5vw,4rem);line-height:1.02;margin:0 0 14px}h1 em{color:var(--violet);font-style:normal}
+.hero p{max-width:920px;line-height:1.7;font-size:1.08rem}.eyebrow{font-weight:800;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;margin-bottom:8px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.tag{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.83rem;font-weight:700}
+nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow:auto;padding:9px 14px}nav a{text-decoration:none;color:var(--ink);white-space:nowrap;padding:8px 10px;border-radius:8px;font-size:.84rem}nav a:hover{background:#f1edf5}
+main{max-width:1100px;margin:auto;padding:32px 18px 70px}
+section{scroll-margin-top:66px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:24px;box-shadow:0 12px 34px rgba(0,0,0,.08)}
+.step{color:var(--violet);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.8rem}
+h2{font-size:clamp(1.5rem,3vw,2.15rem);margin:8px 0 12px}h3{margin:22px 0 9px}p,li{line-height:1.65}.lead{font-size:1.06rem;color:#403b49}.muted{color:var(--muted)}
+code{font-family:Consolas,"Courier New",monospace}code.inline{background:#f1edf5;padding:2px 6px;border-radius:6px}
+pre{margin:12px 0 0;padding:17px;color:#f8f7fa;background:var(--code);overflow:auto;border-radius:14px;font-family:Consolas,"Courier New",monospace;font-size:.88rem;line-height:1.55;white-space:pre}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:850px){.grid3,.grid4{grid-template-columns:1fr 1fr}}@media(max-width:680px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.brand small{display:none}}
+.card{border:1px solid var(--line);border-radius:14px;background:#fcfbfd;padding:16px}.card h3{margin-top:0}.card strong.big{display:block;color:var(--violet-deep);font-size:1.1rem;margin-bottom:5px}
+.callout{border-left:4px solid var(--violet);background:var(--soft-violet);padding:15px 17px;border-radius:12px;margin:16px 0}.callout.teal{border-color:var(--teal);background:var(--soft-teal)}.callout.warn{border-color:var(--warn);background:var(--soft-warn)}
+.flow{border:1px dashed #b7afbc;background:#fdfcfe;border-radius:15px;padding:18px;text-align:center;overflow:auto}.flow .node{display:inline-block;border:2px solid var(--violet);border-radius:10px;padding:9px 13px;background:#fff;font-weight:700;margin:4px}.flow .teal{border-color:var(--teal);background:var(--soft-teal)}.flow .warn{border-color:var(--warn);background:var(--soft-warn)}.arr{color:#777;font-size:1.25rem;padding:0 3px}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{background:#f3eff6}
+details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fdfcfe;margin:12px 0}summary{cursor:pointer;font-weight:700}
+.responsibility{display:flex;gap:11px;align-items:flex-start;border-bottom:1px solid #eee8ef;padding:10px 0}.responsibility:last-child{border-bottom:0}.badge{min-width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--soft-violet);color:var(--violet-deep);font-weight:800}
+.compare{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:12px}.compare .mid{text-align:center;font-size:2rem;color:var(--teal)}@media(max-width:760px){.compare{grid-template-columns:1fr}.compare .mid{transform:rotate(90deg)}}
+.arch{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fcfbfd}.layer{border:2px solid var(--violet);border-radius:12px;padding:12px;text-align:center;font-weight:800;background:#fff;margin:8px auto;max-width:560px}.layer.future{border-style:dashed;color:#5d5865}.layer.main{border-color:var(--teal);background:var(--soft-teal)}.down{text-align:center;color:#827d7d;font-size:1.4rem}
+.quiz{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:#fcfbfd}.quiz p{margin-top:0;font-weight:700}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #cfc7d3;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.choice:hover{background:#f5f1f8}.choice.correct{border-color:var(--teal);background:var(--soft-teal)}.choice.wrong{border-color:#b56d6d;background:#fbefef}.feedback{margin:10px 0 0;min-height:1.4em;color:#4d4753}
+.footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
+hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
+
+.code-label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:16px;font-size:.8rem;font-weight:800;color:var(--violet);text-transform:uppercase;letter-spacing:.05em}
+.path{font-family:Consolas,"Courier New",monospace;background:#f1edf5;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0;color:#403b49}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}.timeline .card{position:relative;padding-top:38px}.timeline .num{position:absolute;top:12px;left:14px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--violet);color:#fff;font-weight:800;font-size:.75rem}
+@media(max-width:820px){.timeline{grid-template-columns:1fr 1fr}}@media(max-width:520px){.timeline{grid-template-columns:1fr}}
+.goodbad{display:grid;grid-template-columns:1fr 1fr;gap:14px}.goodbad .good{border-top:4px solid var(--teal)}.goodbad .bad{border-top:4px solid var(--warn)}@media(max-width:680px){.goodbad{grid-template-columns:1fr}}
+
+/* Recursos visuales y legibilidad de la unidad */
+figure.uml{margin:18px 0 22px;background:white;border:1px solid var(--line);border-radius:16px;padding:14px;overflow:auto}
+figure.uml img{display:block;margin:auto;max-width:100%;width:auto;height:auto;max-height:520px;object-fit:contain}
+figure.uml figcaption{margin:12px 6px 0;color:#5c5562;font-size:.93rem;line-height:1.5}
+.lesson-number{color:var(--teal);font-weight:800;font-size:.85rem;letter-spacing:.06em}
+.model-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.model-steps>div{padding:18px;border:1px solid var(--line);background:var(--soft-violet);border-radius:12px}.model-steps b{display:block;color:var(--violet-deep);margin-bottom:6px}
+@media(max-width:760px){.model-steps{grid-template-columns:1fr}section{padding:20px 16px}.brand .full{max-width:70vw}}
+@media print{nav,.quiz,#scormProgress{display:none!important}body{background:white}section{box-shadow:none;break-inside:avoid}.hero{padding-bottom:12px}figure.uml img{max-height:430px}}
+
+.object-window{padding:16px;background:#faf8fc;border:1px solid var(--line);border-radius:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:15px 0}
+.object-card{background:white;border:2px solid var(--violet);border-radius:12px;overflow:hidden}
+.object-card header{padding:11px 13px;background:var(--soft-violet);font-weight:800;color:#574b74;font-family:Consolas,monospace}
+.object-card ul{list-style:none;padding:10px 13px;margin:0;line-height:1.7;font: .9rem/1.65 Consolas,monospace}
+.object-card li{border-bottom:1px dashed #eee;padding:4px 0}.object-card li:last-child{border:0}
+.important-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.important-row .card{border-top:4px solid var(--teal)}
+.photo-note{margin:14px 0;border-radius:12px;background:#f0faf8;padding:14px 17px;border-left:4px solid var(--teal)}
+@media(max-width:680px){.object-window,.important-row{grid-template-columns:1fr}}
+@media print{.object-window,.flow,.card{break-inside:avoid}}
+
+.relationship{display:grid;grid-template-columns:1fr auto 1fr;gap:13px;align-items:center;margin:20px 0}
+.relationship .entity{border:2px solid var(--violet);border-radius:12px;padding:18px 12px;background:#fff;text-align:center;font-weight:bold}
+.relationship .relation{text-align:center;color:#5f507a;font-weight:bold;font-size:.9rem}
+.microcaption{font-size:.85rem;color:#665e69;margin:8px 0 20px}
+.compare-relations{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.compare-relations>.card{border-top:4px solid var(--violet)}
+.compare-relations>.card:nth-child(2){border-top-color:var(--teal)}
+.compare-relations>.card:nth-child(3){border-top-color:#dc9d4a}
+.lifecycle{padding:18px 20px;background:#f5f1f8;border-radius:14px;border:1px solid var(--line);margin:15px 0}
+.example-label{display:inline-block;background:#e9f6f3;padding:5px 11px;border-radius:16px;color:#007f76;font-weight:700;font-size:.85rem}
+@media(max-width:750px){.compare-relations{grid-template-columns:1fr}.relationship{grid-template-columns:1fr}.relationship .relation{padding:4px}}
+
+.uml-stage{margin:22px 0 30px;border:1px solid var(--line);border-radius:15px;background:#fff;overflow:hidden;box-shadow:0 8px 24px rgba(23,20,25,.06)}.uml-stage img{display:block;width:100%;height:auto;object-fit:contain;background:white;padding:16px;box-sizing:border-box}.uml-stage figcaption{padding:12px 18px;background:#f3eff6;color:#39323d;font-size:.93rem;line-height:1.55;border-top:1px solid var(--line)}.uml-stage figcaption code{font-size:.92em}@media(max-width:650px){.uml-stage img{padding:6px}.uml-stage figcaption{padding:10px 12px}}
+</style></head><body><a class="curso-regreso" href="../../index.html#unidad-01" aria-label="Volver al índice de la Unidad 1">← Volver a Unidad 1</a>
+<style>.curso-regreso{position:fixed;bottom:20px;right:20px;z-index:9999;display:block;background:#171419;color:#fff!important;font:700 14px/1.35 Arial,Helvetica,sans-serif;text-decoration:none;padding:12px 16px;border-radius:30px;box-shadow:0 8px 25px #17141945;border:2px solid #00a99d}.curso-regreso:hover,.curso-regreso:focus-visible{background:#756a96;color:#fff!important;outline:2px solid #fff}@media print{.curso-regreso{display:none}}</style><header class="hero"><div class="wrap"><div class="brand"><img alt="Profe Macón" class="full" src="assets/logo-profemacon.png"/><small><b>PROGRAMACIÓN AVANZADA</b><br/>2.º BT TI · DGETP/UTU · 2026<br/>CET1 · POO en Java</small></div><div class="eyebrow">UNIDAD 01 · INTRODUCCIÓN A LA POO · LECCIÓN 03</div><h1>Relaciones entre objetos <em>y herencia</em></h1><p>En «La Viñeta», comprender cómo colaboran Cliente, Venta, Producto y DetalleVenta nos permite diseñar relaciones correctas. Luego veremos qué cambia cuando una clase es una especialización de otra.</p><div class="tags"><span class="tag">Asociaciones</span><span class="tag">Agregación</span><span class="tag">Composición</span><span class="tag">Herencia</span><span class="tag">CET1</span></div></div></header><nav aria-label="Apartados de la lección"><div class="wrap"><a href="#partida">Nuestros UML</a><a href="#asociacion">Asociación</a><a href="#agregacion">Agregación</a><a href="#composicion">Composición</a><a href="#distinguir">Comparación</a><a href="#herencia">Herencia</a><a href="#modelo">Decisiones</a><a href="#cierre">Comprobación</a></div></nav><main><section id="partida"><div class="step">01 · El punto de partida</div><h2>Volvemos al modelo de la tienda</h2><p class="lead">En los dos SCORM anteriores aprendimos a identificar entidades, definir atributos y distribuir responsabilidades. Ahora necesitamos precisar <b>qué significa cada línea que une nuestras clases</b>.</p><div class="grid2"><figure class="uml"><img alt="UML conceptual de Cliente, Venta, Producto y clase de asociación DetalleVenta" src="assets/uml-conceptual.png"/><figcaption>Diagrama conceptual aportado: representa la venta y su detalle como clase de asociación.</figcaption></figure><figure class="uml"><img alt="UML de diseño con Cliente, Venta, Producto, DetalleVenta y atributos" src="assets/uml-diseno.png"/><figcaption>Diagrama de diseño aportado: muestra atributos y relaciones cercanas a la implementación.</figcaption></figure></div><div class="callout teal"><b>Observación importante:</b> en nuestros dibujos aparecen rombos y una clase de asociación. <b>No debemos interpretar automáticamente un rombo como prueba de que existe composición</b>. La semántica de agregación o composición se justifica con reglas de pertenencia y ciclo de vida; el material original se conserva sin alterar.</div><p>La pregunta que orienta esta lección es: <b>¿un objeto simplemente conoce a otro, lo agrupa o es responsable de su existencia?</b></p></section>
+<section id="asociacion"><div class="step">02 · Relación general</div><h2>Asociación: un objeto conoce a otro</h2><p>Una <b>asociación</b> representa un vínculo entre objetos. No afirma necesariamente quién los crea, quién es su propietario o cuánto tiempo viven.</p><div class="relationship"><div class="entity">Cliente</div><div class="relation">realiza →<br/>asociación</div><div class="entity">Venta</div></div><p>En la tienda una venta corresponde a un cliente. En una implementación Java podemos representarlo con un atributo que guarde una referencia a un objeto de la clase <code class="inline">Cliente</code>.</p><div class="code-label">Venta.java — referencia a otra clase</div><pre><code>public class Venta {
+    private int numero;
+    private Cliente cliente;
+
+    public Venta(int numero, Cliente cliente) {
+        this.numero = numero;
+        this.cliente = cliente;
+    }
+}</code></pre><div class="callout"><b>Pregunta conceptual:</b> si se elimina el registro de una venta, ¿debe desaparecer el cliente del sistema? <b>No.</b> Esa independencia ayuda a entender por qué esta relación es una asociación, no una composición.</div><h3>Multiplicidad: ¿cuántos objetos participan?</h3><p>En un sistema real debemos determinar, por ejemplo, si un cliente puede realizar muchas ventas y si cada venta corresponde a un único cliente. En UML esto suele expresarse con <code class="inline">1</code>, <code class="inline">0..1</code> o <code class="inline">0..*</code>.</p><p>Los diagramas proporcionados no explicitan todas las multiplicidades, por lo que las siguientes afirmaciones se toman como <b>supuestos didácticos del caso</b>, no como datos ya escritos en el UML.</p></section>
+<section id="agregacion"><div class="step">03 · Relación todo–parte débil</div><h2>Agregación: agrupar sin depender para existir</h2><p>La <b>agregación compartida</b> es una asociación todo–parte: el «todo» reúne elementos que pueden existir independientemente de él. En UML se representa con un <b>rombo blanco</b> junto al todo.</p><div class="relationship"><div class="entity">Catálogo</div><div class="relation">◇────<br/>agrupa</div><div class="entity">Producto</div></div><span class="example-label">Ejemplo propuesto para ampliar «La Viñeta»</span><p>Un <code class="inline">Catalogo</code> puede agrupar productos, pero eliminar ese catálogo no tendría por qué eliminar cada producto del inventario. Es un ejemplo pedagógico nuevo, no una clase presente en los UML originales.</p><div class="code-label">Catalogo.java — ejemplo de agrupación</div><pre><code>import java.util.List;
+
+public class Catalogo {
+    private String nombre;
+    private List&lt;Producto&gt; productos;
+
+    public Catalogo(String nombre, List&lt;Producto&gt; productos) {
+        this.nombre = nombre;
+        this.productos = productos;
+    }
+}</code></pre><p>El atributo <code class="inline">List&lt;Producto&gt;</code> anticipa la siguiente lección, pero aquí lo importante no es su funcionamiento, sino <b>qué significa la relación</b>. Una lista por sí sola <b>no demuestra</b> que exista agregación.</p><div class="callout warn"><b>Precisión UML:</b> los modelos contemporáneos utilizan la agregación compartida con cautela porque su significado formal es menos fuerte que el de composición. Cuando no agrega información útil, una asociación simple suele ser suficiente.</div></section>
+<section id="composicion"><div class="step">04 · Relación todo–parte fuerte</div><h2>Composición: partes que pertenecen a un todo</h2><p>Una <b>composición</b> es una relación todo–parte fuerte. Cada parte pertenece como máximo a un todo compuesto a la vez, y el todo es responsable de su ciclo de vida dentro del modelo.</p><div class="relationship"><div class="entity">Venta</div><div class="relation">◆────<br/>contiene</div><div class="entity">DetalleVenta</div></div><p>Para «La Viñeta», podemos <b>decidir</b> que cada detalle es un renglón de una venta concreta: no debe pertenecer simultáneamente a otra venta. Si eliminamos definitivamente una venta, sus detalles dejan de tener sentido en este modelo.</p><div class="code-label">Venta.java — diseño posible con composición</div><pre><code>import java.util.ArrayList;
+import java.util.List;
+
+public class Venta {
+    private List&lt;DetalleVenta&gt; detalles;
+
+    public Venta() {
+        detalles = new ArrayList&lt;&gt;();
+    }
+
+    public void agregarProducto(Producto producto,
+                                int cantidad,
+                                double precioUnitario) {
+        DetalleVenta detalle =
+                new DetalleVenta(producto, cantidad, precioUnitario);
+        detalles.add(detalle);
+    }
+}</code></pre><p>En este diseño <code class="inline">Venta</code> crea el <code class="inline">DetalleVenta</code>. Esa decisión ayuda a expresar el control del todo sobre la parte, aunque <b>composición no significa simplemente «usar new dentro de la clase»</b>. La regla sobre propiedad y vida de las partes es lo fundamental.</p><div class="lifecycle"><b>Ciclo de vida en el modelo elegido:</b><br/>Venta creada → agrega detalles → conserva detalles → venta eliminada definitivamente → sus detalles dejan de pertenecer al modelo.</div><div class="callout teal"><b>¿Y Producto?</b> El producto del catálogo puede aparecer en muchas ventas diferentes; no debería desaparecer cuando se elimina un <code class="inline">DetalleVenta</code>. El detalle se asocia al producto, pero no lo posee mediante composición.</div></section>
+<section id="distinguir"><div class="step">05 · Comparar sin confundir</div><h2>Tres relaciones, tres preguntas diferentes</h2><div class="compare-relations"><div class="card"><h3>Asociación</h3><p><b>¿Se conocen?</b></p><p>Cliente ↔ Venta</p><p>No impone una relación de ciclo de vida.</p><p><b>UML:</b> línea simple.</p></div><div class="card"><h3>Agregación</h3><p><b>¿Uno agrupa a otros independientes?</b></p><p>Catálogo ◇— Producto</p><p>La parte puede existir fuera del conjunto.</p><p><b>UML:</b> rombo blanco.</p></div><div class="card"><h3>Composición</h3><p><b>¿La parte pertenece fuertemente a un todo?</b></p><p>Venta ◆— DetalleVenta</p><p>La parte depende del ciclo de vida del todo definido por el modelo.</p><p><b>UML:</b> rombo negro.</p></div></div><table><thead><tr><th>Pregunta</th><th>Asociación</th><th>Agregación</th><th>Composición</th></tr></thead><tbody><tr><td>¿Expresa todo–parte?</td><td>No necesariamente</td><td>Sí</td><td>Sí</td></tr><tr><td>¿Puede la parte tener vida independiente?</td><td>La relación no lo define</td><td>Sí</td><td>Depende del todo en el modelo</td></tr><tr><td>¿Símbolo UML?</td><td>Línea</td><td>◇</td><td>◆</td></tr></tbody></table><div class="callout warn"><b>Evita este error:</b> declarar un atributo, una referencia o una <code class="inline">ArrayList</code> no convierte automáticamente la relación en agregación o composición. Primero razonamos sobre el problema; después elegimos cómo programarlo.</div></section>
+<section id="herencia">
+<div class="step">06 · Una relación diferente</div>
+<h2>Herencia: cuando el modelo necesita evolucionar</h2>
+<p>Las asociaciones describen vínculos entre objetos. La <b>herencia</b> expresa que un tipo de objeto <b>es un</b> tipo más específico de otro. Pero no empezamos dibujando flechas: primero aparece un problema de diseño.</p>
+<div class="callout"><b>El nuevo requerimiento de La Viñeta:</b> además de registrar clientes, ahora necesitamos registrar a los <b>vendedores</b> y saber quién atendió cada venta. Vamos a revisar nuestro modelo tres veces, justificando cada cambio.</div>
+<h3>Primer intento · Sin herencia: repetimos información</h3>
+<p>Agregamos una clase <code class="inline">Vendedor</code> y la relacionamos con <code class="inline">Venta</code>. Funciona, pero <code class="inline">Cliente</code> y <code class="inline">Vendedor</code> repiten <code class="inline">cedula</code>, <code class="inline">nombre</code> y <code class="inline">correo</code>. Si cambiamos cómo representamos esos datos, tendremos que revisar ambas clases.</p>
+<figure class="uml-stage"><img alt="Primer modelo UML: Cliente y Vendedor son clases independientes. Ambas repiten cédula, nombre y correo; Vendedor también tiene teléfono. Cada una se relaciona con Venta." loading="lazy" src="assets/uml-sin-herencia.png"/><figcaption><b>Modelo 1 · Sin herencia.</b> Agregamos al vendedor, pero aparecen atributos duplicados.</figcaption></figure>
+<h3>Segundo intento · Herencia: extraemos lo común</h3>
+<p>Identificamos lo que comparten ambas clases y creamos <code class="inline">Persona</code> con <code class="inline">cedula</code>, <code class="inline">nombre</code> y <code class="inline">correo</code>. Después hacemos que <code class="inline">Cliente</code> y <code class="inline">Vendedor</code> hereden de <code class="inline">Persona</code>. El teléfono queda en <code class="inline">Vendedor</code>, porque es su dato específico.</p>
+<figure class="uml-stage"><img alt="Segundo modelo UML: Persona contiene los atributos cédula, nombre y correo. Cliente y Vendedor heredan de Persona; Vendedor añade teléfono. La venta conserva referencias a Cliente y Vendedor." loading="lazy" src="assets/uml-herencia-1.png"/><figcaption><b>Modelo 2 · Herencia inicial.</b> Compartimos estado mediante una superclase y dos subclases.</figcaption></figure>
+<div class="code-label">Persona.java y Vendedor.java — fragmentos del segundo diseño</div>
+<pre><code>public class Persona {
+    private long cedula;
+    private String nombre;
+    private String correo;
+
+    public Persona(long cedula, String nombre, String correo) {
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.correo = correo;
+    }
+}
+
+public class Vendedor extends Persona {
+    private long telefono;
+
+    public Vendedor(long cedula, String nombre,
+                    String correo, long telefono) {
+        super(cedula, nombre, correo);
+        this.telefono = telefono;
+    }
+}</code></pre>
+<div class="grid2"><div class="card"><h3><code class="inline">extends</code></h3><p>Expresa la relación <b>«es un»</b>: un vendedor es una persona. En UML, el triángulo vacío apunta hacia la superclase <code class="inline">Persona</code>.</p></div><div class="card"><h3><code class="inline">super(...)</code></h3><p>Invoca el constructor de <code class="inline">Persona</code> para inicializar sus datos comunes. No copia los atributos en <code class="inline">Vendedor</code>.</p></div></div>
+<h3>Tercer intento · Simplificamos: ¿necesitamos Cliente como subclase?</h3>
+<p>Al revisar el modelo advertimos que <code class="inline">Cliente</code> <b>no tiene atributos ni comportamientos propios</b> en este sistema. Solo hereda lo que ya define <code class="inline">Persona</code>. Por ahora, mantener una subclase vacía agrega complejidad sin resolver una necesidad real.</p>
+<p>Decidimos <b>eliminar la clase <code class="inline">Cliente</code></b> y representar a los clientes mediante objetos <code class="inline">Persona</code>. Conservamos <code class="inline">Vendedor extends Persona</code>, porque su teléfono y su función específica justifican una especialización en este modelo.</p>
+<figure class="uml-stage"><img alt="Tercer modelo UML: desaparece la clase Cliente. Venta tiene un atributo cliente de tipo Persona y un atributo vendedor de tipo Vendedor. Vendedor hereda de Persona y añade teléfono." loading="lazy" src="assets/uml-herencia-2.png"/><figcaption><b>Modelo 3 · Diseño elegido para esta etapa.</b> <code>Venta</code> referencia a <code>Persona</code> como cliente y a <code>Vendedor</code> como vendedor.</figcaption></figure>
+<div class="code-label">Venta.java — referencias en el diseño final</div>
+<pre><code>public class Venta {
+    private Persona cliente;
+    private Vendedor vendedor;
+
+    // Los demás atributos y métodos se incorporan
+    // a partir del modelo de la tienda.
+}</code></pre>
+<div class="callout teal"><b>Idea clave:</b> la herencia no sirve simplemente para reducir líneas de código. Sirve para representar una especialización real. Y tampoco es obligatorio crear una subclase solo porque exista un rol distinto: una persona puede actuar como cliente sin que necesitemos una clase <code class="inline">Cliente</code> en esta etapa.</div>
+<h3>Herencia no es asociación</h3>
+<p>Un <code class="inline">Vendedor</code> <b>es una</b> <code class="inline">Persona</code>; por eso hereda de ella. En cambio, una <code class="inline">Venta</code> <b>tiene un</b> cliente y un vendedor: esas son relaciones entre objetos, no relaciones de herencia.</p>
+<p><b>Decisión abierta:</b> si más adelante los clientes necesitan reglas o comportamientos específicos, podremos revisar la conveniencia de recuperar <code class="inline">Cliente</code> como clase especializada. El diseño responde a los requerimientos presentes, no a todas las posibilidades futuras.</p>
+</section>
+<section id="modelo"><div class="step">07 · Decidir antes de programar</div><h2>El UML nos obliga a justificar nuestras elecciones</h2><div class="grid2"><div class="card"><h3>En nuestros UML de partida</h3><p>Se representan Cliente, Venta, Producto y DetalleVenta. La asociación entre Venta y Producto lleva información propia en DetalleVenta.</p><p>Conservamos las imágenes sin modificar símbolos ni inventar multiplicidades dibujadas.</p></div><div class="card"><h3>En una versión posterior del diseño</h3><p>Podemos establecer una composición Venta–DetalleVenta, una asociación DetalleVenta–Producto y, si el dominio lo necesita, introducir tipos generales y especializados mediante herencia.</p><p>Estas son <b>decisiones justificadas</b>, no correcciones silenciosas de los diagramas originales.</p></div></div><div class="callout teal"><b>Regla útil:</b> antes de elegir una flecha UML, explica la relación en una oración del negocio. Si no puedes explicar la relación, todavía falta análisis.</div><h3>Progresión del curso</h3><p>Hoy estudiaremos <b>la semántica de las relaciones y la herencia</b>. En el siguiente SCORM aprenderemos a representar asociaciones múltiples mediante <code class="inline">List</code> y a elegir entre <code class="inline">ArrayList</code> y <code class="inline">LinkedList</code>. Allí introduciremos también el polimorfismo de colecciones y una primera mirada a <code class="inline">Set</code>, <code class="inline">Map</code>, estructuras ordenadas y métodos de ordenación.</p></section>
+<section id="cierre"><div class="step">08 · Cierre y verificación</div><h2>Comprueba si distingues las relaciones</h2><div class="quiz" data-answer="b"><p><b>Situación 1:</b> Una venta utiliza un cliente que permanece en el sistema cuando se elimina esa venta. ¿Qué relación describe mejor este vínculo?</p><div class="choices"><button class="choice" data-value="a" type="button">Composición</button><button class="choice" data-value="b" type="button">Asociación</button><button class="choice" data-value="c" type="button">Herencia</button></div><div aria-live="polite" class="feedback"></div></div><div class="quiz" data-answer="c"><p><b>Situación 2:</b> Un detalle no tiene sentido sin la venta a la que pertenece y la aplicación decide que una venta controla la vida de sus detalles. ¿Qué relación estamos modelando?</p><div class="choices"><button class="choice" data-value="a" type="button">Herencia</button><button class="choice" data-value="b" type="button">Asociación sin pertenencia</button><button class="choice" data-value="c" type="button">Composición</button></div><div aria-live="polite" class="feedback"></div></div><div class="quiz" data-answer="a"><p><b>Situación 3:</b> En una ampliación justificada del sistema, Cliente especializa Persona. ¿Qué palabra Java expresa esa relación?</p><div class="choices"><button class="choice" data-value="a" type="button">extends</button><button class="choice" data-value="b" type="button">new</button><button class="choice" data-value="c" type="button">import</button></div><div aria-live="polite" class="feedback"></div></div><div class="callout"><b>Microentrega de documentación:</b> redacta tres reglas de negocio que justifiquen las relaciones Venta–Cliente, Venta–DetalleVenta y DetalleVenta–Producto. Luego escribe una oración para explicar por qué Venta no debe heredar de Cliente.</div><p><b>Siguiente:</b> SCORM 04 — Colecciones Java, interfaz <code class="inline">List</code>, implementaciones, otras colecciones y polimorfismo.</p></section><div class="footer"><div style="display:flex;align-items:center;gap:12px"><img alt="PM" src="assets/logo-pm.png"/><div><b>PROFE MACÓN</b><br/><span class="muted">Explora, aprende, crea.</span></div></div><div class="site">profemacon.net</div></div></main><div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div><script>document.querySelectorAll('.quiz').forEach(function(q){q.querySelectorAll('.choice').forEach(function(btn){btn.addEventListener('click',function(){q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong')});var ok=btn.dataset.value===q.dataset.answer;btn.classList.add(ok?'correct':'wrong');q.querySelector('.feedback').textContent=ok?'Correcto. Has identificado la relación por su significado en el modelo.':'Revisa qué ocurre con la independencia de los objetos y sus ciclos de vida.'})})});</script><script src="scorm.js"></script></body></html>

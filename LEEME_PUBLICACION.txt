@@ -1,0 +1,15 @@
+PROGRAMACIÓN AVANZADA 2026 — WEB ESTÁTICA
+
+Publicación: subir el CONTENIDO de esta carpeta a la raíz del repositorio con GitHub Pages (Deploy from a branch, main, /root), o alojarla en cualquier servidor estático.
+
+Unidad 1:
+01 Análisis y diseño OO — SCORM original
+02 Clases y objetos — SCORM original
+03 Relaciones y herencia — SCORM REVISADO con los 3 UML de vendedores
+04 Colecciones y polimorfismo — SCORM original
+05 Clases abstractas y sobrescritura — SCORM original
+06 Maven — adaptación HTML del material introductorio YA PRESENTE en el sitio original; NO es el SCORM original completo de Maven. Reemplazar lecciones/06-maven/ por los archivos del SCORM original cuando esté disponible.
+
+Las unidades 2, 3 y 4 se conservan. No requiere Astro ni npm.
+Los SCORM pueden abrirse de forma estática; el progreso LMS sólo se registra en CREA.
+No se publicaron cambios en GitHub desde esta entrega.

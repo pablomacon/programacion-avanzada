@@ -1,0 +1,197 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Clases, objetos y responsabilidades · Tienda de Cómics · Profe Macón</title><style>
+:root{
+  --violet:#988db3;--violet-deep:#756a96;--teal:#00a99d;--ink:#171419;
+  --paper:#fff;--bg:#f4f2f5;--line:#ddd7df;--muted:#827d7d;--code:#171419;
+  --soft-violet:#f5f1f8;--soft-teal:#eaf8f6;--soft-warn:#faf7ef;--warn:#b68a3c;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:
+linear-gradient(rgba(152,141,179,.05) 1px,transparent 1px),
+linear-gradient(90deg,rgba(152,141,179,.05) 1px,transparent 1px),var(--bg);background-size:24px 24px}
+.wrap{max-width:1100px;margin:auto}
+.hero{padding:28px 18px 44px;background:linear-gradient(135deg,#fff,#f5f1f8 60%,#e7f8f6);border-bottom:5px solid var(--teal)}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 18px;box-shadow:0 12px 34px rgba(0,0,0,.09);margin-bottom:30px}
+.brand .full{width:min(420px,68vw);height:auto}.brand .iso{width:72px;height:auto}.brand small{text-align:right;color:var(--muted);line-height:1.5}
+h1{font-size:clamp(2.1rem,5vw,4rem);line-height:1.02;margin:0 0 14px}h1 em{color:var(--violet);font-style:normal}
+.hero p{max-width:920px;line-height:1.7;font-size:1.08rem}.eyebrow{font-weight:800;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;margin-bottom:8px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.tag{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.83rem;font-weight:700}
+nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;overflow:auto;padding:9px 14px}nav a{text-decoration:none;color:var(--ink);white-space:nowrap;padding:8px 10px;border-radius:8px;font-size:.84rem}nav a:hover{background:#f1edf5}
+main{max-width:1100px;margin:auto;padding:32px 18px 70px}
+section{scroll-margin-top:66px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px;margin-bottom:24px;box-shadow:0 12px 34px rgba(0,0,0,.08)}
+.step{color:var(--violet);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.8rem}
+h2{font-size:clamp(1.5rem,3vw,2.15rem);margin:8px 0 12px}h3{margin:22px 0 9px}p,li{line-height:1.65}.lead{font-size:1.06rem;color:#403b49}.muted{color:var(--muted)}
+code{font-family:Consolas,"Courier New",monospace}code.inline{background:#f1edf5;padding:2px 6px;border-radius:6px}
+pre{margin:12px 0 0;padding:17px;color:#f8f7fa;background:var(--code);overflow:auto;border-radius:14px;font-family:Consolas,"Courier New",monospace;font-size:.88rem;line-height:1.55;white-space:pre}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:850px){.grid3,.grid4{grid-template-columns:1fr 1fr}}@media(max-width:680px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.brand small{display:none}}
+.card{border:1px solid var(--line);border-radius:14px;background:#fcfbfd;padding:16px}.card h3{margin-top:0}.card strong.big{display:block;color:var(--violet-deep);font-size:1.1rem;margin-bottom:5px}
+.callout{border-left:4px solid var(--violet);background:var(--soft-violet);padding:15px 17px;border-radius:12px;margin:16px 0}.callout.teal{border-color:var(--teal);background:var(--soft-teal)}.callout.warn{border-color:var(--warn);background:var(--soft-warn)}
+.flow{border:1px dashed #b7afbc;background:#fdfcfe;border-radius:15px;padding:18px;text-align:center;overflow:auto}.flow .node{display:inline-block;border:2px solid var(--violet);border-radius:10px;padding:9px 13px;background:#fff;font-weight:700;margin:4px}.flow .teal{border-color:var(--teal);background:var(--soft-teal)}.flow .warn{border-color:var(--warn);background:var(--soft-warn)}.arr{color:#777;font-size:1.25rem;padding:0 3px}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{background:#f3eff6}
+details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fdfcfe;margin:12px 0}summary{cursor:pointer;font-weight:700}
+.responsibility{display:flex;gap:11px;align-items:flex-start;border-bottom:1px solid #eee8ef;padding:10px 0}.responsibility:last-child{border-bottom:0}.badge{min-width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--soft-violet);color:var(--violet-deep);font-weight:800}
+.compare{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;gap:12px}.compare .mid{text-align:center;font-size:2rem;color:var(--teal)}@media(max-width:760px){.compare{grid-template-columns:1fr}.compare .mid{transform:rotate(90deg)}}
+.arch{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fcfbfd}.layer{border:2px solid var(--violet);border-radius:12px;padding:12px;text-align:center;font-weight:800;background:#fff;margin:8px auto;max-width:560px}.layer.future{border-style:dashed;color:#5d5865}.layer.main{border-color:var(--teal);background:var(--soft-teal)}.down{text-align:center;color:#827d7d;font-size:1.4rem}
+.quiz{border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:#fcfbfd}.quiz p{margin-top:0;font-weight:700}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #cfc7d3;background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.choice:hover{background:#f5f1f8}.choice.correct{border-color:var(--teal);background:var(--soft-teal)}.choice.wrong{border-color:#b56d6d;background:#fbefef}.feedback{margin:10px 0 0;min-height:1.4em;color:#4d4753}
+.footer{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:15px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:16px}.footer img{width:76px;height:auto}.footer .site{color:var(--teal);font-weight:800}
+hr.sep{border:0;border-top:1px solid var(--line);margin:22px 0}.nowrap{white-space:nowrap}
+
+.code-label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:16px;font-size:.8rem;font-weight:800;color:var(--violet);text-transform:uppercase;letter-spacing:.05em}
+.path{font-family:Consolas,"Courier New",monospace;background:#f1edf5;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0;color:#403b49}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}.timeline .card{position:relative;padding-top:38px}.timeline .num{position:absolute;top:12px;left:14px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--violet);color:#fff;font-weight:800;font-size:.75rem}
+@media(max-width:820px){.timeline{grid-template-columns:1fr 1fr}}@media(max-width:520px){.timeline{grid-template-columns:1fr}}
+.goodbad{display:grid;grid-template-columns:1fr 1fr;gap:14px}.goodbad .good{border-top:4px solid var(--teal)}.goodbad .bad{border-top:4px solid var(--warn)}@media(max-width:680px){.goodbad{grid-template-columns:1fr}}
+
+/* Recursos visuales y legibilidad de la unidad */
+figure.uml{margin:18px 0 22px;background:white;border:1px solid var(--line);border-radius:16px;padding:14px;overflow:auto}
+figure.uml img{display:block;margin:auto;max-width:100%;width:auto;height:auto;max-height:520px;object-fit:contain}
+figure.uml figcaption{margin:12px 6px 0;color:#5c5562;font-size:.93rem;line-height:1.5}
+.lesson-number{color:var(--teal);font-weight:800;font-size:.85rem;letter-spacing:.06em}
+.model-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.model-steps>div{padding:18px;border:1px solid var(--line);background:var(--soft-violet);border-radius:12px}.model-steps b{display:block;color:var(--violet-deep);margin-bottom:6px}
+@media(max-width:760px){.model-steps{grid-template-columns:1fr}section{padding:20px 16px}.brand .full{max-width:70vw}}
+@media print{nav,.quiz,#scormProgress{display:none!important}body{background:white}section{box-shadow:none;break-inside:avoid}.hero{padding-bottom:12px}figure.uml img{max-height:430px}}
+
+.object-window{padding:16px;background:#faf8fc;border:1px solid var(--line);border-radius:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:15px 0}
+.object-card{background:white;border:2px solid var(--violet);border-radius:12px;overflow:hidden}
+.object-card header{padding:11px 13px;background:var(--soft-violet);font-weight:800;color:#574b74;font-family:Consolas,monospace}
+.object-card ul{list-style:none;padding:10px 13px;margin:0;line-height:1.7;font: .9rem/1.65 Consolas,monospace}
+.object-card li{border-bottom:1px dashed #eee;padding:4px 0}.object-card li:last-child{border:0}
+.important-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.important-row .card{border-top:4px solid var(--teal)}
+.photo-note{margin:14px 0;border-radius:12px;background:#f0faf8;padding:14px 17px;border-left:4px solid var(--teal)}
+@media(max-width:680px){.object-window,.important-row{grid-template-columns:1fr}}
+@media print{.object-window,.flow,.card{break-inside:avoid}}
+</style></head>
+<body><a class="curso-regreso" href="../../index.html#unidad-01" aria-label="Volver al índice de la Unidad 1">← Volver a Unidad 1</a>
+<style>.curso-regreso{position:fixed;bottom:20px;right:20px;z-index:9999;display:block;background:#171419;color:#fff!important;font:700 14px/1.35 Arial,Helvetica,sans-serif;text-decoration:none;padding:12px 16px;border-radius:30px;box-shadow:0 8px 25px #17141945;border:2px solid #00a99d}.curso-regreso:hover,.curso-regreso:focus-visible{background:#756a96;color:#fff!important;outline:2px solid #fff}@media print{.curso-regreso{display:none}}</style><header class="hero"><div class="wrap"><div class="brand"><img class="full" src="assets/logo-profemacon.png" alt="Profe Macón"><small><b>PROGRAMACIÓN AVANZADA</b><br>2.º BT TI · DGETP/UTU · 2026<br>CET1 · POO en Java</small></div><div class="eyebrow">UNIDAD 01 · INTRODUCCIÓN A LA POO · LECCIÓN 02</div><h1>De las clases a <em>los objetos</em></h1><p>En la tienda de cómics «La Viñeta» ya identificamos entidades y asociaciones. Ahora vamos a convertir ese análisis en clases Java, repartir responsabilidades y crear objetos que colaboran.</p><div class="tags"><span class="tag">Clases y objetos</span><span class="tag">Estado y comportamiento</span><span class="tag">Encapsulamiento</span><span class="tag">Relaciones</span><span class="tag">CET1</span></div></div></header>
+<nav aria-label="Apartados de la lección"><div class="wrap"><a href="#retomar">Recordamos UML</a><a href="#clases">Clases y objetos</a><a href="#atributos">Atributos</a><a href="#responsabilidades">Responsabilidades</a><a href="#encapsular">Encapsulamiento</a><a href="#colaboracion">Colaboración</a><a href="#ensamble">Código integrado</a><a href="#cierre">Síntesis</a></div></nav><main><section id="retomar"><div class="step">01 · Punto de partida</div><h2>El diagrama no es todavía el programa</h2><p class="lead">El SCORM anterior nos dejó dos miradas sobre el mismo problema: un <b>modelo conceptual</b> para comprender el negocio y un <b>modelo de diseño</b> para acercarnos a Java.</p>
+<div class="grid2"><figure class="uml"><img src="assets/uml-conceptual.png" alt="Diagrama conceptual de Cliente, Venta, Producto y DetalleVenta como clase de asociación"/><figcaption><b>Modelo conceptual.</b> Expresa quién participa en la venta y por qué es necesario guardar datos sobre cada producto vendido.</figcaption></figure><figure class="uml"><img src="assets/uml-diseno.png" alt="Diagrama de diseño de Cliente, Venta, Producto y DetalleVenta con atributos y tipos"/><figcaption><b>Modelo de diseño.</b> Agrega atributos y tipos; representa referencias y una colección de detalles para programar.</figcaption></figure></div>
+<div class="callout teal"><b>Pregunta de diseño:</b> ¿Dónde debe vivir la cantidad de ejemplares de un cómic vendidos en una compra? En <code class="inline">DetalleVenta</code>, porque pertenece a esa operación, no al producto del catálogo en general.</div>
+<p>Conservamos los diagramas originales. Para los ejemplos que siguen elegiremos determinadas firmas Java; son <b>decisiones de implementación</b> y no datos nuevos del modelo conceptual.</p></section><section id="clases"><div class="step">02 · Una distinción esencial</div><h2>La clase describe; el objeto existe</h2><p>Una <b>clase</b> define qué información y operaciones tienen los objetos de un mismo tipo. Un <b>objeto</b> es una instancia concreta, con valores propios.</p>
+<div class="flow"><span class="node">Clase Producto</span><span class="arr">→ new Producto(...)</span><span class="node teal">Objeto p1</span><span class="arr">+</span><span class="node teal">Objeto p2</span></div>
+<div class="object-window"><div class="object-card"><header>p1 : Producto</header><ul><li>codigo = 101</li><li>nombre = "Mafalda 1"</li><li>precio = 450.0</li><li>stock = 8</li></ul></div><div class="object-card"><header>p2 : Producto</header><ul><li>codigo = 102</li><li>nombre = "El Eternauta"</li><li>precio = 790.0</li><li>stock = 3</li></ul></div></div>
+<p>Ambos tienen el mismo <b>tipo</b> y la misma estructura, pero no son el mismo objeto ni tienen el mismo estado.</p>
+<div class="code-label">Producto.java — primera versión</div><pre><code>public class Producto {
+    private long codigo;
+    private String nombre;
+    private double precio;
+    private int stock;
+
+    public Producto(long codigo, String nombre, double precio, int stock) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.stock = stock;
+    }
+}</code></pre><p>El constructor recibe los valores iniciales. <code class="inline">this.codigo</code> se refiere al atributo del objeto; <code class="inline">codigo</code> es el parámetro recibido.</p></section><section id="atributos"><div class="step">03 · Estado</div><h2>Los atributos representan información del dominio</h2><div class="grid2"><div class="card"><h3>Producto</h3><p>El ejemplar del catálogo tiene código, nombre, precio y stock. El stock representa unidades disponibles, no unidades compradas en una venta concreta.</p></div><div class="card"><h3>DetalleVenta</h3><p>Registra qué producto figura en una venta, cuántas unidades se compraron y qué precio unitario se aplicó.</p></div></div>
+<table><thead><tr><th>Entidad</th><th>Atributos principales</th><th>¿Por qué?</th></tr></thead><tbody><tr><td><code class="inline">Cliente</code></td><td>cédula, nombre, correo</td><td>Identificar al comprador.</td></tr><tr><td><code class="inline">Venta</code></td><td>número, fecha, cliente, detalles</td><td>Representar una transacción.</td></tr><tr><td><code class="inline">Producto</code></td><td>código, nombre, precio, stock</td><td>Describir el catálogo.</td></tr><tr><td><code class="inline">DetalleVenta</code></td><td>producto, cantidad, precioUnitario</td><td>Representar cada renglón de la compra.</td></tr></tbody></table>
+<div class="callout"><b>No todo sustantivo exige una clase.</b> Antes de crear una clase, comprueba si representa una entidad con identidad, estado o responsabilidades propias en el problema.</div>
+</section><section id="responsabilidades"><div class="step">04 · Comportamiento</div><h2>¿Qué debe saber hacer cada clase?</h2><p>No diseñamos clases únicamente para guardar datos. También distribuimos <b>responsabilidades</b>: acciones coherentes con lo que cada objeto representa.</p>
+<div class="important-row"><div class="card"><h3>Producto</h3><p>Informar su precio y stock; permitir modificaciones controladas de sus datos.</p></div><div class="card"><h3>DetalleVenta</h3><p>Calcular el subtotal del renglón: cantidad por precio unitario.</p></div><div class="card"><h3>Venta</h3><p>Conservar sus detalles y calcular el total sumando los subtotales.</p></div></div>
+<div class="code-label">DetalleVenta.java — responsabilidad propia</div><pre><code>public class DetalleVenta {
+    private Producto producto;
+    private int cantidad;
+    private double precioUnitario;
+
+    public DetalleVenta(Producto producto, int cantidad, double precioUnitario) {
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.precioUnitario = precioUnitario;
+    }
+
+    public double calcularSubtotal() {
+        double subtotal = cantidad * precioUnitario;
+        return subtotal;
+    }
+}</code></pre><div class="callout teal"><b>Decisión importante:</b> <code class="inline">precioUnitario</code> se conserva en el detalle, incluso si luego cambia el precio del catálogo. Así podemos representar el precio utilizado en esa venta.</div></section><section id="encapsular"><div class="step">05 · Encapsulamiento</div><h2>Atributos privados y operaciones públicas</h2><p>Declarar los atributos <code class="inline">private</code> evita que otra clase modifique directamente el estado. Exponemos métodos públicos para consultar o cambiar lo que corresponda.</p>
+<div class="compare"><div class="card"><h3>Sin control</h3><p>Otra clase modifica un precio directamente y puede introducir valores incorrectos.</p><pre><code>producto.precio = -50;</code></pre></div><div class="mid">→</div><div class="card"><h3>Con encapsulamiento</h3><p>El objeto decide qué operación pública ofrece y qué condiciones aplica.</p><pre><code>producto.setPrecio(450);</code></pre></div></div>
+<div class="code-label">Producto.java — métodos accesibles</div><pre><code>public long getCodigo() {
+    return codigo;
+}
+
+public String getNombre() {
+    return nombre;
+}
+
+public double getPrecio() {
+    return precio;
+}
+
+public int getStock() {
+    return stock;
+}
+
+public void setPrecio(double nuevoPrecio) {
+    if (nuevoPrecio &gt;= 0 &amp;&amp; Double.isFinite(nuevoPrecio)) {
+        this.precio = nuevoPrecio;
+    }
+}</code></pre><p>El ejemplo introduce una comprobación pequeña para ilustrar la idea. Más adelante veremos una <b>capa de servicio</b> que concentrará las reglas de negocio de la aplicación; no debemos confundir ambas responsabilidades.</p>
+<div class="callout warn"><b>Observación:</b> aquí el método no cambia el precio si el dato es inválido. En una aplicación más completa podríamos comunicar ese error de forma explícita. Estudiaremos las excepciones posteriormente.</div></section><section id="colaboracion"><div class="step">06 · Asociaciones</div><h2>Los objetos colaboran mediante referencias</h2><p>En Java, una relación entre objetos puede implementarse conservando una <b>referencia</b> a otro objeto. Cuando una venta tiene varios detalles, podemos usar una colección de referencias.</p>
+<div class="flow"><span class="node">Cliente</span><span class="arr">← comprador de</span><span class="node">Venta</span><span class="arr">→ contiene</span><span class="node teal">List&lt;DetalleVenta&gt;</span><span class="arr">→ referencia</span><span class="node">Producto</span></div>
+<div class="grid2"><div class="card"><h3>Una venta, un cliente</h3><p>Un campo <code class="inline">Cliente cliente</code> identifica al comprador de esa venta.</p></div><div class="card"><h3>Una venta, varios detalles</h3><p>Una lista permite registrar diferentes productos y cantidades dentro de una misma venta.</p></div></div>
+<div class="code-label">Venta.java — estructura mínima</div><pre><code>import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Venta {
+    private int numero;
+    private LocalDate fecha;
+    private Cliente cliente;
+    private List&lt;DetalleVenta&gt; detalles;
+
+    public Venta(int numero, LocalDate fecha, Cliente cliente) {
+        this.numero = numero;
+        this.fecha = fecha;
+        this.cliente = cliente;
+        this.detalles = new ArrayList&lt;&gt;();
+    }
+
+    public void agregarDetalle(DetalleVenta detalle) {
+        detalles.add(detalle);
+    }
+
+    public double calcularTotal() {
+        double total = 0;
+        for (DetalleVenta detalle : detalles) {
+            total += detalle.calcularSubtotal();
+        }
+        return total;
+    }
+}</code></pre><div class="callout"><b>Una decisión de diseño explícita:</b> el diagrama escribe <code class="inline">Date</code>. Aquí usamos <code class="inline">LocalDate</code>, disponible en Java moderno, para representar una fecha sin hora. Es una elección de implementación, no una modificación del diagrama original.</div>
+</section><section id="ensamble"><div class="step">07 · Instancias y mensajes</div><h2>La historia completa, en objetos</h2><p>Supongamos que Lucía compra dos ejemplares de «Mafalda 1» y uno de «El Eternauta». Creamos los productos, un cliente, la venta y sus detalles.</p>
+<div class="code-label">Main.java — ejemplo didáctico de uso</div><pre><code>import java.time.LocalDate;
+
+public class Main {
+    public static void main(String[] args) {
+        Producto mafalda = new Producto(101, &quot;Mafalda 1&quot;, 450, 8);
+        Producto eternauta = new Producto(102, &quot;El Eternauta&quot;, 790, 3);
+
+        Cliente lucia = new Cliente(49876543L, &quot;Lucía Pérez&quot;, &quot;lucia@ejemplo.com&quot;);
+
+        Venta venta = new Venta(25, LocalDate.of(2026, 10, 25), lucia);
+        DetalleVenta d1 = new DetalleVenta(mafalda, 2, 450);
+        DetalleVenta d2 = new DetalleVenta(eternauta, 1, 790);
+
+        venta.agregarDetalle(d1);
+        venta.agregarDetalle(d2);
+
+        System.out.println(&quot;Total: $&quot; + venta.calcularTotal());
+    }
+}</code></pre><div class="code-label">Cliente.java — clase mínima para ejecutar el ejemplo</div><pre><code>public class Cliente {
+    private long cedula;
+    private String nombre;
+    private String correo;
+
+    public Cliente(long cedula, String nombre, String correo) {
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.correo = correo;
+    }
+}</code></pre><div class="flow"><span class="node">Detalle 1: 2 × 450 = 900</span><span class="arr">+</span><span class="node">Detalle 2: 1 × 790 = 790</span><span class="arr">=</span><span class="node teal">Total: $1690</span></div><p>El <code class="inline">Main</code> es solo un ejemplo para visualizar la colaboración entre objetos. Todavía no hay Swing, DAO ni base de datos; esos componentes aparecerán más adelante cuando hagan falta.</p>
+<div class="callout warn"><b>Precisión:</b> para facilitar la comprensión mantuvimos <code class="inline">double</code>, como en el modelo que estamos trabajando. En sistemas monetarios de producción es preferible <code class="inline">BigDecimal</code>.</div></section><section id="cierre"><div class="step">08 · Lo que queda construido</div><h2>Del modelo OO a responsabilidades concretas</h2>
+<div class="model-steps"><div><b>Clase</b>Define atributos, constructor y métodos para un tipo de objeto.</div><div><b>Objeto</b>Es una instancia con valores particulares y referencias a otros objetos.</div><div><b>Colaboración</b>Los objetos se comunican mediante llamadas a métodos; cada uno cumple su responsabilidad.</div></div>
+<h3>Comprobación rápida</h3><div class="quiz" data-answer="c"><p>Si una venta contiene tres productos diferentes, ¿qué objeto debería calcular el importe de cada renglón?</p><div class="choices"><button class="choice" data-value="a">Cliente, porque participa en la compra</button><button class="choice" data-value="b">Producto, porque es un artículo del catálogo</button><button class="choice" data-value="c">DetalleVenta, porque conoce cantidad y precio de ese renglón</button></div><p class="feedback" aria-live="polite"></p></div>
+<div class="callout teal"><b>Microentrega de documentación:</b> elabora una ficha CRC de <code class="inline">Venta</code> y <code class="inline">DetalleVenta</code>: nombre de clase, dos responsabilidades y sus colaboradores. Acompáñala con un ejemplo de objeto concreto de cada una.</div>
+<p><b>Lo siguiente:</b> profundizaremos en encapsulamiento, relaciones y colecciones, y veremos cómo las decisiones OO nos permiten construir programas más fáciles de ampliar.</p></section><div class="footer"><div style="display:flex;align-items:center;gap:12px"><img src="assets/logo-pm.png" alt="PM"><div><b>PROFE MACÓN</b><br><span class="muted">Explora, aprende, crea.</span></div></div><div class="site">profemacon.net</div></div></main><div id="scormProgress" style="position:fixed;right:14px;bottom:14px;z-index:50;display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.88);color:#fff;border-radius:999px;padding:8px 12px;font:12px Arial,Helvetica,sans-serif"><span id="scormDot" style="width:9px;height:9px;border-radius:50%;background:#988db3;display:inline-block"></span><span id="scormProgressText">Material en curso</span></div>
+<script>document.querySelectorAll('.quiz').forEach(function(q){q.querySelectorAll('.choice').forEach(function(btn){btn.addEventListener('click',function(){q.querySelectorAll('.choice').forEach(function(b){b.classList.remove('correct','wrong')});var ok=btn.dataset.value===q.dataset.answer;btn.classList.add(ok?'correct':'wrong');q.querySelector('.feedback').textContent=ok?'Correcto: DetalleVenta puede calcular el subtotal con su cantidad y precio unitario.':'Revisa qué objeto conoce los dos valores necesarios para calcular cada subtotal.'})})});</script><script src="scorm.js"></script></body></html>
